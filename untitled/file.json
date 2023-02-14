@@ -1,22 +1,48 @@
 {
-  "glossary": {
-    "title": "example glossary",
-    "GlossDiv": {
-      "title": "S",
-      "GlossList": {
-        "GlossEntry": {
-          "ID": "SGML",
-          "SortAs": "SGML",
-          "GlossTerm": "Standard Generalized Markup Language",
-          "Acronym": "SGML",
-          "Abbrev": "ISO 8879:1986",
-          "GlossDef": {
-            "para": "A meta-markup language, used to create markup languages such as DocBook.",
-            "GlossSeeAlso": ["GML", "XML"]
-          },
-          "GlossSee": "markup"
+  "tickets": [
+    {
+      "id": 1,
+      "name": "Imperial Orchestra",
+      "coordinates": {
+        "x": 123.445,
+        "y": 665.33
+      },
+      "creationDate": "2011-12-03T10:15:30+01:00",
+      "price": 4000,
+      "type": "VIP",
+      "person": {
+        "birthday": "2007-12-03T10:15:30",
+        "eyeColor": "GREEN",
+        "hairColor": "BROWN",
+        "nationality": "USA",
+        "location": {
+          "x": 12.2,
+          "y": 15,
+          "z": 87.98
+        }
+      }
+    },
+    {
+      "id": 1,
+      "name": "Imperial Orchestra",
+      "coordinates": {
+        "x": 123.445,
+        "y": 665.33
+      },
+      "creationDate": "2011-12-03T10:15:30+01:00",
+      "price": 4000,
+      "type": "VIP",
+      "person": {
+        "birthday": "2007-12-03T10:15:30",
+        "eyeColor": "GREEN",
+        "hairColor": "BROWN",
+        "nationality": "USA",
+        "location": {
+          "x": 12.2,
+          "y": 15,
+          "z": 87.98
         }
       }
     }
-  }
+  ]
 }
