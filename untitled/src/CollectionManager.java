@@ -3,9 +3,7 @@ import core.Ticket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -23,6 +21,23 @@ public class CollectionManager {
             }
         }
         System.out.println(this.collection);
+
+        JSONObject mainObject = new JSONObject();
+        JSONArray ticketsArray = new JSONArray();
+        mainObject.put("tickets", ticketsArray);
+        try {
+            FileWriter fileOutput = new FileWriter("file1.json");
+            BufferedWriter writer = new BufferedWriter(fileOutput);
+            for (Ticket ticket : tickets) {
+                JSONObject jo = new JSONObject(ticket.getMappedValue());
+                ticketsArray.put(jo);
+            }
+            writer.write(mainObject.toString());
+            writer.close();
+            fileOutput.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public JSONObject getJSONObjectFromFile() {

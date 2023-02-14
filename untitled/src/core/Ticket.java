@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Ticket implements Comparable {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -68,5 +70,11 @@ public class Ticket implements Comparable {
 
     public long getId() {
         return id;
+    }
+
+    public HashMap<String, Object> getMappedValue() {
+        HashMap<String, Object> hm = new HashMap<>();
+        hm.put("id", this.id);
+        return hm;
     }
 }
