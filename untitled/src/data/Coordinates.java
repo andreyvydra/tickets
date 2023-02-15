@@ -1,6 +1,8 @@
-package core;
+package data;
 
 import org.json.JSONException;
+
+import java.util.HashMap;
 
 public class Coordinates {
     private Float x; //Значение поля должно быть больше -873, Поле не может быть null
@@ -17,6 +19,13 @@ public class Coordinates {
     @Override
     public String toString() {
         return "Coordinates(x=" + this.x + ", y=" + this.y + ")";
+    }
+
+    public HashMap<String, Object> getMappedValues() {
+        HashMap<String, Object> hm = new HashMap<>();
+        hm.put("x", this.x);
+        hm.put("y", this.y);
+        return hm;
     }
 }
 

@@ -1,6 +1,7 @@
-package core;
+package data;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class Person {
     private java.time.LocalDateTime birthday; //Поле может быть null
@@ -27,5 +28,15 @@ public class Person {
 
     public void setNationality(Country nationality) {
         this.nationality = nationality;
+    }
+
+    public HashMap<String, Object> getMappedValues() {
+        HashMap<String, Object> hm = new HashMap<>();
+        hm.put("birthday", this.birthday.toString());
+        hm.put("eyeColor", this.eyeColor.toString());
+        hm.put("hairColor", this.hairColor.toString());
+        hm.put("nationality", this.nationality.toString());
+        hm.put("location", this.location.getMappedValues());
+        return hm;
     }
 }

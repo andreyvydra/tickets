@@ -1,48 +1,26 @@
 {
   "tickets": [
     {
+      "price": 4000,
+      "person": {
+        "birthday": "2007-12-03T10:15:30",
+        "location": {
+          "x": 12.2,
+          "y": 15,
+          "z": 87.98
+        },
+        "hairColor": "BROWN",
+        "eyeColor": "GREEN",
+        "nationality": "USA"
+      },
+      "name": "Imperial Orchestra",
+      "coordinates": {
+        "x": 123.445,
+        "y": 665.33
+      },
       "id": 1,
-      "name": "Imperial Orchestra",
-      "coordinates": {
-        "x": 123.445,
-        "y": 665.33
-      },
       "creationDate": "2011-12-03T10:15:30+01:00",
-      "price": 4000,
-      "type": "VIP",
-      "person": {
-        "birthday": "2007-12-03T10:15:30",
-        "eyeColor": "GREEN",
-        "hairColor": "BROWN",
-        "nationality": "USA",
-        "location": {
-          "x": 12.2,
-          "y": 15,
-          "z": 87.98
-        }
-      }
-    },
-    {
-      "id": 2,
-      "name": "Imperial Orchestra",
-      "coordinates": {
-        "x": 123.445,
-        "y": 665.33
-      },
-      "creationDate": "2011-12-03T10:15:30+01:00",
-      "price": 4000,
-      "type": "VIP",
-      "person": {
-        "birthday": "2007-12-03T10:15:30",
-        "eyeColor": "GREEN",
-        "hairColor": "BROWN",
-        "nationality": "USA",
-        "location": {
-          "x": 12.2,
-          "y": 15,
-          "z": 87.98
-        }
-      }
+      "type": "VIP"
     }
   ]
 }

@@ -1,4 +1,4 @@
-package core;
+package data;
 
 public enum Country {
     USA,

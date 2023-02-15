@@ -1,4 +1,6 @@
-package core;
+package data;
+
+import java.util.HashMap;
 
 public class Location {
     private double x;
@@ -15,5 +17,13 @@ public class Location {
 
     public void setZ(float z) {
         this.z = z;
+    }
+
+    public HashMap<String, Object> getMappedValues() {
+        HashMap<String, Object> hm = new HashMap<>();
+        hm.put("x", this.x);
+        hm.put("y", this.y);
+        hm.put("z", this.z);
+        return hm;
     }
 }

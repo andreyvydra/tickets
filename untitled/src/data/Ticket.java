@@ -1,12 +1,9 @@
-package core;
+package data;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Ticket implements Comparable {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -72,9 +69,15 @@ public class Ticket implements Comparable {
         return id;
     }
 
-    public HashMap<String, Object> getMappedValue() {
+    public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put("id", this.id);
+        hm.put("name", this.name);
+        hm.put("coordinates", this.coordinates.getMappedValues());
+        hm.put("creationDate", this.creationDate.toString());
+        hm.put("price", this.price);
+        hm.put("type", this.type.toString());
+        hm.put("person", this.person.getMappedValues());
         return hm;
     }
 }
