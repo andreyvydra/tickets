@@ -3,6 +3,7 @@ package data;
 import org.json.JSONException;
 
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Ticket implements Comparable<Ticket> {
@@ -54,7 +55,7 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket ticket) {
-        return Long.compare(this.id, ticket.id);
+        return Long.compare(this.price, ticket.price);
     }
 
     @Override

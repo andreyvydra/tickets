@@ -4,6 +4,8 @@ import core.CollectionManager;
 import core.InputTicket;
 import data.*;
 
+import java.util.Collections;
+
 public class AddCommand implements Command {
     private InputTicket inputTicket;
     private CollectionManager collectionManager;

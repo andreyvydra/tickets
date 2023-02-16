@@ -4,6 +4,7 @@ import data.Ticket;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeSet;
 
 public class CollectionManager {
@@ -62,6 +63,10 @@ public class CollectionManager {
         return null;
     }
 
+    public Ticket getMaxTicket() {
+        return Collections.max(this.collection);
+    }
+
     public void removeTicket(long id) {
         this.collection.remove(this.getTicketById(id));
     }
@@ -73,5 +78,11 @@ public class CollectionManager {
     @Override
     public String toString() {
         return "Type: CollectionManager, InitDate: " + this.initDateTime + ", Items quantity of collection: " + this.collection.size();
+    }
+
+    public void removeTickets(ArrayList<Ticket> ticketsToDelete) {
+        for (Ticket ticket : ticketsToDelete) {
+            this.collection.remove(ticket);
+        }
     }
 }

@@ -20,6 +20,9 @@ public class Console {
         this.commands.put("remove_by_id", new RemoveCommand(app.getCollectionManager()));
         this.commands.put("clear", new ClearCommand(app.getCollectionManager()));
         this.commands.put("save", new SaveCommand(app.getCollectionManager(), app.getFileManager()));
+        this.commands.put("execute_script", new ExecuteScriptCommand(app));
+        this.commands.put("add_if_max", new AddIfMaxCommand(app.getCollectionManager()));
+        this.commands.put("remove_lower", new RemoveLowerCommand(app.getCollectionManager()));
         this.commands.put("exit", new ExitCommand());
         this.commands.put("history", new HistoryCommand(this.commandsHistory));
     }
