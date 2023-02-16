@@ -26,4 +26,9 @@ public class Location {
         hm.put("z", this.z);
         return hm;
     }
+
+    @Override
+    public String toString() {
+        return "Location(x=" + this.x + ", y=" + this.y + ", z=" + this.z + ")";
+    }
 }

@@ -1,10 +1,13 @@
+package application;
+
+import console.Console;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
 import data.Ticket;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class App {
@@ -28,15 +31,23 @@ public class App {
 
         Console console = new Console(this);
         Scanner scanner = new Scanner(System.in);
+
         while (true) {
             try {
+                System.out.print("Введите команду: ");
                 String input = scanner.nextLine();
                 console.execute(input);
+            } catch (NoSuchElementException e) {
+                System.exit(1);
             } catch (Exception e) {
                 System.out.println(e);
             }
 
         }
 
+    }
+
+    public FileManager getFileManager() {
+        return this.fileManager;
     }
 }

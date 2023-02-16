@@ -39,4 +39,11 @@ public class Person {
         hm.put("location", this.location.getMappedValues());
         return hm;
     }
+
+    @Override
+    public String toString() {
+        return "Person(birthday=" + this.birthday + ", eyeColor=" + this.eyeColor +
+                ", hairColor=" + this.hairColor + ", nationality=" +
+                this.nationality + ", location=" + this.location + ")";
+    }
 }

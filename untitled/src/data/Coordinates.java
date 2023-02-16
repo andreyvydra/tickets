@@ -9,10 +9,22 @@ public class Coordinates {
     private Float y; //Поле не может быть null
 
     public Coordinates(Float x, Float y) {
+        this.setX(x);
+        this.setY(y);
+    }
+
+    public Coordinates() {
+
+    }
+
+    public void setX(Float x) {
         if (x <= -873) {
             throw new JSONException("X is lower then -873");
         }
         this.x = x;
+    }
+
+    public void setY(Float y) {
         this.y = y;
     }
 

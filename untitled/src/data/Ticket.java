@@ -5,7 +5,7 @@ import org.json.JSONException;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 
-public class Ticket implements Comparable {
+public class Ticket implements Comparable<Ticket> {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -53,8 +53,7 @@ public class Ticket implements Comparable {
 
 
     @Override
-    public int compareTo(Object o) {
-        Ticket ticket = (Ticket) o;
+    public int compareTo(Ticket ticket) {
         return Long.compare(this.id, ticket.id);
     }
 
@@ -67,6 +66,30 @@ public class Ticket implements Comparable {
 
     public long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public TicketType getType() {
+        return type;
+    }
+
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
     }
 
     public HashMap<String, Object> getMappedValues() {

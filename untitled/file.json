@@ -1,26 +1,48 @@
 {
   "tickets": [
     {
-      "price": 4000,
+      "price": 1000,
       "person": {
         "birthday": "2007-12-03T10:15:30",
         "location": {
           "x": 12.2,
           "y": 15,
-          "z": 87.98
+          "z": 0
         },
         "hairColor": "BROWN",
         "eyeColor": "GREEN",
         "nationality": "USA"
       },
-      "name": "Imperial Orchestra",
+      "name": "Imperial",
       "coordinates": {
-        "x": 123.445,
-        "y": 665.33
+        "x": 125,
+        "y": 890
       },
       "id": 1,
       "creationDate": "2011-12-03T10:15:30+01:00",
-      "type": "VIP"
+      "type": "USUAL"
+    },
+    {
+      "price": 34567,
+      "person": {
+        "birthday": "2023-02-16T08:39:26",
+        "location": {
+          "x": 46787,
+          "y": 3435,
+          "z": 324356
+        },
+        "hairColor": "RED",
+        "eyeColor": "RED",
+        "nationality": "USA"
+      },
+      "name": "aboba",
+      "coordinates": {
+        "x": 243568,
+        "y": 3456
+      },
+      "id": 2,
+      "creationDate": "2023-02-16T13:22:51.557282700+03:00[Europe/Moscow]",
+      "type": "USUAL"
     }
   ]
 }

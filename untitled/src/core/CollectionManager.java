@@ -39,6 +39,37 @@ public class CollectionManager {
         return true;
     }
 
+    public long getNewId() {
+        long id = 0;
+        for (Ticket ticket : this.collection) {
+            if (ticket.getId() > id) {
+                id = ticket.getId();
+            }
+        }
+        return id + 1;
+    }
+
+    public void addTicket(Ticket ticket) {
+        this.collection.add(ticket);
+    }
+
+    public Ticket getTicketById(long id) {
+        for (Ticket ticket : this.collection) {
+            if (ticket.getId() == id) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public void removeTicket(long id) {
+        this.collection.remove(this.getTicketById(id));
+    }
+
+    public void clear() {
+        this.collection.clear();
+    }
+
     @Override
     public String toString() {
         return "Type: CollectionManager, InitDate: " + this.initDateTime + ", Items quantity of collection: " + this.collection.size();
