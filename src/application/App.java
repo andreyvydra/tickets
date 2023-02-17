@@ -4,8 +4,10 @@ import console.Console;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
+import core.exceptions.CoordinateException;
 import data.Ticket;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -16,6 +18,7 @@ public class App {
     private FileManager fileManager;
     private JSONParser jsonParser;
     private ArrayList<String> commandBuffer = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
 
     public App(String filename) {
         this.collectionManager = new CollectionManager();
@@ -29,10 +32,13 @@ public class App {
         return collectionManager;
     }
 
+    public Scanner getScanner() {
+        return scanner;
+    }
+
     public void execute() {
 
         Console console = new Console(this);
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             try {
@@ -42,12 +48,14 @@ public class App {
                     input = scanner.nextLine().trim();
                 } else {
                     input = this.commandBuffer.get(0).trim();
+                    System.out.println(input);
                     this.commandBuffer.remove(0);
                 }
                 console.execute(input);
             } catch (NoSuchElementException e) {
+                System.out.println("Некорректный символ!");
                 System.exit(1);
-            } catch (Exception e) {
+            } catch (InvocationTargetException | IllegalAccessException | NullPointerException e) {
                 System.out.println(e);
             }
 

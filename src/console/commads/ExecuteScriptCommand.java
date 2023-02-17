@@ -3,6 +3,7 @@ package console.commads;
 import application.App;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ExecuteScriptCommand implements Command {
@@ -22,7 +23,15 @@ public class ExecuteScriptCommand implements Command {
             for (int b : buffer.readAllBytes()) {
                 stringBuilder.append((char) b);
             }
-            this.app.setCommandBuffer(stringBuilder.toString().split("\n"));
+            String[] commands = stringBuilder.toString().split("\n");
+            for (String currentCommand : stringBuilder.toString().split("\n")) {
+                currentCommand = currentCommand.trim();
+                if (currentCommand.equals(command)) {
+                    System.out.println("В файле присутствует рекурсия!");
+                    return;
+                }
+            }
+            this.app.setCommandBuffer(commands);
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден!");
         } catch (IOException e) {

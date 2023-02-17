@@ -1,9 +1,9 @@
 package data;
 
+import core.exceptions.ValueIsNotPositiveException;
 import org.json.JSONException;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Ticket implements Comparable<Ticket> {
@@ -15,16 +15,16 @@ public class Ticket implements Comparable<Ticket> {
     private TicketType type; //Поле не может быть null
     private Person person; //Поле не может быть null
 
-    public void setId(long id) {
+    public void setId(long id) throws ValueIsNotPositiveException {
         if (id <= 0) {
-            throw new JSONException("Id is lower or equals 0");
+            throw new ValueIsNotPositiveException("Id должен быть положительным");
         }
         this.id = id;
     }
 
     public void setName(String name) {
-        if (name.equals("")) {
-            throw new JSONException("Name is equals empty string");
+        if (name.isEmpty()) {
+
         }
         this.name = name;
     }
@@ -39,7 +39,7 @@ public class Ticket implements Comparable<Ticket> {
 
     public void setPrice(long price) {
         if (price <= 0) {
-            throw new JSONException("Price is negative");
+            throw new ValueIsNotPositiveException("Price is negative");
         }
         this.price = price;
     }

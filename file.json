@@ -1,7 +1,7 @@
 {
   "tickets": [
     {
-      "price": 1000,
+      "price": 2000,
       "person": {
         "birthday": "2007-12-03T10:15:30",
         "location": {
@@ -15,7 +15,7 @@
       },
       "name": "Imperial",
       "coordinates": {
-        "x": 125,
+        "x": 11,
         "y": 890
       },
       "id": 1,

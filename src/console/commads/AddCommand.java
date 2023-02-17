@@ -1,5 +1,6 @@
 package console.commads;
 
+import application.App;
 import core.CollectionManager;
 import core.InputTicket;
 import data.*;
@@ -10,9 +11,9 @@ public class AddCommand implements Command {
     private InputTicket inputTicket;
     private CollectionManager collectionManager;
 
-    public AddCommand(CollectionManager collectionManager) {
-        this.inputTicket = new InputTicket(collectionManager);
-        this.collectionManager = collectionManager;
+    public AddCommand(App app) {
+        this.inputTicket = new InputTicket(app);
+        this.collectionManager = app.getCollectionManager();
     }
 
     @Override

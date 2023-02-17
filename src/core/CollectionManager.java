@@ -3,9 +3,10 @@ package core;
 import data.Ticket;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeSet;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CollectionManager {
     private TreeSet<Ticket> collection = new TreeSet<>();
@@ -22,6 +23,12 @@ public class CollectionManager {
     public TreeSet<Ticket> getCollection() {
         return collection;
     }
+
+    public Map<ZonedDateTime, List<Ticket>> getGroupsByDate() {
+        return collection.stream().collect(Collectors.groupingBy(Ticket::getCreationDate));
+    }
+
+
 
     public void loadTickets(ArrayList<Ticket> tickets) {
         for (Ticket ticket : tickets) {

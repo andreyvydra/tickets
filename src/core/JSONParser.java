@@ -1,7 +1,10 @@
 package core;
 
+import core.exceptions.CoordinateXException;
+import core.exceptions.ValueIsNotPositiveException;
 import data.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
@@ -26,7 +29,7 @@ public class JSONParser {
                 JSONObject jObj = (JSONObject) item;
                 Ticket ticket = this.parseTicket(jObj);
                 tickets.add(ticket);
-            } catch (Exception e) {
+            } catch (ValueIsNotPositiveException | CoordinateXException | JSONException e) {
                 System.out.println(e);
             }
         }

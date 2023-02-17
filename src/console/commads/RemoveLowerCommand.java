@@ -1,5 +1,6 @@
 package console.commads;
 
+import application.App;
 import core.CollectionManager;
 import core.InputTicket;
 import data.Ticket;
@@ -8,15 +9,16 @@ import java.util.ArrayList;
 
 public class RemoveLowerCommand implements Command {
     private CollectionManager collectionManager;
+    private InputTicket inputTicket;
 
-    public RemoveLowerCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    public RemoveLowerCommand(App app) {
+        this.inputTicket = new InputTicket(app);
+        this.collectionManager = app.getCollectionManager();
     }
 
     @Override
     public void execute(String command) {
-        InputTicket inputTicket = new InputTicket(this.collectionManager);
-        Ticket ticket = inputTicket.getTicketFromConsole();
+        Ticket ticket = this.inputTicket.getTicketFromConsole();
         int count = 0;
         ArrayList<Ticket> ticketsToDelete = new ArrayList<>();
         for (Ticket ticket1 : this.collectionManager.getCollection()) {

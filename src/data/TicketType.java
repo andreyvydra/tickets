@@ -1,8 +1,8 @@
 package data;
 
-public enum TicketType implements Comparable<TicketType> {
-    VIP,
-    USUAL,
+public enum TicketType {
+    CHEAP,
     BUDGETARY,
-    CHEAP;
+    USUAL,
+    VIP
 }

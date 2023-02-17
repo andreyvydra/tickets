@@ -15,16 +15,19 @@ public class Console {
         this.commands.put("help", new HelpCommand());
         this.commands.put("info", new InfoCommand(app.getCollectionManager()));
         this.commands.put("show", new ShowCommand(app.getCollectionManager()));
-        this.commands.put("add", new AddCommand(app.getCollectionManager()));
-        this.commands.put("update", new UpdateCommand(app.getCollectionManager()));
+        this.commands.put("add", new AddCommand(app));
+        this.commands.put("update", new UpdateCommand(app));
         this.commands.put("remove_by_id", new RemoveCommand(app.getCollectionManager()));
         this.commands.put("clear", new ClearCommand(app.getCollectionManager()));
         this.commands.put("save", new SaveCommand(app.getCollectionManager(), app.getFileManager()));
         this.commands.put("execute_script", new ExecuteScriptCommand(app));
-        this.commands.put("add_if_max", new AddIfMaxCommand(app.getCollectionManager()));
-        this.commands.put("remove_lower", new RemoveLowerCommand(app.getCollectionManager()));
+        this.commands.put("add_if_max", new AddIfMaxCommand(app));
+        this.commands.put("remove_lower", new RemoveLowerCommand(app));
         this.commands.put("exit", new ExitCommand());
         this.commands.put("history", new HistoryCommand(this.commandsHistory));
+        this.commands.put("group_counting_by_creation_date", new GroupByDateCommand(app.getCollectionManager()));
+        this.commands.put("count_greater_than_type", new GreaterThenTypeCommand(app.getCollectionManager()));
+        this.commands.put("print_field_ascending_type", new PrintTypeAscendingCommand(app.getCollectionManager()));
     }
 
     public void execute(String command) throws InvocationTargetException, IllegalAccessException, NullPointerException {

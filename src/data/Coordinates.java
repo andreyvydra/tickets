@@ -1,5 +1,7 @@
 package data;
 
+import core.exceptions.CoordinateException;
+import core.exceptions.CoordinateXException;
 import org.json.JSONException;
 
 import java.util.HashMap;
@@ -17,9 +19,9 @@ public class Coordinates {
 
     }
 
-    public void setX(Float x) {
+    public void setX(Float x) throws CoordinateXException {
         if (x <= -873) {
-            throw new JSONException("X is lower then -873");
+            throw new CoordinateXException();
         }
         this.x = x;
     }
