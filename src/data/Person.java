@@ -43,7 +43,7 @@ public class Person {
         hm.put("eyeColor", this.eyeColor.toString());
         hm.put("hairColor", !Objects.isNull(this.hairColor) ? this.hairColor.toString() : null);
         hm.put("nationality", this.nationality.toString());
-        hm.put("location", !Objects.isNull(this.location) ? this.location.toString() : null);
+        hm.put("location", !Objects.isNull(this.location) ? this.location.getMappedValues() : null);
         return hm;
     }
 

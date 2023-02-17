@@ -1,16 +1,21 @@
 {
   "tickets": [
     {
-      "price": 1000,
+      "price": 464678765,
       "person": {
-        "birthday": "2007-12-03T10:15:30",
-        "eyeColor": "BLUE",
+        "location": {
+          "x": 100,
+          "y": 100,
+          "z": 100
+        },
+        "hairColor": "GREEN",
+        "eyeColor": "YELLOW",
         "nationality": "JAPAN"
       },
-      "name": "aboba",
+      "name": "alos",
       "coordinates": {
-        "x": 123,
-        "y": 12
+        "x": 23432,
+        "y": 234453
       },
       "id": 1,
       "creationDate": "2023-02-17T21:40:04.920982100+03:00[Europe/Moscow]",

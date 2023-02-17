@@ -47,13 +47,17 @@ public class JSONParser {
 
     public Ticket parseTicket(JSONObject jObject) {
         Ticket ticket = new Ticket();
-        ticket.setId(this.getIdTicket(jObject));
-        ticket.setName(this.getStringName(jObject));
-        ticket.setCoordinates(this.getCoordinates(jObject));
-        ticket.setCreationDate(this.getCreationDate(jObject));
-        ticket.setPrice(this.getPrice(jObject));
-        ticket.setType(this.getType(jObject));
-        ticket.setPerson(this.getPerson(jObject));
+        try {
+            ticket.setId(this.getIdTicket(jObject));
+            ticket.setName(this.getStringName(jObject));
+            ticket.setCoordinates(this.getCoordinates(jObject));
+            ticket.setCreationDate(this.getCreationDate(jObject));
+            ticket.setPrice(this.getPrice(jObject));
+            ticket.setType(this.getType(jObject));
+            ticket.setPerson(this.getPerson(jObject));
+        } catch (JSONException e) {
+            System.out.println(e);
+        }
         return ticket;
     }
 
