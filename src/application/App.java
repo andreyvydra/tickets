@@ -60,8 +60,10 @@ public class App {
             } catch (NoSuchElementException e) {
                 System.out.println("Некорректный символ!");
                 System.exit(1);
-            } catch (InvocationTargetException | IllegalAccessException | NullPointerException e) {
+            } catch (InvocationTargetException | IllegalAccessException e) {
                 System.out.println(e);
+            } catch (NullPointerException e) {
+                System.out.println("Введена неправильная команда!");
             }
 
         }
