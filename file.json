@@ -1,48 +1,20 @@
 {
   "tickets": [
     {
-      "price": 2000,
+      "price": 1000,
       "person": {
         "birthday": "2007-12-03T10:15:30",
-        "location": {
-          "x": 12.2,
-          "y": 15,
-          "z": 0
-        },
-        "hairColor": "BROWN",
-        "eyeColor": "GREEN",
-        "nationality": "USA"
-      },
-      "name": "Imperial",
-      "coordinates": {
-        "x": 11,
-        "y": 890
-      },
-      "id": 1,
-      "creationDate": "2011-12-03T10:15:30+01:00",
-      "type": "USUAL"
-    },
-    {
-      "price": 34567,
-      "person": {
-        "birthday": "2023-02-16T08:39:26",
-        "location": {
-          "x": 46787,
-          "y": 3435,
-          "z": 324356
-        },
-        "hairColor": "RED",
-        "eyeColor": "RED",
-        "nationality": "USA"
+        "eyeColor": "BLUE",
+        "nationality": "JAPAN"
       },
       "name": "aboba",
       "coordinates": {
-        "x": 243568,
-        "y": 3456
+        "x": 123,
+        "y": 12
       },
-      "id": 2,
-      "creationDate": "2023-02-16T13:22:51.557282700+03:00[Europe/Moscow]",
-      "type": "USUAL"
+      "id": 1,
+      "creationDate": "2023-02-17T21:40:04.920982100+03:00[Europe/Moscow]",
+      "type": "VIP"
     }
   ]
 }

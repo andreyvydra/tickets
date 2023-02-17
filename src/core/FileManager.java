@@ -2,6 +2,7 @@ package core;
 
 import data.Ticket;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -29,11 +30,13 @@ public class FileManager {
             }
             fileInput.close();
             buffer.close();
-
+            return new JSONObject(sb.toString());
         } catch (IOException e) {
             System.out.println(e);
+        } catch (JSONException e) {
+            System.out.println("Некорректный файл");
         }
-        return new JSONObject(sb.toString());
+        return new JSONObject();
     }
 
     public void saveJSONObjectToFile(CollectionManager collectionManager) {

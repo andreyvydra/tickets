@@ -30,13 +30,15 @@ public class JSONParser {
     public ArrayList<Ticket> parse() {
         ArrayList<Ticket> tickets = new ArrayList<>();
 
-        for (Object item : (JSONArray) this.jObject.get("tickets")) {
-            try {
-                JSONObject jObj = (JSONObject) item;
-                Ticket ticket = this.parseTicket(jObj);
-                tickets.add(ticket);
-            } catch (ValueIsNotPositiveException | CoordinateXException | JSONException e) {
-                System.out.println(e);
+        if (this.jObject.has("tickets")) {
+            for (Object item : (JSONArray) this.jObject.get("tickets")) {
+                try {
+                    JSONObject jObj = (JSONObject) item;
+                    Ticket ticket = this.parseTicket(jObj);
+                    tickets.add(ticket);
+                } catch (ValueIsNotPositiveException | CoordinateXException | JSONException e) {
+                    System.out.println(e);
+                }
             }
         }
 

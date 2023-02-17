@@ -2,6 +2,7 @@ package data;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 /**
@@ -38,11 +39,11 @@ public class Person {
 
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
-        hm.put("birthday", this.birthday.toString());
+        hm.put("birthday", !Objects.isNull(this.birthday) ? this.birthday.toString() : null);
         hm.put("eyeColor", this.eyeColor.toString());
-        hm.put("hairColor", this.hairColor.toString());
+        hm.put("hairColor", !Objects.isNull(this.hairColor) ? this.hairColor.toString() : null);
         hm.put("nationality", this.nationality.toString());
-        hm.put("location", this.location.getMappedValues());
+        hm.put("location", !Objects.isNull(this.location) ? this.location.toString() : null);
         return hm;
     }
 
