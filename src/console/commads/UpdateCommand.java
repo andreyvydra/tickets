@@ -1,31 +1,37 @@
 package console.commads;
 
 import application.App;
+import console.commads.generalCommands.InputCollectionCommand;
 import core.CollectionManager;
 import core.InputTicket;
 import data.Ticket;
 
 import java.util.Objects;
 
-public class UpdateCommand implements Command {
-    private InputTicket inputTicket;
-    private CollectionManager collectionManager;
-
+/**
+ * UpdateCommand updates ticket by id and extends Input
+ * collection command. It finds changeable item
+ * and update its attributes.
+ *
+ * @see InputCollectionCommand
+ * @see CollectionManager
+ * @see InputTicket
+ */
+public class UpdateCommand extends InputCollectionCommand {
     public UpdateCommand(App app) {
-        this.inputTicket = new InputTicket(app);
-        this.collectionManager = app.getCollectionManager();
+        super(app);
     }
 
     @Override
     public void execute(String command) {
         long id = Long.parseLong(command.split(" ")[1]);
-        Ticket curTicket = this.collectionManager.getTicketById(id);
+        Ticket curTicket = this.getCollectionManager().getTicketById(id);
         if (Objects.isNull(curTicket)) {
             System.out.println("Ticket не был найден");
             return;
         }
         System.out.println(curTicket);
-        Ticket inpTicket = this.inputTicket.getTicketFromConsole();
+        Ticket inpTicket = this.getInputTicket().getTicketFromConsole();
         curTicket.setName(inpTicket.getName());
         curTicket.setType(inpTicket.getType());
         curTicket.setPerson(inpTicket.getPerson());

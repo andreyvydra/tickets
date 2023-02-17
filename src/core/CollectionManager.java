@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * CollectionManager operates collection and their items.
+ */
 public class CollectionManager {
     private TreeSet<Ticket> collection = new TreeSet<>();
     private LocalDateTime initDateTime;
@@ -27,7 +29,6 @@ public class CollectionManager {
     public Map<ZonedDateTime, List<Ticket>> getGroupsByDate() {
         return collection.stream().collect(Collectors.groupingBy(Ticket::getCreationDate));
     }
-
 
 
     public void loadTickets(ArrayList<Ticket> tickets) {

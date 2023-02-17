@@ -3,6 +3,12 @@ package data;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+
+/**
+ * Person is a class of person
+ *
+ * @see Ticket
+ */
 public class Person {
     private java.time.LocalDateTime birthday; //Поле может быть null
     private Color eyeColor; //Поле не может быть null

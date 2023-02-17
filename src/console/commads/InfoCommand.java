@@ -1,15 +1,22 @@
 package console.commads;
 
+import console.commads.generalCommands.CollectionCommand;
 import core.CollectionManager;
 
-public class InfoCommand implements Command{
-    private CollectionManager collectionManager;
+/**
+ * InfoCommand shows info about CollectionManager
+ *
+ * @see CollectionManager
+ * @see CollectionCommand
+ */
+public class InfoCommand extends CollectionCommand {
 
     public InfoCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+        super(collectionManager);
     }
+
     @Override
     public void execute(String command) {
-        System.out.println(collectionManager);
+        System.out.println(this.getCollectionManager());
     }
 }

@@ -4,15 +4,20 @@ import console.Console;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
-import core.exceptions.CoordinateException;
 import data.Ticket;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
+/**
+ * App is class which link collection, fileManager, console, parser etc.
+ * There is mainloop of program
+ *
+ * @see FileManager
+ * @see Console
+ * @see CollectionManager
+ * @see JSONParser
+ */
 public class App {
     private CollectionManager collectionManager;
     private FileManager fileManager;
@@ -67,7 +72,7 @@ public class App {
         return this.fileManager;
     }
 
-    public void setCommandBuffer(String[] commands) {
-        this.commandBuffer.addAll(Arrays.asList(commands));
+    public void setCommandBuffer(List<String> commands) {
+        this.commandBuffer.addAll(commands);
     }
 }

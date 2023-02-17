@@ -1,20 +1,24 @@
 package console.commads;
 
+import console.commads.generalCommands.CollectionCommand;
 import core.CollectionManager;
 import data.Ticket;
 
-import java.util.Collections;
-import java.util.stream.Collectors;
-
-public class PrintTypeAscendingCommand implements Command {
-    private CollectionManager collectionManager;
+/**
+ * PrintTypeAscendingCommand prints every ticket's type ascending.
+ *
+ * @see CollectionCommand
+ * @see CollectionManager
+ */
+public class PrintTypeAscendingCommand extends CollectionCommand {
 
     public PrintTypeAscendingCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+        super(collectionManager);
     }
+
     @Override
     public void execute(String command) {
-        for (Ticket ticket : this.collectionManager.getCollection()) {
+        for (Ticket ticket : this.getCollectionManager().getCollection()) {
             System.out.println(ticket.getType());
         }
     }

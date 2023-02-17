@@ -1,41 +1,73 @@
 package console.commads;
 
 import application.App;
+import console.commads.generalCommands.AppCommand;
 
 import java.io.*;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class ExecuteScriptCommand implements Command {
 
-    private App app;
+/**
+ * ExecuteScriptCommand can execute scripts with console commands.
+ * It also adds commands to commandBuffer from files. It protected from
+ * recursions.
+ *
+ * @see AppCommand
+ * @see App
+ * @see core.CollectionManager
+ */
+public class ExecuteScriptCommand extends AppCommand {
 
     public ExecuteScriptCommand(App app) {
-        this.app = app;
+        super(app);
     }
+
     @Override
     public void execute(String command) {
+        ArrayList<String> allCommands = new ArrayList<>();
+        allCommands.add(command);
+        if (this.recursionFindingCommands(command, allCommands)) {
+            this.getApp().setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
+        } else {
+            System.out.println("Неизбежна рекурсия");
+        }
+    }
+
+    public boolean recursionFindingCommands(String currentCommand, ArrayList<String> allCommands) {
+        String filename = currentCommand.split(" ")[1];
+        String[] commands = this.getCommandsFromFile(filename);
+        for (String command : commands) {
+            command = command.trim();
+            String commandName = command.split(" ")[0];
+            if (commandName.equals("execute_script") && allCommands.contains(command)) {
+                return false;
+            }
+            allCommands.add(command);
+            if (commandName.equals("execute_script")) {
+                if (!this.recursionFindingCommands(command, allCommands)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public String[] getCommandsFromFile(String filename) {
         try {
-            String filename = command.split(" ")[1];
             FileInputStream fileInput = new FileInputStream(filename);
             BufferedInputStream buffer = new BufferedInputStream(fileInput);
             StringBuilder stringBuilder = new StringBuilder();
             for (int b : buffer.readAllBytes()) {
                 stringBuilder.append((char) b);
             }
-            String[] commands = stringBuilder.toString().split("\n");
-            for (String currentCommand : stringBuilder.toString().split("\n")) {
-                currentCommand = currentCommand.trim();
-                if (currentCommand.equals(command)) {
-                    System.out.println("В файле присутствует рекурсия!");
-                    return;
-                }
-            }
-            this.app.setCommandBuffer(commands);
+            fileInput.close();
+            buffer.close();
+            return stringBuilder.toString().split("\n");
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден!");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
+        return null;
     }
 }

@@ -2,6 +2,12 @@ package data;
 
 import java.util.HashMap;
 
+
+/**
+ * Location stores x, y, z value for person
+ *
+ * @see Person
+ */
 public class Location {
     private double x;
     private Integer y; //Поле не может быть null

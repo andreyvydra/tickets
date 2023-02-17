@@ -1,5 +1,12 @@
 package console.commads;
 
+import console.commads.generalCommands.Command;
+
+/**
+ * ExitCommand is a command for exiting application
+ *
+ * @see Command
+ */
 public class ExitCommand implements Command {
 
     @Override

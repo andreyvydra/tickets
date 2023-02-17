@@ -1,5 +1,13 @@
 package console.commads;
 
+import console.commads.generalCommands.Command;
+
+/**
+ * Help command prints info about commands
+ *
+ * @see Command
+ * @see console.Console
+ */
 public class HelpCommand implements Command {
 
     @Override

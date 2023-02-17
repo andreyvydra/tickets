@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
+/**
+ * JSONParser converts data from json file to java objects.
+ *
+ * @see JSONObject
+ * @see JSONArray
+ */
 public class JSONParser {
     private JSONObject jObject;
 

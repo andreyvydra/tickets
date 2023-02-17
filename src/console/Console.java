@@ -2,11 +2,17 @@ package console;
 
 import application.App;
 import console.commads.*;
+import console.commads.generalCommands.Command;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Console executes every command and collect story of commands
+ *
+ * @see App
+ */
 public class Console {
     private HashMap<String, Command> commands = new HashMap<>();
     private ArrayList<String> commandsHistory = new ArrayList<>(8);

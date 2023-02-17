@@ -1,11 +1,14 @@
 package data;
 
-import core.exceptions.CoordinateException;
 import core.exceptions.CoordinateXException;
-import org.json.JSONException;
 
 import java.util.HashMap;
 
+/**
+ * Coordinates stores x, y values
+ *
+ * @see Ticket
+ */
 public class Coordinates {
     private Float x; //Значение поля должно быть больше -873, Поле не может быть null
     private Float y; //Поле не может быть null
@@ -16,7 +19,7 @@ public class Coordinates {
     }
 
     public Coordinates() {
-
+        super();
     }
 
     public void setX(Float x) throws CoordinateXException {

@@ -1,16 +1,21 @@
 package console.commads;
 
+import console.commads.generalCommands.CollectionCommand;
 import core.CollectionManager;
 
-public class ClearCommand implements Command {
-
-    private CollectionManager collectionManager;
+/**
+ * ClearCommand deletes all tickets from collection.
+ *
+ * @see CollectionManager
+ */
+public class ClearCommand extends CollectionCommand {
 
     public ClearCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+        super(collectionManager);
     }
+
     @Override
     public void execute(String command) {
-        this.collectionManager.clear();
+        this.getCollectionManager().clear();
     }
 }

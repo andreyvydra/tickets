@@ -1,11 +1,13 @@
 package data;
 
 import core.exceptions.ValueIsNotPositiveException;
-import org.json.JSONException;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 
+/**
+ * Ticket is a class of ticket
+ */
 public class Ticket implements Comparable<Ticket> {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой

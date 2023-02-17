@@ -1,25 +1,26 @@
 package console.commads;
 
 import application.App;
-import core.CollectionManager;
-import core.InputTicket;
+import console.commads.generalCommands.InputCollectionCommand;
 import data.*;
 
-import java.util.Collections;
-
-public class AddCommand implements Command {
-    private InputTicket inputTicket;
-    private CollectionManager collectionManager;
+/**
+ * AddCommand adds new item to collection.
+ *
+ * @see InputCollectionCommand
+ * @see App
+ * @see core.InputTicket
+ */
+public class AddCommand extends InputCollectionCommand {
 
     public AddCommand(App app) {
-        this.inputTicket = new InputTicket(app);
-        this.collectionManager = app.getCollectionManager();
+        super(app);
     }
 
     @Override
     public void execute(String command) {
-        Ticket ticket = this.inputTicket.getTicketFromConsole();
-        this.collectionManager.addTicket(ticket);
+        Ticket ticket = this.getInputTicket().getTicketFromConsole();
+        this.getCollectionManager().addTicket(ticket);
         System.out.println("Ticket успешно добавлен");
     }
 }

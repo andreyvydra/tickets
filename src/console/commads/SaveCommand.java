@@ -1,19 +1,27 @@
 package console.commads;
 
+import console.commads.generalCommands.CollectionCommand;
 import core.CollectionManager;
 import core.FileManager;
 
-public class SaveCommand implements Command {
-    private CollectionManager collectionManager;
+/**
+ * Class SaveCommand extends Collection command, and
+ * it's main func is saving data. It invokes method from FileManager,
+ * which translate data to json.
+ *
+ * @see FileManager
+ * @see CollectionCommand
+ */
+public class SaveCommand extends CollectionCommand {
     private FileManager fileManager;
 
     public SaveCommand(CollectionManager collectionManager, FileManager fileManager) {
-        this.collectionManager = collectionManager;
+        super(collectionManager);
         this.fileManager = fileManager;
     }
 
     @Override
     public void execute(String command) {
-        this.fileManager.saveJSONObjectToFile(this.collectionManager);
+        this.fileManager.saveJSONObjectToFile(this.getCollectionManager());
     }
 }

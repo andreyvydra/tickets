@@ -5,9 +5,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
+/**
+ * FileManager returns values from json files
+ *
+ * @see JSONParser
+ */
 public class FileManager {
     private String filename;
 
@@ -31,12 +34,6 @@ public class FileManager {
             System.out.println(e);
         }
         return new JSONObject(sb.toString());
-    }
-
-    public void loadDataToCollection(CollectionManager collectionManager) {
-        JSONParser jParser = new JSONParser(this.getJSONObjectFromFile());
-        ArrayList<Ticket> tickets = jParser.parse();
-        collectionManager.loadTickets(tickets);
     }
 
     public void saveJSONObjectToFile(CollectionManager collectionManager) {
