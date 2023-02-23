@@ -1,9 +1,13 @@
 package data;
 
+import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.Objects;
+
+import static core.Globals.TicketFields.*;
 
 /**
  * Ticket is a class of ticket
@@ -17,40 +21,62 @@ public class Ticket implements Comparable<Ticket> {
     private TicketType type; //Поле не может быть null
     private Person person; //Поле не может быть null
 
-    public void setId(long id) throws ValueIsNotPositiveException {
+    public Ticket() {
+        id = 1;
+        name = "ticket";
+        coordinates = new Coordinates();
+        creationDate = ZonedDateTime.now();
+        price = 1000;
+        type = TicketType.USUAL;
+        person = new Person();
+    }
+
+    public void setId(long id) {
         if (id <= 0) {
-            throw new ValueIsNotPositiveException("Id должен быть положительным");
+            throw new ValueIsNotPositiveException();
         }
         this.id = id;
     }
 
     public void setName(String name) {
         if (name.isEmpty()) {
-
+            throw new EmptyNameException();
         }
         this.name = name;
     }
 
     public void setCoordinates(Coordinates coordinates) {
+        if (Objects.isNull(coordinates)) {
+            throw new NullPointerException();
+        }
         this.coordinates = coordinates;
     }
 
     public void setCreationDate(ZonedDateTime creationDate) {
+        if (Objects.isNull(creationDate)) {
+            throw new NullPointerException();
+        }
         this.creationDate = creationDate;
     }
 
     public void setPrice(long price) {
         if (price <= 0) {
-            throw new ValueIsNotPositiveException("Price is negative");
+            throw new ValueIsNotPositiveException();
         }
         this.price = price;
     }
 
     public void setType(TicketType type) {
+        if (Objects.isNull(type)) {
+            throw new NullPointerException();
+        }
         this.type = type;
     }
 
     public void setPerson(Person person) {
+        if (Objects.isNull(person)) {
+            throw new NullPointerException();
+        }
         this.person = person;
     }
 
@@ -97,13 +123,13 @@ public class Ticket implements Comparable<Ticket> {
 
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
-        hm.put("id", this.id);
-        hm.put("name", this.name);
-        hm.put("coordinates", this.coordinates.getMappedValues());
-        hm.put("creationDate", this.creationDate.toString());
-        hm.put("price", this.price);
-        hm.put("type", this.type.toString());
-        hm.put("person", this.person.getMappedValues());
+        hm.put(ID, this.id);
+        hm.put(NAME, this.name);
+        hm.put(COORDINATES, this.coordinates.getMappedValues());
+        hm.put(CREATION_DATE, this.creationDate.toString());
+        hm.put(PRICE, this.price);
+        hm.put(TYPE, this.type.toString());
+        hm.put(PERSON, this.person.getMappedValues());
         return hm;
     }
 }

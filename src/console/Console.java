@@ -1,12 +1,19 @@
 package console;
 
 import application.App;
-import console.commads.*;
+import application.DataApp;
 import console.commads.generalCommands.Command;
+import core.exceptions.CommandWasNotFound;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import static core.Globals.COMMAND_POSITION;
+import static core.Globals.CommandNames.commandMap;
+import static core.Globals.HISTORY_SIZE;
 
 /**
  * Console executes every command and collect story of commands
@@ -14,33 +21,37 @@ import java.util.HashMap;
  * @see App
  */
 public class Console {
-    private HashMap<String, Command> commands = new HashMap<>();
-    private ArrayList<String> commandsHistory = new ArrayList<>(8);
+    private final HashMap<String, Command> commands = new HashMap<>();
+    private final ArrayList<String> commandsHistory = new ArrayList<>(8);
 
-    public Console(App app) {
-        this.commands.put("help", new HelpCommand());
-        this.commands.put("info", new InfoCommand(app.getCollectionManager()));
-        this.commands.put("show", new ShowCommand(app.getCollectionManager()));
-        this.commands.put("add", new AddCommand(app));
-        this.commands.put("update", new UpdateCommand(app));
-        this.commands.put("remove_by_id", new RemoveCommand(app.getCollectionManager()));
-        this.commands.put("clear", new ClearCommand(app.getCollectionManager()));
-        this.commands.put("save", new SaveCommand(app.getCollectionManager(), app.getFileManager()));
-        this.commands.put("execute_script", new ExecuteScriptCommand(app));
-        this.commands.put("add_if_max", new AddIfMaxCommand(app));
-        this.commands.put("remove_lower", new RemoveLowerCommand(app));
-        this.commands.put("exit", new ExitCommand());
-        this.commands.put("history", new HistoryCommand(this.commandsHistory));
-        this.commands.put("group_counting_by_creation_date", new GroupByDateCommand(app.getCollectionManager()));
-        this.commands.put("count_greater_than_type", new GreaterThenTypeCommand(app.getCollectionManager()));
-        this.commands.put("print_field_ascending_type", new PrintTypeAscendingCommand(app.getCollectionManager()));
+    public Console(DataApp dataApp) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        for (Map.Entry<String, Class<? extends Command>> entry : commandMap.entrySet()) {
+            String key = entry.getKey();
+            Class<? extends Command> value = entry.getValue();
+            Constructor<?> constructor = value.getConstructors()[0];
+            if (constructor.getParameterCount() == 1) {
+                if (constructor.getParameterTypes()[0].equals(DataApp.class)) {
+                    commands.put(key, (Command) constructor.newInstance(dataApp));
+                } else if (constructor.getParameterTypes()[0].equals(ArrayList.class)) {
+                    commands.put(key, (Command) constructor.newInstance(commandsHistory));
+                } else {
+                    commands.put(key, (Command) constructor.newInstance(commands));
+                }
+            } else {
+                commands.put(key, (Command) constructor.newInstance());
+            }
+        }
     }
 
     public void execute(String command) throws InvocationTargetException, IllegalAccessException, NullPointerException {
-        this.commands.get(command.split(" ")[0]).execute(command);
-        if (commandsHistory.size() == 8) {
-            this.commandsHistory.remove(0);
+        String commandName = command.split(" ")[COMMAND_POSITION];
+        if (!commandMap.containsKey(commandName)) {
+            throw new CommandWasNotFound();
         }
-        this.commandsHistory.add(command);
+        commands.get(commandName).execute(command);
+        if (commandsHistory.size() == HISTORY_SIZE) {
+            commandsHistory.remove(0);
+        }
+        commandsHistory.add(command);
     }
 }

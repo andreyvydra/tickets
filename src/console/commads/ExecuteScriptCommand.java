@@ -1,10 +1,14 @@
 package console.commads;
 
-import application.App;
-import console.commads.generalCommands.AppCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import static core.Globals.CommandNames.EXECUTE_SCRIPT;
+import static core.Globals.ARGUMENT_POSITION;
+import static core.Globals.COMMAND_POSITION;
 
 
 /**
@@ -12,62 +16,63 @@ import java.util.ArrayList;
  * It also adds commands to commandBuffer from files. It protected from
  * recursions.
  *
- * @see AppCommand
- * @see App
+ * @see DataApp
  * @see core.CollectionManager
  */
-public class ExecuteScriptCommand extends AppCommand {
+public class ExecuteScriptCommand extends DataAppCommand {
 
-    public ExecuteScriptCommand(App app) {
-        super(app);
+    public ExecuteScriptCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
         ArrayList<String> allCommands = new ArrayList<>();
         allCommands.add(command);
-        if (this.recursionFindingCommands(command, allCommands)) {
-            this.getApp().setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
+        if (!this.recursionFindingCommands(command, allCommands)) {
+            this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
         } else {
             System.out.println("Неизбежна рекурсия");
         }
     }
 
     public boolean recursionFindingCommands(String currentCommand, ArrayList<String> allCommands) {
-        String filename = currentCommand.split(" ")[1];
+        String filename = currentCommand.split(" ")[ARGUMENT_POSITION];
         String[] commands = this.getCommandsFromFile(filename);
         for (String command : commands) {
             command = command.trim();
-            String commandName = command.split(" ")[0];
-            if (commandName.equals("execute_script") && allCommands.contains(command)) {
-                return false;
+            String commandName = command.split(" ")[COMMAND_POSITION];
+            if (commandName.equals(EXECUTE_SCRIPT) && allCommands.contains(command)) {
+                return true;
             }
             allCommands.add(command);
-            if (commandName.equals("execute_script")) {
-                if (!this.recursionFindingCommands(command, allCommands)) {
-                    return false;
+            if (commandName.equals(EXECUTE_SCRIPT)) {
+                if (this.recursionFindingCommands(command, allCommands)) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public String[] getCommandsFromFile(String filename) {
-        try {
-            FileInputStream fileInput = new FileInputStream(filename);
-            BufferedInputStream buffer = new BufferedInputStream(fileInput);
+        try (FileInputStream fileInput = new FileInputStream(filename);
+             BufferedInputStream buffer = new BufferedInputStream(fileInput)) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int b : buffer.readAllBytes()) {
                 stringBuilder.append((char) b);
             }
-            fileInput.close();
-            buffer.close();
             return stringBuilder.toString().split("\n");
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден!");
+            System.out.println("Файл не найден, является директорией или не может быть прочитан!");
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Поток был завершён, или файл не может быть прочитан!");
         }
-        return null;
+        return new String[]{};
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("execute_script file_name : считать и исполнить скрипт из указанного файла.");
     }
 }

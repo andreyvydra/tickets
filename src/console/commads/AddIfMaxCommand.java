@@ -1,30 +1,36 @@
 package console.commads;
 
-import application.App;
-import console.commads.generalCommands.InputCollectionCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
+import core.InputTicket;
 import data.Ticket;
 
 /**
  * AddIfMaxCommand adds inputted element if it's max of collection.
  *
- * @see InputCollectionCommand
- * @see App
+ * @see DataApp
  * @see core.CollectionManager
  */
-public class AddIfMaxCommand extends InputCollectionCommand {
+public class AddIfMaxCommand extends DataAppCommand {
 
-    public AddIfMaxCommand(App app) {
-        super(app);
+    public AddIfMaxCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
-        Ticket ticket = this.getInputTicket().getTicketFromConsole();
-        if (ticket.compareTo(this.getCollectionManager().getMaxTicket()) > 0) {
-            this.getCollectionManager().addTicket(ticket);
+        Ticket ticket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
+        if (ticket.compareTo(dataApp.getMaxTicket()) > 0) {
+            dataApp.addTicketToCollection(ticket);
             System.out.println("Ticket успешно добавлен");
         } else {
             System.out.println("Ticket слишком маленький");
         }
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("add_if_max {element} : добавить новый элемент в коллекцию, " +
+                "если его значение превышает значение наибольшего элемента этой коллекции");
     }
 }

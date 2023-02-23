@@ -3,6 +3,10 @@ package data;
 import core.exceptions.CoordinateXException;
 
 import java.util.HashMap;
+import java.util.Objects;
+
+import static core.Globals.COORDINATE_X_MIN_LIMIT;
+import static core.Globals.CoordinatesFields.*;
 
 /**
  * Coordinates stores x, y values
@@ -23,25 +27,28 @@ public class Coordinates {
     }
 
     public void setX(Float x) throws CoordinateXException {
-        if (x <= -873) {
+        if (x <= COORDINATE_X_MIN_LIMIT) {
             throw new CoordinateXException();
         }
         this.x = x;
     }
 
     public void setY(Float y) {
+        if (Objects.isNull(y)) {
+            throw new NullPointerException();
+        }
         this.y = y;
     }
 
     @Override
     public String toString() {
-        return "Coordinates(x=" + this.x + ", y=" + this.y + ")";
+        return "Coordinates(" + X + "=" + this.x + ", " + Y + "=" + this.y + ")";
     }
 
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
-        hm.put("x", this.x);
-        hm.put("y", this.y);
+        hm.put(X, this.x);
+        hm.put(Y, this.y);
         return hm;
     }
 }

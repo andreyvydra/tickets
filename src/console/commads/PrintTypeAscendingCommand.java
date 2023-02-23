@@ -1,25 +1,31 @@
 package console.commads;
 
-import console.commads.generalCommands.CollectionCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import data.Ticket;
 
 /**
  * PrintTypeAscendingCommand prints every ticket's type ascending.
  *
- * @see CollectionCommand
  * @see CollectionManager
  */
-public class PrintTypeAscendingCommand extends CollectionCommand {
+public class PrintTypeAscendingCommand extends DataAppCommand {
 
-    public PrintTypeAscendingCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public PrintTypeAscendingCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
-        for (Ticket ticket : this.getCollectionManager().getCollection()) {
+        for (Ticket ticket : dataApp.getCollection()) {
             System.out.println(ticket.getType());
         }
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("print_field_ascending_type : вывести значения поля type" +
+                " всех элементов в порядке возрастания");
     }
 }

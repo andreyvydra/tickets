@@ -4,7 +4,7 @@ import console.Console;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
-import data.Ticket;
+import core.exceptions.CommandWasNotFound;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -19,62 +19,36 @@ import java.util.*;
  * @see JSONParser
  */
 public class App {
-    private CollectionManager collectionManager;
-    private FileManager fileManager;
-    private JSONParser jsonParser;
-    private ArrayList<String> commandBuffer = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+    private final DataApp dataApp;
 
     public App(String filename) {
-        this.collectionManager = new CollectionManager();
-        this.fileManager = new FileManager(filename);
-        this.jsonParser = new JSONParser(this.fileManager.getJSONObjectFromFile());
-        ArrayList<Ticket> tickets = this.jsonParser.parse();
-        this.collectionManager.loadTickets(tickets);
+        dataApp = new DataApp(filename);
     }
 
-    public CollectionManager getCollectionManager() {
-        return collectionManager;
-    }
+    public void execute() throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
-    public Scanner getScanner() {
-        return scanner;
-    }
-
-    public void execute() {
-
-        Console console = new Console(this);
+        Console console = new Console(dataApp);
 
         while (true) {
             try {
                 System.out.print("Введите команду: ");
                 String input;
-                if (this.commandBuffer.size() == 0) {
+                if (dataApp.getCommandBufferSize() == 0) {
                     input = scanner.nextLine().trim();
                 } else {
-                    input = this.commandBuffer.get(0).trim();
+                    input = dataApp.getCommandFromBuffer();
                     System.out.println(input);
-                    this.commandBuffer.remove(0);
                 }
                 console.execute(input);
             } catch (NoSuchElementException e) {
                 System.out.println("Некорректный символ!");
-                System.exit(1);
+                break;
             } catch (InvocationTargetException | IllegalAccessException e) {
-                System.out.println(e);
-            } catch (NullPointerException e) {
+                System.out.println("Файл не доступен для чтения!");
+            } catch (CommandWasNotFound e) {
                 System.out.println("Введена неправильная команда!");
             }
-
         }
-
-    }
-
-    public FileManager getFileManager() {
-        return this.fileManager;
-    }
-
-    public void setCommandBuffer(List<String> commands) {
-        this.commandBuffer.addAll(commands);
     }
 }

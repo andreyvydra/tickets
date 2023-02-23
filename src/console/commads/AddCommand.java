@@ -1,26 +1,31 @@
 package console.commads;
 
-import application.App;
-import console.commads.generalCommands.InputCollectionCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
+import core.InputTicket;
 import data.*;
 
 /**
  * AddCommand adds new item to collection.
  *
- * @see InputCollectionCommand
- * @see App
+ * @see DataApp
  * @see core.InputTicket
  */
-public class AddCommand extends InputCollectionCommand {
+public class AddCommand extends DataAppCommand {
 
-    public AddCommand(App app) {
-        super(app);
+
+    public AddCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
-        Ticket ticket = this.getInputTicket().getTicketFromConsole();
-        this.getCollectionManager().addTicket(ticket);
+        Ticket ticket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
+        dataApp.addTicketToCollection(ticket);
         System.out.println("Ticket успешно добавлен");
+    }
+
+    public void printHelp() {
+        System.out.println("add {element} : добавить новый элемент в коллекцию");
     }
 }

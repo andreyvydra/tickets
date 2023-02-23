@@ -1,7 +1,7 @@
 package console.commads;
 
-import console.commads.generalCommands.CollectionCommand;
-import core.CollectionManager;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
 import core.FileManager;
 
 /**
@@ -10,18 +10,20 @@ import core.FileManager;
  * which translate data to json.
  *
  * @see FileManager
- * @see CollectionCommand
  */
-public class SaveCommand extends CollectionCommand {
-    private FileManager fileManager;
+public class SaveCommand extends DataAppCommand {
 
-    public SaveCommand(CollectionManager collectionManager, FileManager fileManager) {
-        super(collectionManager);
-        this.fileManager = fileManager;
+    public SaveCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
-        this.fileManager.saveJSONObjectToFile(this.getCollectionManager());
+        dataApp.saveJSONObjectToFile();
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("save : сохранить коллекцию в файл");
     }
 }

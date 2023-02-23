@@ -13,7 +13,7 @@ import java.io.*;
  * @see JSONParser
  */
 public class FileManager {
-    private String filename;
+    private final String filename;
 
     public FileManager(String filename) {
         this.filename = filename;
@@ -32,7 +32,7 @@ public class FileManager {
             buffer.close();
             return new JSONObject(sb.toString());
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Поток был завершён, или файл не может быть прочитан!");
         } catch (JSONException e) {
             System.out.println("Некорректный файл");
         }
@@ -40,21 +40,21 @@ public class FileManager {
     }
 
     public void saveJSONObjectToFile(CollectionManager collectionManager) {
-        JSONObject mainObject = new JSONObject();
+        JSONObject mainJsonObject = new JSONObject();
         JSONArray ticketsArray = new JSONArray();
-        mainObject.put("tickets", ticketsArray);
+        mainJsonObject.put("tickets", ticketsArray);
         try {
             FileWriter fileOutput = new FileWriter(this.filename);
             BufferedWriter writer = new BufferedWriter(fileOutput);
             for (Ticket ticket : collectionManager.getCollection()) {
-                JSONObject jo = new JSONObject(ticket.getMappedValues());
-                ticketsArray.put(jo);
+                JSONObject jsonObject = new JSONObject(ticket.getMappedValues());
+                ticketsArray.put(jsonObject);
             }
-            writer.write(mainObject.toString());
+            writer.write(mainJsonObject.toString());
             writer.close();
             fileOutput.close();
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println("Поток был завершён, или файл не может быть прочитан!");
         }
     }
 }

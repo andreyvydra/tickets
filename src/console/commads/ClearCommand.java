@@ -1,6 +1,7 @@
 package console.commads;
 
-import console.commads.generalCommands.CollectionCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 
 /**
@@ -8,14 +9,19 @@ import core.CollectionManager;
  *
  * @see CollectionManager
  */
-public class ClearCommand extends CollectionCommand {
+public class ClearCommand extends DataAppCommand {
 
-    public ClearCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public ClearCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
-        this.getCollectionManager().clear();
+        this.dataApp.clearCollectionManger();
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("clear : очистить коллекцию");
     }
 }

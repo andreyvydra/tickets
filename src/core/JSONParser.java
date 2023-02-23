@@ -1,6 +1,7 @@
 package core;
 
 import core.exceptions.CoordinateXException;
+import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.*;
 import org.json.JSONArray;
@@ -11,6 +12,11 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
+import static core.Globals.JSONFields.PERSON;
+import static core.Globals.JSONFields.TICKETS;
+import static core.Globals.LocationFields.*;
+import static core.Globals.PersonFields.*;
+import static core.Globals.TicketFields.*;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
@@ -21,7 +27,7 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  * @see JSONArray
  */
 public class JSONParser {
-    private JSONObject jObject;
+    private final JSONObject jObject;
 
     public JSONParser(JSONObject jObject) {
         this.jObject = jObject;
@@ -30,14 +36,18 @@ public class JSONParser {
     public ArrayList<Ticket> parse() {
         ArrayList<Ticket> tickets = new ArrayList<>();
 
-        if (this.jObject.has("tickets")) {
-            for (Object item : (JSONArray) this.jObject.get("tickets")) {
+        if (this.jObject.has(TICKETS)) {
+            for (Object item : (JSONArray) this.jObject.get(TICKETS)) {
                 try {
-                    JSONObject jObj = (JSONObject) item;
-                    Ticket ticket = this.parseTicket(jObj);
+                    JSONObject jsonObject = (JSONObject) item;
+                    Ticket ticket = this.parseTicket(jsonObject);
                     tickets.add(ticket);
-                } catch (ValueIsNotPositiveException | CoordinateXException | JSONException e) {
+                } catch (ValueIsNotPositiveException | CoordinateXException | EmptyNameException e) {
                     System.out.println(e);
+                } catch (JSONException e) {
+                    System.out.println("Некорректный файл!");
+                } catch (NullPointerException e) {
+                    System.out.println("Поле не может быть null");
                 }
             }
         }
@@ -56,40 +66,40 @@ public class JSONParser {
             ticket.setType(this.getType(jObject));
             ticket.setPerson(this.getPerson(jObject));
         } catch (JSONException e) {
-            System.out.println(e);
+            System.out.println("Некорректный файл!");
         }
         return ticket;
     }
 
     public Person getPerson(JSONObject jObject) {
         Person person = new Person();
-        JSONObject jPerson = (JSONObject) jObject.get("person");
+        JSONObject jPerson = (JSONObject) jObject.get(PERSON);
 
-        if (jPerson.isNull("birthday") || !jPerson.has("birthday")) {
+        if (jPerson.isNull(BIRTHDAY) || !jPerson.has(BIRTHDAY)) {
             person.setBirthday(null);
         } else {
-            person.setBirthday(LocalDateTime.parse(jPerson.getString("birthday"), ISO_LOCAL_DATE_TIME));
+            person.setBirthday(LocalDateTime.parse(jPerson.getString(BIRTHDAY), ISO_LOCAL_DATE_TIME));
         }
 
-        person.setEyeColor(Color.valueOf(jPerson.getString("eyeColor")));
+        person.setEyeColor(Color.valueOf(jPerson.getString(EYE_COLOR)));
 
-        if (jPerson.isNull("hairColor") || !jPerson.has("hairColor")) {
+        if (jPerson.isNull(HAIR_COLOR) || !jPerson.has(HAIR_COLOR)) {
             person.setHairColor(null);
         } else {
-            person.setHairColor(Color.valueOf(jPerson.getString("hairColor")));
+            person.setHairColor(Color.valueOf(jPerson.getString(HAIR_COLOR)));
         }
 
-        person.setNationality(Country.valueOf(jPerson.getString("nationality")));
+        person.setNationality(Country.valueOf(jPerson.getString(NATIONALITY)));
 
-        if (jPerson.isNull("location") || !jPerson.has("location")) {
+        if (jPerson.isNull(LOCATION) || !jPerson.has(LOCATION)) {
             person.setLocation(null);
         } else {
-            JSONObject jLocation = (JSONObject) jPerson.get("location");
+            JSONObject jLocation = (JSONObject) jPerson.get(LOCATION);
             Location location = new Location();
 
-            location.setX(jLocation.getDouble("x"));
-            location.setY(jLocation.getInt("y"));
-            location.setZ(jLocation.getFloat("z"));
+            location.setX(jLocation.getDouble(X));
+            location.setY(jLocation.getInt(Y));
+            location.setZ(jLocation.getFloat(Z));
 
             person.setLocation(location);
         }
@@ -97,27 +107,27 @@ public class JSONParser {
     }
 
     public TicketType getType(JSONObject jObject) {
-        return TicketType.valueOf(jObject.getString("type"));
+        return TicketType.valueOf(jObject.getString(TYPE));
     }
 
     public long getPrice(JSONObject jObject) {
-        return jObject.getLong("price");
+        return jObject.getLong(PRICE);
     }
 
     public ZonedDateTime getCreationDate(JSONObject jObject) {
-        return ZonedDateTime.parse(jObject.getString("creationDate"), ISO_ZONED_DATE_TIME);
+        return ZonedDateTime.parse(jObject.getString(CREATION_DATE), ISO_ZONED_DATE_TIME);
     }
 
     public Coordinates getCoordinates(JSONObject jObject) {
-        JSONObject jCoordinate = (JSONObject) jObject.get("coordinates");
-        return new Coordinates(jCoordinate.getFloat("x"), jCoordinate.getFloat("y"));
+        JSONObject jCoordinate = (JSONObject) jObject.get(COORDINATES);
+        return new Coordinates(jCoordinate.getFloat(Globals.CoordinatesFields.X), jCoordinate.getFloat(Globals.CoordinatesFields.Y));
     }
 
     public long getIdTicket(JSONObject jObject) {
-        return jObject.getLong("id");
+        return jObject.getLong(ID);
     }
 
     public String getStringName(JSONObject jObject) {
-        return jObject.getString("name");
+        return jObject.getString(NAME);
     }
 }

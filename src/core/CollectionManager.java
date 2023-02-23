@@ -11,15 +11,11 @@ import java.util.stream.Collectors;
  * CollectionManager operates collection and their items.
  */
 public class CollectionManager {
-    private TreeSet<Ticket> collection = new TreeSet<>();
-    private LocalDateTime initDateTime;
+    private final TreeSet<Ticket> collection = new TreeSet<>();
+    private final LocalDateTime initDateTime;
 
     public CollectionManager() {
         this.initDateTime = LocalDateTime.now();
-    }
-
-    public LocalDateTime getInitDateTime() {
-        return this.initDateTime;
     }
 
     public TreeSet<Ticket> getCollection() {
@@ -52,10 +48,13 @@ public class CollectionManager {
         long id = 0;
         for (Ticket ticket : this.collection) {
             if (ticket.getId() > id) {
-                id = ticket.getId();
+                id = ticket.getId() + 1;
             }
         }
-        return id + 1;
+        while (!checkId(id)) {
+            id += 1;
+        }
+        return id;
     }
 
     public void addTicket(Ticket ticket) {

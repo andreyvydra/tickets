@@ -6,10 +6,20 @@ package data;
  * @see Person
  */
 public enum Color {
-    GREEN,
-    YELLOW,
-    ORANGE,
-    RED,
-    BLUE,
-    BROWN;
+    GREEN("Зелёный"),
+    YELLOW("Жёлтый"),
+    ORANGE("Оранжевый"),
+    RED("Красный"),
+    BLUE("Синий"),
+    BROWN("Коричневый");
+
+    public final String colorName;
+    Color(String name) {
+        this.colorName = name;
+    }
+
+    @Override
+    public String toString() {
+        return colorName;
+    }
 }

@@ -1,9 +1,12 @@
 package console.commads;
 
-import console.commads.generalCommands.CollectionCommand;
+import application.DataApp;
+import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import data.Ticket;
 import data.TicketType;
+
+import static core.Globals.ARGUMENT_POSITION;
 
 /**
  * GreaterThenTypeCommand shows tickets, which have larger
@@ -11,20 +14,19 @@ import data.TicketType;
  *
  * @see Ticket
  * @see CollectionManager
- * @see CollectionCommand
  */
-public class GreaterThenTypeCommand extends CollectionCommand {
+public class GreaterThenTypeCommand extends DataAppCommand {
 
-    public GreaterThenTypeCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public GreaterThenTypeCommand(DataApp dataApp) {
+        super(dataApp);
     }
 
     @Override
     public void execute(String command) {
         try {
-            TicketType type = TicketType.valueOf(command.split(" ")[1]);
+            TicketType type = TicketType.valueOf(command.split(" ")[ARGUMENT_POSITION]);
             int count = 0;
-            for (Ticket ticket : this.getCollectionManager().getCollection()) {
+            for (Ticket ticket : dataApp.getCollectionManager().getCollection()) {
                 if (ticket.getType().compareTo(type) > 0) {
                     count += 1;
                 }
@@ -35,5 +37,11 @@ public class GreaterThenTypeCommand extends CollectionCommand {
         } catch (IllegalArgumentException e) {
             System.out.println("Такого type не существует!");
         }
+    }
+
+    @Override
+    public void printHelp() {
+        System.out.println("count_greater_than_type type : вывести количество элементов, значение" +
+                " поля type которых больше заданного");
     }
 }

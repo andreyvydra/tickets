@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static core.Globals.PersonFields.*;
+
 
 /**
  * Person is a class of person
@@ -17,11 +19,22 @@ public class Person {
     private Country nationality; //Поле не может быть null
     private Location location; //Поле может быть null
 
+    public Person() {
+        birthday = null;
+        eyeColor = Color.BLUE;
+        hairColor = null;
+        nationality = Country.USA;
+        location = null;
+    }
+
     public void setBirthday(LocalDateTime birthday) {
         this.birthday = birthday;
     }
 
     public void setEyeColor(Color eyeColor) {
+        if (Objects.isNull(eyeColor)) {
+            throw new NullPointerException();
+        }
         this.eyeColor = eyeColor;
     }
 
@@ -34,16 +47,19 @@ public class Person {
     }
 
     public void setNationality(Country nationality) {
+        if (Objects.isNull(nationality)) {
+            throw new NullPointerException();
+        }
         this.nationality = nationality;
     }
 
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
-        hm.put("birthday", !Objects.isNull(this.birthday) ? this.birthday.toString() : null);
-        hm.put("eyeColor", this.eyeColor.toString());
-        hm.put("hairColor", !Objects.isNull(this.hairColor) ? this.hairColor.toString() : null);
-        hm.put("nationality", this.nationality.toString());
-        hm.put("location", !Objects.isNull(this.location) ? this.location.getMappedValues() : null);
+        hm.put(BIRTHDAY, !Objects.isNull(this.birthday) ? this.birthday.toString() : null);
+        hm.put(EYE_COLOR, this.eyeColor.toString());
+        hm.put(HAIR_COLOR, !Objects.isNull(this.hairColor) ? this.hairColor.toString() : null);
+        hm.put(NATIONALITY, this.nationality.toString());
+        hm.put(LOCATION, !Objects.isNull(this.location) ? this.location.getMappedValues() : null);
         return hm;
     }
 

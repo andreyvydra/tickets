@@ -1,6 +1,8 @@
 package data;
 
 import java.util.HashMap;
+import java.util.Objects;
+import static core.Globals.LocationFields.*;
 
 
 /**
@@ -13,11 +15,20 @@ public class Location {
     private Integer y; //Поле не может быть null
     private float z;
 
+    public Location() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
     public void setX(double x) {
         this.x = x;
     }
 
     public void setY(Integer y) {
+        if (Objects.isNull(y)) {
+            throw new NullPointerException();
+        }
         this.y = y;
     }
 
@@ -27,14 +38,14 @@ public class Location {
 
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
-        hm.put("x", this.x);
-        hm.put("y", this.y);
-        hm.put("z", this.z);
+        hm.put(X, this.x);
+        hm.put(Y, this.y);
+        hm.put(Z, this.z);
         return hm;
     }
 
     @Override
     public String toString() {
-        return "Location(x=" + this.x + ", y=" + this.y + ", z=" + this.z + ")";
+        return "Location(" + X + "=" + this.x + ", " + Y + "=" + this.y + ", " + Z + "=" + this.z + ")";
     }
 }

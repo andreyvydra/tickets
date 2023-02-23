@@ -1,6 +1,5 @@
 package core;
 
-import application.App;
 import core.exceptions.CoordinateXException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.*;
@@ -11,101 +10,98 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import static core.Globals.COORDINATE_X_MIN_LIMIT;
+
 public class InputTicket {
-    private CollectionManager collectionManager;
-    private Scanner scanner;
-
-    public InputTicket(App app) {
-        this.collectionManager = app.getCollectionManager();
-        this.scanner = app.getScanner();
-    }
-
-
-    public Ticket getTicketFromConsole() {
+    private static final Scanner scanner = new Scanner(System.in);
+    
+    public static Ticket getTicketFromConsole(CollectionManager collectionManager) {
         Ticket ticket = new Ticket();
 
-        this.setId(ticket);
-        this.setName(ticket);
-        this.setCoordinates(ticket);
-        this.setCreationDate(ticket);
-        this.setPrice(ticket);
-        this.setType(ticket);
-        this.setPerson(ticket);
+        setId(ticket, collectionManager);
+        setName(ticket);
+        setCoordinates(ticket);
+        setCreationDate(ticket);
+        setPrice(ticket);
+        setType(ticket);
+        setPerson(ticket);
         return ticket;
 
     }
 
-    public void setPerson(Ticket ticket) {
+    public static void setPerson(Ticket ticket) {
         Person person = new Person();
         System.out.println("Создание человека");
 
-        this.setPersonsBirthday(person);
-        this.setPersonsEyeColor(person);
-        this.setPersonsHairColor(person);
-        this.setPersonsNationality(person);
-        if (!this.willLocationInputted()) {
+        setPersonsBirthday(person);
+        setPersonsEyeColor(person);
+        setPersonsHairColor(person);
+        setPersonsNationality(person);
+        if (!isLocationInputted()) {
             person.setLocation(null);
         } else {
-            this.setLocation(person);
+            setLocation(person);
         }
 
         ticket.setPerson(person);
     }
 
-    public void setLocation(Person person) {
+    public static void setLocation(Person person) {
         Location location = new Location();
-        this.setLocationX(location);
-        this.setLocationY(location);
-        this.setLocationZ(location);
+        setLocationX(location);
+        setLocationY(location);
+        setLocationZ(location);
 
         person.setLocation(location);
     }
 
-    public void setLocationX(Location location) {
+    public static void setLocationX(Location location) {
         while (true) {
             try {
                 System.out.print("Введите координату x (Person x): ");
                 location.setX(Double.parseDouble(scanner.nextLine()));
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Введена пустая строка либо текст");
+                System.out.println("Введен текст");
             }
         }
     }
 
-    public void setLocationY(Location location) {
+    public static void setLocationY(Location location) {
         while (true) {
             try {
                 System.out.print("Введите координату y (Person y): ");
                 location.setY(Integer.parseInt(scanner.nextLine()));
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Введена пустая строка либо текст");
+                System.out.println("Введен текст");
+            } catch (NullPointerException e) {
+                System.out.println("Введен null");
             }
         }
     }
 
-    public void setLocationZ(Location location) {
+    public static void setLocationZ(Location location) {
         while (true) {
             try {
                 System.out.print("Введите координату z (Person z): ");
                 location.setZ(Float.parseFloat(scanner.nextLine()));
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Введена пустая строка либо текст");
+                System.out.println("Введен текст");
             }
         }
     }
 
-    public boolean willLocationInputted() {
+    public static boolean isLocationInputted() {
         System.out.println("Хотите ли вы ввести значения локации? \n" +
                 "Press enter or input something [no, yes]");
         String line = scanner.nextLine();
         return !line.isEmpty();
     }
 
-    public void setPersonsNationality(Person person) {
-        this.printCountries();
+    public static void setPersonsNationality(Person person) {
+        printCountries();
         while (true) {
             try {
                 System.out.print("Национальность (nationality): ");
@@ -117,15 +113,15 @@ public class InputTicket {
         }
     }
 
-    public void printCountries() {
+    public static void printCountries() {
         System.out.println("Доступные страны");
         for (Country country : Country.values()) {
             System.out.println(country);
         }
     }
 
-    public void setPersonsHairColor(Person person) {
-        this.printColors();
+    public static void setPersonsHairColor(Person person) {
+        printColors();
         while (true) {
             try {
                 System.out.print("Цвет волос (hairColor): ");
@@ -142,8 +138,8 @@ public class InputTicket {
         }
     }
 
-    public void setPersonsEyeColor(Person person) {
-        this.printColors();
+    public static void setPersonsEyeColor(Person person) {
+        printColors();
         while (true) {
             try {
                 System.out.print("Цвет глаз (eyeColor): ");
@@ -155,14 +151,14 @@ public class InputTicket {
         }
     }
 
-    public void printColors() {
+    public static void printColors() {
         System.out.println("Доступные цвета");
         for (Color color : Color.values()) {
             System.out.println(color);
         }
     }
 
-    public void setPersonsBirthday(Person person) {
+    public static void setPersonsBirthday(Person person) {
         System.out.println("Пример ввода дня рождения: Пример ввода дня рождения: 2007-12-03T10:15:30. ISO FORMAT");
         while (true) {
             try {
@@ -180,8 +176,8 @@ public class InputTicket {
         }
     }
 
-    public void setType(Ticket ticket) {
-        this.printAllTypesOfTickets();
+    public static void setType(Ticket ticket) {
+        printAllTypesOfTickets();
 
         while (true) {
             try {
@@ -194,14 +190,14 @@ public class InputTicket {
         }
     }
 
-    public void printAllTypesOfTickets() {
+    public static void printAllTypesOfTickets() {
         System.out.println("Виды билетов: ");
         for (TicketType value : TicketType.values()) {
             System.out.println(value);
         }
     }
 
-    public void setPrice(Ticket ticket) {
+    public static void setPrice(Ticket ticket) {
         while (true) {
             try {
                 System.out.print("Введите цену (price): ");
@@ -218,16 +214,16 @@ public class InputTicket {
         }
     }
 
-    public void setCreationDate(Ticket ticket) {
+    public static void setCreationDate(Ticket ticket) {
         ticket.setCreationDate(ZonedDateTime.now());
     }
 
-    public void setId(Ticket ticket) {
-        long id = this.collectionManager.getNewId();
+    public static void setId(Ticket ticket, CollectionManager collectionManager) {
+        long id = collectionManager.getNewId();
         ticket.setId(id);
     }
 
-    public void setName(Ticket ticket) {
+    public static void setName(Ticket ticket) {
         String name = "";
         while (name.isEmpty()) {
             System.out.print("Введите название (name): ");
@@ -239,48 +235,48 @@ public class InputTicket {
         ticket.setName(name);
     }
 
-    public void setCoordinates(Ticket ticket) {
+    public static void setCoordinates(Ticket ticket) {
         Coordinates coordinates = new Coordinates();
 
-        this.setCoordinateX(coordinates);
-        this.setCoordinateY(coordinates);
+        setCoordinateX(coordinates);
+        setCoordinateY(coordinates);
 
         ticket.setCoordinates(coordinates);
     }
 
-    public void setCoordinateX(Coordinates coordinates) {
+    public static void setCoordinateX(Coordinates coordinates) {
         while (true) {
             try {
                 System.out.print("Введите координату X (Coordinates x): ");
                 String line = scanner.nextLine();
                 if (line.isEmpty()) {
-                    System.out.println("Координата X должна быть дробным числом и не может быть равна null");
+                    System.out.println("Координата X должна быть дробным числом");
                 } else {
                     coordinates.setX(Float.valueOf(line));
                     break;
                 }
             } catch (CoordinateXException e) {
-                System.out.println("Координата X должна быть больше -873");
+                System.out.println("Координата X должна быть больше " + COORDINATE_X_MIN_LIMIT);
             } catch (NumberFormatException e) {
-                System.out.println("Координата X должна быть дробным числом и не может быть равна null");
+                System.out.println("Координата X должна быть дробным числом");
             }
         }
     }
 
-    public void setCoordinateY(Coordinates coordinates) {
+    public static void setCoordinateY(Coordinates coordinates) {
         while (true) {
             try {
                 System.out.print("Введите координату Y (Coordinates y): ");
                 String line = scanner.nextLine();
                 if (line.isEmpty()) {
-                    System.out.println("Координата Y должна быть дробным числом и не может быть равна null");
+                    System.out.println("Координата Y должна быть дробным числом");
                 } else {
                     coordinates.setY(Float.valueOf(line));
                     break;
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("Координата Y должна быть дробным числом и не может быть равна null");
+                System.out.println("Координата Y должна быть дробным числом");
             }
         }
     }
