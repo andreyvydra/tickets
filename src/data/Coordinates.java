@@ -27,6 +27,9 @@ public class Coordinates {
     }
 
     public void setX(Float x) throws CoordinateXException {
+        if (Objects.isNull(x)) {
+            throw new NullPointerException();
+        }
         if (x <= COORDINATE_X_MIN_LIMIT) {
             throw new CoordinateXException();
         }
