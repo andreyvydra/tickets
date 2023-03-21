@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import static core.Globals.JSONFields.PERSON;
@@ -51,6 +52,8 @@ public class JSONParser {
                     outputHandler.println("Поле не может быть null");
                 } catch (IllegalArgumentException e) {
                     outputHandler.println("Некорректное поле enum");
+                } catch (DateTimeParseException e) {
+                    outputHandler.println("Дата и время в неправильном формате");
                 }
             }
         }
