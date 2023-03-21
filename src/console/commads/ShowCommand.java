@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
+import core.OutputHandler;
 import data.Ticket;
 
 /**
@@ -13,21 +14,21 @@ import data.Ticket;
 public class ShowCommand extends DataAppCommand {
 
 
-    public ShowCommand(DataApp dataApp) {
-        super(dataApp);
+    public ShowCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
     public void execute(String command) {
-        System.out.println("Collection items:");
+        outputHandler.println("Collection items:");
         for (Ticket ticket : dataApp.getCollection()) {
-            System.out.println(ticket);
+            outputHandler.println(ticket);
         }
     }
 
     @Override
     public void printHelp() {
-        System.out.println("show : вывести в стандартный поток вывода все элементы" +
+        outputHandler.println("show : вывести в стандартный поток вывода все элементы" +
                 " коллекции в строковом представлении");
     }
 }

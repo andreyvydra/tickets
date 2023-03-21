@@ -2,6 +2,7 @@ package console.commads;
 
 import console.commads.generalCommands.Command;
 import console.commads.generalCommands.DefaultCommand;
+import core.OutputHandler;
 
 import java.util.ArrayList;
 
@@ -14,17 +15,18 @@ import java.util.ArrayList;
 public class HistoryCommand extends DefaultCommand {
     private final ArrayList<String> commandsHistory;
 
-    public HistoryCommand(ArrayList<String> commandsHistory) {
+    public HistoryCommand(OutputHandler outputHandler, ArrayList<String> commandsHistory) {
+        super(outputHandler);
         this.commandsHistory = commandsHistory;
     }
 
     @Override
     public void execute(String command) {
-        System.out.println(this.commandsHistory.toString());
+        outputHandler.println(this.commandsHistory.toString());
     }
 
     @Override
     public void printHelp() {
-        System.out.println("history : вывести последние 8 команд (без их аргументов)");
+        outputHandler.println("history : вывести последние 8 команд (без их аргументов)");
     }
 }

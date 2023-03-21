@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.FileManager;
+import core.OutputHandler;
 
 /**
  * Class SaveCommand extends Collection command, and
@@ -13,17 +14,19 @@ import core.FileManager;
  */
 public class SaveCommand extends DataAppCommand {
 
-    public SaveCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public SaveCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
     public void execute(String command) {
         dataApp.saveJSONObjectToFile();
+        outputHandler.println("Данные были сохранены в json");
     }
 
     @Override
     public void printHelp() {
-        System.out.println("save : сохранить коллекцию в файл");
+        outputHandler.println("save : сохранить коллекцию в файл");
     }
 }

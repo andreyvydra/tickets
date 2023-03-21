@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.InputTicket;
+import core.OutputHandler;
 import data.*;
 
 /**
@@ -13,19 +14,18 @@ import data.*;
  */
 public class AddCommand extends DataAppCommand {
 
-
-    public AddCommand(DataApp dataApp) {
-        super(dataApp);
+    public AddCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
     public void execute(String command) {
         Ticket ticket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
         dataApp.addTicketToCollection(ticket);
-        System.out.println("Ticket успешно добавлен");
+        outputHandler.println("Ticket успешно добавлен");
     }
 
     public void printHelp() {
-        System.out.println("add {element} : добавить новый элемент в коллекцию");
+        outputHandler.println("add {element} : добавить новый элемент в коллекцию");
     }
 }

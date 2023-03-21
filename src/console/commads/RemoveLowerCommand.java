@@ -4,6 +4,7 @@ import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import core.InputTicket;
+import core.OutputHandler;
 import data.Ticket;
 
 import java.util.ArrayList;
@@ -16,8 +17,9 @@ import java.util.ArrayList;
  */
 public class RemoveLowerCommand extends DataAppCommand {
 
-    public RemoveLowerCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public RemoveLowerCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -32,11 +34,11 @@ public class RemoveLowerCommand extends DataAppCommand {
             }
         }
         dataApp.removeTickets(ticketsToDelete);
-        System.out.println("Было удалено: " + count + " тикетов.");
+        outputHandler.println("Было удалено: " + count + " тикетов.");
     }
 
     @Override
     public void printHelp() {
-        System.out.println("remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный");
+        outputHandler.println("remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный");
     }
 }

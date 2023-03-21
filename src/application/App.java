@@ -4,6 +4,7 @@ import console.Console;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
+import core.OutputHandler;
 import core.exceptions.CommandWasNotFound;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,33 +22,34 @@ import java.util.*;
 public class App {
     private final Scanner scanner = new Scanner(System.in);
     private final DataApp dataApp;
+    private final OutputHandler outputHandler = new OutputHandler();
 
     public App(String filename) {
         dataApp = new DataApp(filename);
     }
 
-    public void execute() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void execute() {
 
-        Console console = new Console(dataApp);
+        Console console = new Console(outputHandler, dataApp);
 
         while (true) {
             try {
-                System.out.print("Введите команду: ");
+                outputHandler.print("Введите команду: ");
                 String input;
                 if (dataApp.getCommandBufferSize() == 0) {
                     input = scanner.nextLine().trim();
                 } else {
                     input = dataApp.getCommandFromBuffer();
-                    System.out.println(input);
+                    outputHandler.println(input);
                 }
                 console.execute(input);
             } catch (NoSuchElementException e) {
-                System.out.println("Некорректный символ!");
+                outputHandler.println("Некорректный символ!");
                 break;
             } catch (InvocationTargetException | IllegalAccessException e) {
-                System.out.println("Файл не доступен для чтения!");
+                outputHandler.println("Файл не доступен для чтения!");
             } catch (CommandWasNotFound e) {
-                System.out.println("Введена неправильная команда!");
+                outputHandler.println("Введена неправильная команда!");
             }
         }
     }

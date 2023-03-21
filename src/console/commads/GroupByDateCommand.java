@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
+import core.OutputHandler;
 import data.Ticket;
 
 import java.time.ZonedDateTime;
@@ -17,8 +18,9 @@ import java.util.Map;
  */
 public class GroupByDateCommand extends DataAppCommand {
 
-    public GroupByDateCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public GroupByDateCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -27,13 +29,13 @@ public class GroupByDateCommand extends DataAppCommand {
         for (Map.Entry<ZonedDateTime, List<Ticket>> entry : groups.entrySet()) {
             ZonedDateTime key = entry.getKey();
             int value = entry.getValue().size();
-            System.out.println("Группа: " + key + ", кол-во: " + value);
+            outputHandler.println("Группа: " + key + ", кол-во: " + value);
         }
     }
 
     @Override
     public void printHelp() {
-        System.out.println("group_counting_by_creation_date : сгруппировать элементы коллекции по" +
+        outputHandler.println("group_counting_by_creation_date : сгруппировать элементы коллекции по" +
                 " значению поля creationDate, вывести количество элементов в каждой группе");
     }
 }

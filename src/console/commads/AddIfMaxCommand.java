@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.InputTicket;
+import core.OutputHandler;
 import data.Ticket;
 
 /**
@@ -13,8 +14,9 @@ import data.Ticket;
  */
 public class AddIfMaxCommand extends DataAppCommand {
 
-    public AddIfMaxCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public AddIfMaxCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -22,15 +24,15 @@ public class AddIfMaxCommand extends DataAppCommand {
         Ticket ticket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
         if (ticket.compareTo(dataApp.getMaxTicket()) > 0) {
             dataApp.addTicketToCollection(ticket);
-            System.out.println("Ticket успешно добавлен");
+            outputHandler.println("Ticket успешно добавлен");
         } else {
-            System.out.println("Ticket слишком маленький");
+            outputHandler.println("Ticket слишком маленький");
         }
     }
 
     @Override
     public void printHelp() {
-        System.out.println("add_if_max {element} : добавить новый элемент в коллекцию, " +
+        outputHandler.println("add_if_max {element} : добавить новый элемент в коллекцию, " +
                 "если его значение превышает значение наибольшего элемента этой коллекции");
     }
 }

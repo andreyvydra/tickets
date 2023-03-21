@@ -45,7 +45,7 @@ public class CollectionManager {
     }
 
     public long getNewId() {
-        long id = 0;
+        long id = 1;
         for (Ticket ticket : this.collection) {
             if (ticket.getId() > id) {
                 id = ticket.getId() + 1;

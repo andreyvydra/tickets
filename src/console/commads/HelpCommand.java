@@ -2,6 +2,7 @@ package console.commads;
 
 import console.commads.generalCommands.Command;
 import console.commads.generalCommands.DefaultCommand;
+import core.OutputHandler;
 
 import java.util.HashMap;
 
@@ -14,8 +15,8 @@ import java.util.HashMap;
 public class HelpCommand extends DefaultCommand {
     private final HashMap<String, Command> commands;
 
-    public HelpCommand(HashMap<String, Command> commands) {
-        super();
+    public HelpCommand(OutputHandler outputHandler, HashMap<String, Command> commands) {
+        super(outputHandler);
         this.commands = commands;
     }
 
@@ -28,6 +29,6 @@ public class HelpCommand extends DefaultCommand {
 
     @Override
     public void printHelp() {
-        System.out.println("help : вывести справку по доступным командам");
+        outputHandler.println("help : вывести справку по доступным командам");
     }
 }

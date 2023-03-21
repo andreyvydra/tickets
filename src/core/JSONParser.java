@@ -28,6 +28,7 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  */
 public class JSONParser {
     private final JSONObject jObject;
+    private final OutputHandler outputHandler = new OutputHandler();
 
     public JSONParser(JSONObject jObject) {
         this.jObject = jObject;
@@ -43,11 +44,11 @@ public class JSONParser {
                     Ticket ticket = this.parseTicket(jsonObject);
                     tickets.add(ticket);
                 } catch (ValueIsNotPositiveException | CoordinateXException | EmptyNameException e) {
-                    System.out.println(e);
+                    outputHandler.println(e);
                 } catch (JSONException e) {
-                    System.out.println("Некорректный файл!");
+                    outputHandler.println("Некорректный файл!");
                 } catch (NullPointerException e) {
-                    System.out.println("Поле не может быть null");
+                    outputHandler.println("Поле не может быть null");
                 }
             }
         }
@@ -66,7 +67,7 @@ public class JSONParser {
             ticket.setType(this.getType(jObject));
             ticket.setPerson(this.getPerson(jObject));
         } catch (JSONException e) {
-            System.out.println("Некорректный файл!");
+            outputHandler.println("Некорректный файл!");
         }
         return ticket;
     }

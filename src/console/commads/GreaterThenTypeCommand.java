@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
+import core.OutputHandler;
 import data.Ticket;
 import data.TicketType;
 
@@ -17,8 +18,9 @@ import static core.Globals.ARGUMENT_POSITION;
  */
 public class GreaterThenTypeCommand extends DataAppCommand {
 
-    public GreaterThenTypeCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public GreaterThenTypeCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -31,17 +33,17 @@ public class GreaterThenTypeCommand extends DataAppCommand {
                     count += 1;
                 }
             }
-            System.out.println("Кол-во элементов, у которых type больше: " + count);
+            outputHandler.println("Кол-во элементов, у которых type больше: " + count);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Аргумен не был введён!");
+            outputHandler.println("Аргумен не был введён!");
         } catch (IllegalArgumentException e) {
-            System.out.println("Такого type не существует!");
+            outputHandler.println("Такого type не существует!");
         }
     }
 
     @Override
     public void printHelp() {
-        System.out.println("count_greater_than_type type : вывести количество элементов, значение" +
+        outputHandler.println("count_greater_than_type type : вывести количество элементов, значение" +
                 " поля type которых больше заданного");
     }
 }

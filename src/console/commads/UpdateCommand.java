@@ -4,6 +4,7 @@ import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import core.InputTicket;
+import core.OutputHandler;
 import data.Ticket;
 
 import java.util.Objects;
@@ -19,8 +20,9 @@ import static core.Globals.ARGUMENT_POSITION;
  * @see InputTicket
  */
 public class UpdateCommand extends DataAppCommand {
-    public UpdateCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public UpdateCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -28,22 +30,22 @@ public class UpdateCommand extends DataAppCommand {
         long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
         Ticket curTicket = dataApp.getTicketById(id);
         if (Objects.isNull(curTicket)) {
-            System.out.println("Ticket не был найден");
+            outputHandler.println("Ticket не был найден");
             return;
         }
-        System.out.println(curTicket);
+        outputHandler.println(curTicket);
         Ticket inpTicket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
         curTicket.setName(inpTicket.getName());
         curTicket.setType(inpTicket.getType());
         curTicket.setPerson(inpTicket.getPerson());
         curTicket.setPrice(inpTicket.getPrice());
         curTicket.setCoordinates(inpTicket.getCoordinates());
-        System.out.println("Ticket успешно изменён!");
+        outputHandler.println("Ticket успешно изменён!");
     }
 
     @Override
     public void printHelp() {
-        System.out.println("update id {element} : обновить значение элемента коллекции," +
+        outputHandler.println("update id {element} : обновить значение элемента коллекции," +
                 " id которого равен заданному");
     }
 }

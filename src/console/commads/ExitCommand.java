@@ -2,6 +2,7 @@ package console.commads;
 
 import console.commads.generalCommands.Command;
 import console.commads.generalCommands.DefaultCommand;
+import core.OutputHandler;
 
 /**
  * ExitCommand is a command for exiting application
@@ -10,14 +11,18 @@ import console.commads.generalCommands.DefaultCommand;
  */
 public class ExitCommand extends DefaultCommand {
 
+    public ExitCommand(OutputHandler outputHandler) {
+        super(outputHandler);
+    }
+
     @Override
     public void execute(String command) {
-        System.out.println("До новой встречи!");
+        outputHandler.println("До новой встречи!");
         System.exit(0);
     }
 
     @Override
     public void printHelp() {
-        System.out.println("exit : завершить программу (без сохранения в файл)");
+        outputHandler.println("exit : завершить программу (без сохранения в файл)");
     }
 }

@@ -2,6 +2,7 @@ package console.commads;
 
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
+import core.OutputHandler;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,8 +22,9 @@ import static core.Globals.COMMAND_POSITION;
  */
 public class ExecuteScriptCommand extends DataAppCommand {
 
-    public ExecuteScriptCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public ExecuteScriptCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ExecuteScriptCommand extends DataAppCommand {
         if (!this.recursionFindingCommands(command, allCommands)) {
             this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
         } else {
-            System.out.println("Неизбежна рекурсия");
+            outputHandler.println("Неизбежна рекурсия");
         }
     }
 
@@ -64,15 +66,15 @@ public class ExecuteScriptCommand extends DataAppCommand {
             }
             return stringBuilder.toString().split("\n");
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден, является директорией или не может быть прочитан!");
+            outputHandler.println("Файл не найден, является директорией или не может быть прочитан!");
         } catch (IOException e) {
-            System.out.println("Поток был завершён, или файл не может быть прочитан!");
+            outputHandler.println("Поток был завершён, или файл не может быть прочитан!");
         }
         return new String[]{};
     }
 
     @Override
     public void printHelp() {
-        System.out.println("execute_script file_name : считать и исполнить скрипт из указанного файла.");
+        outputHandler.println("execute_script file_name : считать и исполнить скрипт из указанного файла.");
     }
 }

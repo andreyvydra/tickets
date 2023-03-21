@@ -1,14 +1,12 @@
 import application.App;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static core.Globals.FILENAME_POSITION;
 
 /**
  * Main class for execution program
  */
 public class Main {
-    public static void main(String[] args) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Передайте имя файла!");
         } else {

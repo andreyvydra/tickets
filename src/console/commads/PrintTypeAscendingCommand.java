@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
+import core.OutputHandler;
 import data.Ticket;
 
 /**
@@ -12,20 +13,21 @@ import data.Ticket;
  */
 public class PrintTypeAscendingCommand extends DataAppCommand {
 
-    public PrintTypeAscendingCommand(DataApp dataApp) {
-        super(dataApp);
+
+    public PrintTypeAscendingCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
     public void execute(String command) {
         for (Ticket ticket : dataApp.getCollection()) {
-            System.out.println(ticket.getType());
+            outputHandler.println(ticket.getType());
         }
     }
 
     @Override
     public void printHelp() {
-        System.out.println("print_field_ascending_type : вывести значения поля type" +
+        outputHandler.println("print_field_ascending_type : вывести значения поля type" +
                 " всех элементов в порядке возрастания");
     }
 }

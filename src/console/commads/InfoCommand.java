@@ -3,6 +3,7 @@ package console.commads;
 import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
+import core.OutputHandler;
 
 /**
  * InfoCommand shows info about CollectionManager
@@ -11,17 +12,17 @@ import core.CollectionManager;
  */
 public class InfoCommand extends DataAppCommand {
 
-    public InfoCommand(DataApp dataApp) {
-        super(dataApp);
+    public InfoCommand(OutputHandler outputHandler, DataApp dataApp) {
+        super(outputHandler, dataApp);
     }
 
     @Override
     public void execute(String command) {
-        System.out.println(dataApp.getCollectionManager());
+        outputHandler.println(dataApp.getCollectionManager());
     }
 
     @Override
     public void printHelp() {
-        System.out.println("info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
+        outputHandler.println("info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
     }
 }

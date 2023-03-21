@@ -14,6 +14,7 @@ import java.io.*;
  */
 public class FileManager {
     private final String filename;
+    private final OutputHandler outputHandler = new OutputHandler();
 
     public FileManager(String filename) {
         this.filename = filename;
@@ -32,9 +33,9 @@ public class FileManager {
             buffer.close();
             return new JSONObject(sb.toString());
         } catch (IOException e) {
-            System.out.println("Поток был завершён, или файл не может быть прочитан!");
+            outputHandler.println("Поток был завершён, или файл не может быть прочитан!");
         } catch (JSONException e) {
-            System.out.println("Некорректный файл");
+            outputHandler.println("Некорректный файл");
         }
         return new JSONObject();
     }
@@ -54,7 +55,7 @@ public class FileManager {
             writer.close();
             fileOutput.close();
         } catch (IOException e) {
-            System.out.println("Поток был завершён, или файл не может быть прочитан!");
+            outputHandler.println("Поток был завершён, или файл не может быть прочитан!");
         }
     }
 }
