@@ -1,6 +1,7 @@
 package core;
 
 import core.exceptions.CoordinateXException;
+import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.*;
 
@@ -17,9 +18,14 @@ public class InputTicket {
     private static final OutputHandler outputHandler = new OutputHandler();
     
     public static Ticket getTicketFromConsole(CollectionManager collectionManager) {
-        Ticket ticket = new Ticket();
-
+        Ticket ticket = getTicketWithoutIdFromConsole();
         setId(ticket, collectionManager);
+        return ticket;
+
+    }
+
+    public static Ticket getTicketWithoutIdFromConsole() {
+        Ticket ticket = new Ticket();
         setName(ticket);
         setCoordinates(ticket);
         setCreationDate(ticket);
@@ -27,7 +33,6 @@ public class InputTicket {
         setType(ticket);
         setPerson(ticket);
         return ticket;
-
     }
 
     public static void setPerson(Ticket ticket) {
@@ -96,7 +101,7 @@ public class InputTicket {
 
     public static boolean isLocationInputted() {
         outputHandler.println("Хотите ли вы ввести значения локации? \n" +
-                "Press enter or input something [no, yes]");
+                "Нажмите enter или введи что-нибудь [нет, да]");
         String line = scanner.nextLine();
         return !line.isEmpty();
     }
@@ -221,19 +226,24 @@ public class InputTicket {
 
     public static void setId(Ticket ticket, CollectionManager collectionManager) {
         long id = collectionManager.getNewId();
-        ticket.setId(id);
+        try {
+            ticket.setId(id);
+        } catch (ValueIsNotPositiveException e) {
+            System.out.println("id не может быть неположительным, возможно переполнение");
+        }
     }
 
     public static void setName(Ticket ticket) {
-        String name = "";
-        while (name.isEmpty()) {
-            outputHandler.print("Введите название (name): ");
-            name = scanner.nextLine();
-            if (name.isEmpty()) {
+        while (true) {
+            try {
+                outputHandler.print("Введите название (name): ");
+                String name = scanner.nextLine();
+                ticket.setName(name);
+                break;
+            } catch (EmptyNameException e) {
                 outputHandler.println("Строка не может быть пустой!");
             }
         }
-        ticket.setName(name);
     }
 
     public static void setCoordinates(Ticket ticket) {

@@ -56,9 +56,9 @@ public class Person {
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put(BIRTHDAY, !Objects.isNull(this.birthday) ? this.birthday.toString() : null);
-        hm.put(EYE_COLOR, this.eyeColor.toString());
-        hm.put(HAIR_COLOR, !Objects.isNull(this.hairColor) ? this.hairColor.toString() : null);
-        hm.put(NATIONALITY, this.nationality.toString());
+        hm.put(EYE_COLOR, this.eyeColor.name());
+        hm.put(HAIR_COLOR, !Objects.isNull(this.hairColor) ? this.hairColor.name() : null);
+        hm.put(NATIONALITY, this.nationality.name());
         hm.put(LOCATION, !Objects.isNull(this.location) ? this.location.getMappedValues() : null);
         return hm;
     }

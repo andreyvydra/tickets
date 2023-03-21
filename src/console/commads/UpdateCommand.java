@@ -5,6 +5,8 @@ import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import core.InputTicket;
 import core.OutputHandler;
+import core.exceptions.EmptyNameException;
+import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
 
 import java.util.Objects;
@@ -34,13 +36,17 @@ public class UpdateCommand extends DataAppCommand {
             return;
         }
         outputHandler.println(curTicket);
-        Ticket inpTicket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
-        curTicket.setName(inpTicket.getName());
-        curTicket.setType(inpTicket.getType());
-        curTicket.setPerson(inpTicket.getPerson());
-        curTicket.setPrice(inpTicket.getPrice());
-        curTicket.setCoordinates(inpTicket.getCoordinates());
-        outputHandler.println("Ticket успешно изменён!");
+        try {
+            Ticket inpTicket = InputTicket.getTicketFromConsole(dataApp.getCollectionManager());
+            curTicket.setName(inpTicket.getName());
+            curTicket.setType(inpTicket.getType());
+            curTicket.setPerson(inpTicket.getPerson());
+            curTicket.setPrice(inpTicket.getPrice());
+            curTicket.setCoordinates(inpTicket.getCoordinates());
+            outputHandler.println("Ticket успешно изменён!");
+        } catch (ValueIsNotPositiveException | EmptyNameException e) {
+            outputHandler.println(e);
+        }
     }
 
     @Override

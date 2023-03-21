@@ -31,14 +31,14 @@ public class Ticket implements Comparable<Ticket> {
         person = new Person();
     }
 
-    public void setId(long id) {
+    public void setId(long id) throws ValueIsNotPositiveException {
         if (id <= 0) {
             throw new ValueIsNotPositiveException();
         }
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws EmptyNameException {
         if (name.isEmpty()) {
             throw new EmptyNameException();
         }
@@ -59,7 +59,7 @@ public class Ticket implements Comparable<Ticket> {
         this.creationDate = creationDate;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(long price) throws ValueIsNotPositiveException {
         if (price <= 0) {
             throw new ValueIsNotPositiveException();
         }
@@ -128,7 +128,7 @@ public class Ticket implements Comparable<Ticket> {
         hm.put(COORDINATES, this.coordinates.getMappedValues());
         hm.put(CREATION_DATE, this.creationDate.toString());
         hm.put(PRICE, this.price);
-        hm.put(TYPE, this.type.toString());
+        hm.put(TYPE, this.type.name());
         hm.put(PERSON, this.person.getMappedValues());
         return hm;
     }

@@ -3,6 +3,7 @@ package application;
 import core.CollectionManager;
 import core.FileManager;
 import core.JSONParser;
+import core.exceptions.TicketWasNotFound;
 import data.Ticket;
 
 import java.time.ZonedDateTime;
@@ -53,7 +54,7 @@ public class DataApp {
         return collectionManager.getCollection();
     }
 
-    public void removeTicketById(long id) {
+    public void removeTicketById(long id) throws TicketWasNotFound {
         collectionManager.removeTicket(id);
     }
 

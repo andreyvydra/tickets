@@ -52,7 +52,7 @@ public class Console {
         }
     }
 
-    public void execute(String command) throws InvocationTargetException, IllegalAccessException, NullPointerException {
+    public void execute(String command) throws InvocationTargetException, IllegalAccessException, NullPointerException, CommandWasNotFound {
         String commandName = command.split(" ")[COMMAND_POSITION];
         if (!commandMap.containsKey(commandName)) {
             throw new CommandWasNotFound();

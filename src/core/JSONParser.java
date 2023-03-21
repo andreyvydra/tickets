@@ -43,12 +43,14 @@ public class JSONParser {
                     JSONObject jsonObject = (JSONObject) item;
                     Ticket ticket = this.parseTicket(jsonObject);
                     tickets.add(ticket);
-                } catch (ValueIsNotPositiveException | CoordinateXException | EmptyNameException e) {
+                } catch (ValueIsNotPositiveException | EmptyNameException | CoordinateXException e) {
                     outputHandler.println(e);
                 } catch (JSONException e) {
                     outputHandler.println("Некорректный файл!");
                 } catch (NullPointerException e) {
                     outputHandler.println("Поле не может быть null");
+                } catch (IllegalArgumentException e) {
+                    outputHandler.println("Некорректное поле enum");
                 }
             }
         }
@@ -56,7 +58,7 @@ public class JSONParser {
         return tickets;
     }
 
-    public Ticket parseTicket(JSONObject jObject) {
+    public Ticket parseTicket(JSONObject jObject) throws ValueIsNotPositiveException, EmptyNameException, CoordinateXException {
         Ticket ticket = new Ticket();
         try {
             ticket.setId(this.getIdTicket(jObject));
@@ -119,7 +121,7 @@ public class JSONParser {
         return ZonedDateTime.parse(jObject.getString(CREATION_DATE), ISO_ZONED_DATE_TIME);
     }
 
-    public Coordinates getCoordinates(JSONObject jObject) {
+    public Coordinates getCoordinates(JSONObject jObject) throws CoordinateXException {
         JSONObject jCoordinate = (JSONObject) jObject.get(COORDINATES);
         return new Coordinates(jCoordinate.getFloat(Globals.CoordinatesFields.X), jCoordinate.getFloat(Globals.CoordinatesFields.Y));
     }

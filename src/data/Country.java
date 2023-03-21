@@ -20,6 +20,6 @@ public enum Country {
 
     @Override
     public String toString() {
-        return countryName;
+        return name() + " (" + countryName + ")";
     }
 }

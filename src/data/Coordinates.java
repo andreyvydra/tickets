@@ -17,7 +17,7 @@ public class Coordinates {
     private Float x; //Значение поля должно быть больше -873, Поле не может быть null
     private Float y; //Поле не может быть null
 
-    public Coordinates(Float x, Float y) {
+    public Coordinates(Float x, Float y) throws CoordinateXException {
         this.setX(x);
         this.setY(y);
     }

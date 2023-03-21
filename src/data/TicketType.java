@@ -16,6 +16,6 @@ public enum TicketType {
 
     @Override
     public String toString() {
-        return ticketTypeName;
+        return name() + " (" + ticketTypeName + ")";
     }
 }

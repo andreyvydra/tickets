@@ -4,6 +4,7 @@ import application.DataApp;
 import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import core.OutputHandler;
+import core.exceptions.TicketWasNotFound;
 
 import java.util.Objects;
 
@@ -24,10 +25,12 @@ public class RemoveCommand extends DataAppCommand {
     @Override
     public void execute(String command) {
         long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
-        dataApp.removeTicketById(id);
-        if (Objects.isNull(dataApp.getTicketById(id))) {
-            outputHandler.println("Ticket " + id + " успешно удалён!");
-        } else {
+        try {
+            dataApp.removeTicketById(id);
+            if (Objects.isNull(dataApp.getTicketById(id))) {
+                outputHandler.println("Ticket " + id + " успешно удалён!");
+            }
+        } catch (TicketWasNotFound e) {
             outputHandler.println("Ticket " + id + " не был найден!");
         }
     }

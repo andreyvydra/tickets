@@ -1,5 +1,6 @@
 package core;
 
+import core.exceptions.TicketWasNotFound;
 import data.Ticket;
 
 import java.time.LocalDateTime;
@@ -74,8 +75,12 @@ public class CollectionManager {
         return Collections.max(this.collection);
     }
 
-    public void removeTicket(long id) {
-        this.collection.remove(this.getTicketById(id));
+    public void removeTicket(long id) throws TicketWasNotFound {
+        if (!Objects.isNull(getTicketById(id))) {
+            this.collection.remove(this.getTicketById(id));
+        } else {
+            throw new TicketWasNotFound();
+        }
     }
 
     public void clear() {
