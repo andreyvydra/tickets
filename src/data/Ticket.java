@@ -1,5 +1,6 @@
 package data;
 
+import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 
@@ -45,16 +46,16 @@ public class Ticket implements Comparable<Ticket> {
         this.name = name;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    public void setCoordinates(Coordinates coordinates) throws EmptyFieldException {
         if (Objects.isNull(coordinates)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.coordinates = coordinates;
     }
 
-    public void setCreationDate(ZonedDateTime creationDate) {
+    public void setCreationDate(ZonedDateTime creationDate) throws EmptyFieldException {
         if (Objects.isNull(creationDate)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.creationDate = creationDate;
     }
@@ -66,16 +67,16 @@ public class Ticket implements Comparable<Ticket> {
         this.price = price;
     }
 
-    public void setType(TicketType type) {
+    public void setType(TicketType type) throws EmptyFieldException {
         if (Objects.isNull(type)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.type = type;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(Person person) throws EmptyFieldException {
         if (Objects.isNull(person)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.person = person;
     }

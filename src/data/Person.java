@@ -1,5 +1,7 @@
 package data;
 
+import core.exceptions.EmptyFieldException;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Objects;
@@ -31,9 +33,9 @@ public class Person {
         this.birthday = birthday;
     }
 
-    public void setEyeColor(Color eyeColor) {
+    public void setEyeColor(Color eyeColor) throws EmptyFieldException {
         if (Objects.isNull(eyeColor)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.eyeColor = eyeColor;
     }
@@ -46,9 +48,9 @@ public class Person {
         this.location = location;
     }
 
-    public void setNationality(Country nationality) {
+    public void setNationality(Country nationality) throws EmptyFieldException {
         if (Objects.isNull(nationality)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.nationality = nationality;
     }

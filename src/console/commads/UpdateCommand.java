@@ -5,6 +5,7 @@ import console.commads.generalCommands.DataAppCommand;
 import core.CollectionManager;
 import core.InputTicket;
 import core.OutputHandler;
+import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
@@ -44,7 +45,7 @@ public class UpdateCommand extends DataAppCommand {
             curTicket.setPrice(inpTicket.getPrice());
             curTicket.setCoordinates(inpTicket.getCoordinates());
             outputHandler.println("Ticket успешно изменён!");
-        } catch (ValueIsNotPositiveException | EmptyNameException e) {
+        } catch (ValueIsNotPositiveException | EmptyNameException | EmptyFieldException e) {
             outputHandler.println(e);
         }
     }

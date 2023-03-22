@@ -1,6 +1,7 @@
 package data;
 
 import core.exceptions.CoordinateXException;
+import core.exceptions.EmptyFieldException;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class Coordinates {
     private Float x; //Значение поля должно быть больше -873, Поле не может быть null
     private Float y; //Поле не может быть null
 
-    public Coordinates(Float x, Float y) throws CoordinateXException {
+    public Coordinates(Float x, Float y) throws CoordinateXException, EmptyFieldException {
         this.setX(x);
         this.setY(y);
     }
@@ -26,9 +27,9 @@ public class Coordinates {
         super();
     }
 
-    public void setX(Float x) throws CoordinateXException {
+    public void setX(Float x) throws CoordinateXException, EmptyFieldException {
         if (Objects.isNull(x)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         if (x <= COORDINATE_X_MIN_LIMIT) {
             throw new CoordinateXException();
@@ -36,9 +37,9 @@ public class Coordinates {
         this.x = x;
     }
 
-    public void setY(Float y) {
+    public void setY(Float y) throws EmptyFieldException {
         if (Objects.isNull(y)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.y = y;
     }

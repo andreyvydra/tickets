@@ -1,6 +1,7 @@
 package core;
 
 import core.exceptions.CoordinateXException;
+import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.*;
@@ -48,8 +49,11 @@ public class InputTicket {
         } else {
             setLocation(person);
         }
-
-        ticket.setPerson(person);
+        try {
+            ticket.setPerson(person);
+        } catch (EmptyFieldException e) {
+            outputHandler.println(e);
+        }
     }
 
     public static void setLocation(Person person) {
@@ -81,8 +85,8 @@ public class InputTicket {
                 break;
             } catch (NumberFormatException e) {
                 outputHandler.println("Введен текст");
-            } catch (NullPointerException e) {
-                outputHandler.println("Введен null");
+            } catch (EmptyFieldException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -115,6 +119,8 @@ public class InputTicket {
                 break;
             } catch (IllegalArgumentException e) {
                 outputHandler.println("Введена неправильная страна");
+            } catch (EmptyFieldException e) {
+                outputHandler.println(e);
             }
         }
     }
@@ -153,6 +159,8 @@ public class InputTicket {
                 break;
             } catch (IllegalArgumentException e) {
                 outputHandler.println("Введён неправильный цвет глаз");
+            } catch (EmptyFieldException e) {
+                outputHandler.println(e);
             }
         }
     }
@@ -192,6 +200,8 @@ public class InputTicket {
                 break;
             } catch (IllegalArgumentException e) {
                 outputHandler.println("Введён неправильный вид билета");
+            } catch (EmptyFieldException e) {
+                outputHandler.println(e);
             }
         }
     }
@@ -221,7 +231,11 @@ public class InputTicket {
     }
 
     public static void setCreationDate(Ticket ticket) {
-        ticket.setCreationDate(ZonedDateTime.now());
+        try {
+            ticket.setCreationDate(ZonedDateTime.now());
+        } catch (EmptyFieldException e) {
+            outputHandler.println(e);
+        }
     }
 
     public static void setId(Ticket ticket, CollectionManager collectionManager) {
@@ -252,7 +266,11 @@ public class InputTicket {
         setCoordinateX(coordinates);
         setCoordinateY(coordinates);
 
-        ticket.setCoordinates(coordinates);
+        try {
+            ticket.setCoordinates(coordinates);
+        } catch (EmptyFieldException e) {
+            outputHandler.println(e);
+        }
     }
 
     public static void setCoordinateX(Coordinates coordinates) {
@@ -270,6 +288,8 @@ public class InputTicket {
                 outputHandler.println("Координата X должна быть больше " + COORDINATE_X_MIN_LIMIT);
             } catch (NumberFormatException e) {
                 outputHandler.println("Координата X должна быть дробным числом");
+            } catch (EmptyFieldException e) {
+                outputHandler.println(e);
             }
         }
     }
@@ -288,6 +308,8 @@ public class InputTicket {
 
             } catch (NumberFormatException e) {
                 outputHandler.println("Координата Y должна быть дробным числом");
+            } catch (EmptyFieldException e) {
+                outputHandler.println(e);
             }
         }
     }

@@ -1,6 +1,7 @@
 package core;
 
 import core.exceptions.CoordinateXException;
+import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 import data.*;
@@ -44,12 +45,10 @@ public class JSONParser {
                     JSONObject jsonObject = (JSONObject) item;
                     Ticket ticket = this.parseTicket(jsonObject);
                     tickets.add(ticket);
-                } catch (ValueIsNotPositiveException | EmptyNameException | CoordinateXException e) {
+                } catch (ValueIsNotPositiveException | EmptyNameException | CoordinateXException | EmptyFieldException e) {
                     outputHandler.println(e);
                 } catch (JSONException e) {
                     outputHandler.println("Некорректный файл!");
-                } catch (NullPointerException e) {
-                    outputHandler.println("Поле не может быть null");
                 } catch (IllegalArgumentException e) {
                     outputHandler.println("Некорректное поле enum");
                 } catch (DateTimeParseException e) {
@@ -61,7 +60,7 @@ public class JSONParser {
         return tickets;
     }
 
-    public Ticket parseTicket(JSONObject jObject) throws ValueIsNotPositiveException, EmptyNameException, CoordinateXException {
+    public Ticket parseTicket(JSONObject jObject) throws ValueIsNotPositiveException, EmptyNameException, CoordinateXException, EmptyFieldException {
         Ticket ticket = new Ticket();
         try {
             ticket.setId(this.getIdTicket(jObject));
@@ -77,7 +76,7 @@ public class JSONParser {
         return ticket;
     }
 
-    public Person getPerson(JSONObject jObject) {
+    public Person getPerson(JSONObject jObject) throws EmptyFieldException {
         Person person = new Person();
         JSONObject jPerson = (JSONObject) jObject.get(PERSON);
 
@@ -124,7 +123,7 @@ public class JSONParser {
         return ZonedDateTime.parse(jObject.getString(CREATION_DATE), ISO_ZONED_DATE_TIME);
     }
 
-    public Coordinates getCoordinates(JSONObject jObject) throws CoordinateXException {
+    public Coordinates getCoordinates(JSONObject jObject) throws CoordinateXException, EmptyFieldException {
         JSONObject jCoordinate = (JSONObject) jObject.get(COORDINATES);
         return new Coordinates(jCoordinate.getFloat(Globals.CoordinatesFields.X), jCoordinate.getFloat(Globals.CoordinatesFields.Y));
     }

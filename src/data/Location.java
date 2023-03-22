@@ -1,5 +1,7 @@
 package data;
 
+import core.exceptions.EmptyFieldException;
+
 import java.util.HashMap;
 import java.util.Objects;
 import static core.Globals.LocationFields.*;
@@ -25,9 +27,9 @@ public class Location {
         this.x = x;
     }
 
-    public void setY(Integer y) {
+    public void setY(Integer y) throws EmptyFieldException {
         if (Objects.isNull(y)) {
-            throw new NullPointerException();
+            throw new EmptyFieldException();
         }
         this.y = y;
     }
