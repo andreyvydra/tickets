@@ -1,11 +1,10 @@
 package core;
 
-import core.exceptions.CoordinateXException;
-import core.exceptions.EmptyFieldException;
-import core.exceptions.EmptyNameException;
-import core.exceptions.ValueIsNotPositiveException;
+import core.exceptions.*;
 import data.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,23 +26,27 @@ public class InputTicket {
 
     public static Ticket getTicketWithoutIdFromConsole() {
         Ticket ticket = new Ticket();
-        setName(ticket);
-        setCoordinates(ticket);
-        setCreationDate(ticket);
-        setPrice(ticket);
-        setType(ticket);
-        setPerson(ticket);
+        try {
+            setName(ticket);
+            setCoordinates(ticket);
+            setCreationDate(ticket);
+            setPrice(ticket);
+            setEnumValue(ticket, TicketType.class, ticket.getClass().getMethod("setType", TicketType.class));
+            setPerson(ticket);
+        } catch (NoSuchMethodException e) {
+            outputHandler.println("Отсутствует указанный метод");
+        }
         return ticket;
     }
 
-    public static void setPerson(Ticket ticket) {
+    public static void setPerson(Ticket ticket) throws NoSuchMethodException {
         Person person = new Person();
         outputHandler.println("Создание человека");
 
         setPersonsBirthday(person);
-        setPersonsEyeColor(person);
-        setPersonsHairColor(person);
-        setPersonsNationality(person);
+        setEnumValue(person, Color.class, person.getClass().getMethod("setEyeColor", Color.class));
+        setEnumValue(person, Color.class, person.getClass().getMethod("setHairColor", Color.class));
+        setEnumValue(person, Country.class, person.getClass().getMethod("setNationality", Country.class));
         if (!isLocationInputted()) {
             person.setLocation(null);
         } else {
@@ -69,7 +72,7 @@ public class InputTicket {
         while (true) {
             try {
                 outputHandler.print("Введите координату x (Person x): ");
-                location.setX(Double.parseDouble(scanner.nextLine()));
+                location.setX(Double.parseDouble(scanner.nextLine().replace(",", ".")));
                 break;
             } catch (NumberFormatException e) {
                 outputHandler.println("Введен текст");
@@ -84,7 +87,7 @@ public class InputTicket {
                 location.setY(Integer.parseInt(scanner.nextLine()));
                 break;
             } catch (NumberFormatException e) {
-                outputHandler.println("Введен текст");
+                outputHandler.println("Введен текст или дробное число");
             } catch (EmptyFieldException e) {
                 throw new RuntimeException(e);
             }
@@ -95,7 +98,7 @@ public class InputTicket {
         while (true) {
             try {
                 outputHandler.print("Введите координату z (Person z): ");
-                location.setZ(Float.parseFloat(scanner.nextLine()));
+                location.setZ(Float.parseFloat(scanner.nextLine().replace(",", ".")));
                 break;
             } catch (NumberFormatException e) {
                 outputHandler.println("Введен текст");
@@ -108,68 +111,6 @@ public class InputTicket {
                 "Нажмите enter или введи что-нибудь [нет, да]");
         String line = scanner.nextLine();
         return !line.isEmpty();
-    }
-
-    public static void setPersonsNationality(Person person) {
-        printCountries();
-        while (true) {
-            try {
-                outputHandler.print("Национальность (nationality): ");
-                person.setNationality(Country.valueOf(scanner.nextLine().toUpperCase()));
-                break;
-            } catch (IllegalArgumentException e) {
-                outputHandler.println("Введена неправильная страна");
-            } catch (EmptyFieldException e) {
-                outputHandler.println(e);
-            }
-        }
-    }
-
-    public static void printCountries() {
-        outputHandler.println("Доступные страны");
-        for (Country country : Country.values()) {
-            outputHandler.println(country);
-        }
-    }
-
-    public static void setPersonsHairColor(Person person) {
-        printColors();
-        while (true) {
-            try {
-                outputHandler.print("Цвет волос (hairColor): ");
-                String stringColor = scanner.nextLine().toUpperCase();
-                if (stringColor.isEmpty()) {
-                    person.setHairColor(null);
-                } else {
-                    person.setHairColor(Color.valueOf(stringColor));
-                }
-                break;
-            } catch (IllegalArgumentException e) {
-                outputHandler.println("Введён неправильный цвет волос");
-            }
-        }
-    }
-
-    public static void setPersonsEyeColor(Person person) {
-        printColors();
-        while (true) {
-            try {
-                outputHandler.print("Цвет глаз (eyeColor): ");
-                person.setEyeColor(Color.valueOf(scanner.nextLine().toUpperCase()));
-                break;
-            } catch (IllegalArgumentException e) {
-                outputHandler.println("Введён неправильный цвет глаз");
-            } catch (EmptyFieldException e) {
-                outputHandler.println(e);
-            }
-        }
-    }
-
-    public static void printColors() {
-        outputHandler.println("Доступные цвета");
-        for (Color color : Color.values()) {
-            outputHandler.println(color);
-        }
     }
 
     public static void setPersonsBirthday(Person person) {
@@ -190,26 +131,51 @@ public class InputTicket {
         }
     }
 
-    public static void setType(Ticket ticket) {
-        printAllTypesOfTickets();
+    public static void setEnumValue(Object object, Class<? extends Enum> eEnum, Method setValue) {
+        printEnumValues(eEnum);
+        Object[] values = eEnum.getEnumConstants();
 
         while (true) {
             try {
-                outputHandler.print("Введите вид бидета (type): ");
-                ticket.setType(TicketType.valueOf(scanner.nextLine().toUpperCase()));
+                outputHandler.print("Введите вид " + eEnum.getName() + ": ");
+                if (scanner.hasNextLine()) {
+                    if (scanner.hasNextInt()) {
+                        int number = Integer.parseInt(scanner.nextLine()) - 1;
+                        if (0 > number || number >= values.length) {
+                            throw new EnumValuesOutOfRangeException();
+                        }
+                        setValue.invoke(object, values[number]);
+                    } else {
+                        String value = scanner.nextLine().trim().toUpperCase();
+                        boolean flag = false;
+                        for (Object item : eEnum.getEnumConstants()) {
+                            if (item.toString().startsWith(value)) {
+                                setValue.invoke(object, item);
+                                flag = true;
+                            }
+                        }
+                        if (!flag) {
+                            throw new IncorrectEnumNameException();
+                        }
+                    }
+                }
                 break;
-            } catch (IllegalArgumentException e) {
-                outputHandler.println("Введён неправильный вид билета");
-            } catch (EmptyFieldException e) {
+            } catch (IllegalArgumentException | InvocationTargetException e) {
+                outputHandler.println("Введён неправильный вид " + eEnum.getName());
+            } catch (IllegalAccessException e) {
+                outputHandler.println("Отсутствует доступ к методу");
+            } catch (EnumValuesOutOfRangeException | IncorrectEnumNameException e) {
                 outputHandler.println(e);
             }
         }
     }
 
-    public static void printAllTypesOfTickets() {
-        outputHandler.println("Виды билетов: ");
-        for (TicketType value : TicketType.values()) {
-            outputHandler.println(value);
+
+    public static void printEnumValues(Class<? extends Enum> eEnum) {
+        outputHandler.println("Виды " + eEnum.getName() + ": ");
+        Object[] values = eEnum.getEnumConstants();
+        for (int i = 0; i < values.length; i++) {
+            outputHandler.println((i + 1) + ". " + values[i]);
         }
     }
 
@@ -243,7 +209,7 @@ public class InputTicket {
         try {
             ticket.setId(id);
         } catch (ValueIsNotPositiveException e) {
-            System.out.println("id не может быть неположительным, возможно переполнение");
+            outputHandler.println("id не может быть неположительным, возможно переполнение");
         }
     }
 
@@ -278,10 +244,10 @@ public class InputTicket {
             try {
                 outputHandler.print("Введите координату X (Coordinates x): ");
                 String line = scanner.nextLine();
-                if (line.isEmpty()) {
+                if (line.replace(",", ".").isEmpty()) {
                     outputHandler.println("Координата X должна быть дробным числом");
                 } else {
-                    coordinates.setX(Float.valueOf(line));
+                    coordinates.setX(Float.valueOf(line.replace(",", ".")));
                     break;
                 }
             } catch (CoordinateXException e) {
@@ -302,7 +268,7 @@ public class InputTicket {
                 if (line.isEmpty()) {
                     outputHandler.println("Координата Y должна быть дробным числом");
                 } else {
-                    coordinates.setY(Float.valueOf(line));
+                    coordinates.setY(Float.valueOf(line.replace(",", ".")));
                     break;
                 }
 
