@@ -35,8 +35,15 @@ public class ExecuteScriptCommand extends DataAppCommand {
         if (commandArgs.length == 1) {
             outputHandler.println("Не передан файл!");
         } else {
-            if (!this.recursionFindingCommands(command, allCommands) && allCommands.size() != 0) {
-                this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
+            if (!this.recursionFindingCommands(command, allCommands)) {
+                for (int i = allCommands.size() - 1; i > -1; i--) {
+                    if (allCommands.get(i).split(" ")[0].equals(EXECUTE_SCRIPT)) {
+                        allCommands.remove(i);
+                    }
+                }
+                if (!allCommands.isEmpty()) {
+                    this.dataApp.setCommandBuffer(allCommands);
+                }
             } else {
                 outputHandler.println("Неизбежна рекурсия");
             }

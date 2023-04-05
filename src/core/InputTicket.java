@@ -140,17 +140,17 @@ public class InputTicket {
                 outputHandler.print("Введите вид " + eEnum.getName() + ": ");
                 if (scanner.hasNextLine()) {
                     String value = scanner.nextLine().trim().toUpperCase();
-                    if (value.equals("")) {
+                    if (value.isEmpty()) {
                         outputHandler.println("Ввели пустую строчку!");
                         continue;
                     }
-                    if (scanner.hasNextInt()) {
-                        int number = Integer.parseInt(scanner.nextLine()) - 1;
+                    try {
+                        int number = Integer.parseInt(value) - 1;
                         if (0 > number || number >= values.length) {
                             throw new EnumValuesOutOfRangeException();
                         }
                         setValue.invoke(object, values[number]);
-                    } else {
+                    } catch (NumberFormatException e) {
                         boolean flag = false;
                         for (Object item : eEnum.getEnumConstants()) {
                             if (item.toString().startsWith(value)) {
@@ -161,14 +161,17 @@ public class InputTicket {
                         if (!flag) {
                             throw new IncorrectEnumNameException();
                         }
+                    } catch (EnumValuesOutOfRangeException e) {
+                        outputHandler.println(e);
+                        continue;
                     }
+                    break;
                 }
-                break;
             } catch (IllegalArgumentException | InvocationTargetException e) {
                 outputHandler.println("Введён неправильный вид " + eEnum.getName());
             } catch (IllegalAccessException e) {
                 outputHandler.println("Отсутствует доступ к методу");
-            } catch (EnumValuesOutOfRangeException | IncorrectEnumNameException e) {
+            } catch (IncorrectEnumNameException e) {
                 outputHandler.println(e);
             }
         }
