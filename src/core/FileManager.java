@@ -54,6 +54,7 @@ public class FileManager {
             writer.write(mainJsonObject.toString());
             writer.close();
             fileOutput.close();
+            outputHandler.println("Данные были сохранены в json");
         } catch (IOException e) {
             outputHandler.println("Поток был завершён, или файл не может быть прочитан!");
         }

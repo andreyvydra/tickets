@@ -22,7 +22,6 @@ public class SaveCommand extends DataAppCommand {
     @Override
     public void execute(String command) {
         dataApp.saveJSONObjectToFile();
-        outputHandler.println("Данные были сохранены в json");
     }
 
     @Override
