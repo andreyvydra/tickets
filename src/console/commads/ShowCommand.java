@@ -20,9 +20,13 @@ public class ShowCommand extends DataAppCommand {
 
     @Override
     public void execute(String command) {
-        outputHandler.println("Collection items:");
-        for (Ticket ticket : dataApp.getCollection()) {
-            outputHandler.println(ticket);
+        if (dataApp.getCollectionLen() == 0) {
+            outputHandler.println("Коллекция пуста!");
+        } else {
+            outputHandler.println("Collection items:");
+            for (Ticket ticket : dataApp.getCollection()) {
+                outputHandler.println(ticket);
+            }
         }
     }
 

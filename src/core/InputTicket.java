@@ -139,6 +139,11 @@ public class InputTicket {
             try {
                 outputHandler.print("Введите вид " + eEnum.getName() + ": ");
                 if (scanner.hasNextLine()) {
+                    String value = scanner.nextLine().trim().toUpperCase();
+                    if (value.equals("")) {
+                        outputHandler.println("Ввели пустую строчку!");
+                        continue;
+                    }
                     if (scanner.hasNextInt()) {
                         int number = Integer.parseInt(scanner.nextLine()) - 1;
                         if (0 > number || number >= values.length) {
@@ -146,7 +151,6 @@ public class InputTicket {
                         }
                         setValue.invoke(object, values[number]);
                     } else {
-                        String value = scanner.nextLine().trim().toUpperCase();
                         boolean flag = false;
                         for (Object item : eEnum.getEnumConstants()) {
                             if (item.toString().startsWith(value)) {

@@ -54,6 +54,10 @@ public class DataApp {
         return collectionManager.getCollection();
     }
 
+    public int getCollectionLen() {
+        return collectionManager.getLen();
+    }
+
     public void removeTicketById(long id) throws TicketWasNotFound {
         collectionManager.removeTicket(id);
     }

@@ -31,7 +31,7 @@ public class ExecuteScriptCommand extends DataAppCommand {
     public void execute(String command) {
         ArrayList<String> allCommands = new ArrayList<>();
         allCommands.add(command);
-        if (!this.recursionFindingCommands(command, allCommands)) {
+        if (!this.recursionFindingCommands(command, allCommands) && allCommands.size() != 0) {
             this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
         } else {
             outputHandler.println("Неизбежна рекурсия");

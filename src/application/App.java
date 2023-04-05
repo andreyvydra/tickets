@@ -44,7 +44,7 @@ public class App {
                 }
                 console.execute(input);
             } catch (NoSuchElementException e) {
-                outputHandler.println("Некорректный символ!");
+                outputHandler.println("До новой встречи!");
                 break;
             } catch (InvocationTargetException | IllegalAccessException e) {
                 outputHandler.println("Файл не доступен для чтения!");

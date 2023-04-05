@@ -27,6 +27,9 @@ public class CollectionManager {
         return collection.stream().collect(Collectors.groupingBy(Ticket::getCreationDate));
     }
 
+    public int getLen() {
+        return collection.size();
+    }
 
     public void loadTickets(ArrayList<Ticket> tickets) {
         for (Ticket ticket : tickets) {

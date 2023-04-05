@@ -62,17 +62,13 @@ public class JSONParser {
 
     public Ticket parseTicket(JSONObject jObject) throws ValueIsNotPositiveException, EmptyNameException, CoordinateXException, EmptyFieldException {
         Ticket ticket = new Ticket();
-        try {
-            ticket.setId(this.getIdTicket(jObject));
-            ticket.setName(this.getStringName(jObject));
-            ticket.setCoordinates(this.getCoordinates(jObject));
-            ticket.setCreationDate(this.getCreationDate(jObject));
-            ticket.setPrice(this.getPrice(jObject));
-            ticket.setType(this.getType(jObject));
-            ticket.setPerson(this.getPerson(jObject));
-        } catch (JSONException e) {
-            outputHandler.println("Некорректный файл!");
-        }
+        ticket.setId(this.getIdTicket(jObject));
+        ticket.setName(this.getStringName(jObject));
+        ticket.setCoordinates(this.getCoordinates(jObject));
+        ticket.setCreationDate(this.getCreationDate(jObject));
+        ticket.setPrice(this.getPrice(jObject));
+        ticket.setType(this.getType(jObject));
+        ticket.setPerson(this.getPerson(jObject));
         return ticket;
     }
 
