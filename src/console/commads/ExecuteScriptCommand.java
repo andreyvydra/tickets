@@ -30,11 +30,16 @@ public class ExecuteScriptCommand extends DataAppCommand {
     @Override
     public void execute(String command) {
         ArrayList<String> allCommands = new ArrayList<>();
+        String[] commandArgs = command.split(" ");
         allCommands.add(command);
-        if (!this.recursionFindingCommands(command, allCommands) && allCommands.size() != 0) {
-            this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
+        if (commandArgs.length == 1) {
+            outputHandler.println("Не передан файл!");
         } else {
-            outputHandler.println("Неизбежна рекурсия");
+            if (!this.recursionFindingCommands(command, allCommands) && allCommands.size() != 0) {
+                this.dataApp.setCommandBuffer(allCommands.subList(1, allCommands.size() - 1));
+            } else {
+                outputHandler.println("Неизбежна рекурсия");
+            }
         }
     }
 
