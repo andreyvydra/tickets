@@ -15,7 +15,11 @@ public class Show extends Command {
     @Override
     public Response execute(Request request) {
         StringBuilder sb = new StringBuilder();
-        dataApp.getCollection().forEach(sb::append);
+        if (dataApp.getCollectionLen() != 0) {
+            dataApp.getCollection().forEach(x -> sb.append(x).append("\n"));
+        } else {
+            sb.append("Коллекция пуста!");
+        }
         return new InfoResponse(sb.toString());
     }
 }

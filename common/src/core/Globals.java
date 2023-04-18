@@ -13,6 +13,9 @@ public class Globals {
     public static byte HISTORY_SIZE = 8;
     public static short COORDINATE_X_MIN_LIMIT = -873;
 
+    public static int DATA_SIZE = 507;
+    public static int PACKET_SIZE = 508;
+
     static public class CommandNames {
         public static String EXECUTE_SCRIPT = "execute_script";
         public static String HELP = "help";

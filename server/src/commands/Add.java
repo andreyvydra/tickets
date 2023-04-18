@@ -1,7 +1,6 @@
 package commands;
 
 import application.DataApp;
-import core.OutputHandler;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
 import requests.AddRequest;
@@ -22,11 +21,12 @@ public class Add extends Command {
         AddRequest addRequest = (AddRequest) request;
         Ticket ticket = addRequest.getTicket();
         try {
-            dataApp.setIdToTicket(ticket);
-            dataApp.addTicketToCollectionWithoutId(addRequest.getTicket());
-            return new AddResponse("Элемент добавлен", ticket.getId());
+            if (dataApp.addTicketToCollectionWithoutId(addRequest.getTicket())) {
+                return new AddResponse("Элемент добавлен", ticket.getId());
+            }
+            return new AddResponse("Элемент не был добавлен", -1);
         } catch (ValueIsNotPositiveException e) {
-            return new Response("Элемент не был добавлен");
+            return new AddResponse("Элемент не был добавлен", -1);
         }
     }
 }

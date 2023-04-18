@@ -61,8 +61,8 @@ public class CollectionManager {
         return id;
     }
 
-    public void addTicket(Ticket ticket) {
-        this.collection.add(ticket);
+    public boolean addTicket(Ticket ticket) {
+        return this.collection.add(ticket);
     }
 
     public Ticket getTicketById(long id) {

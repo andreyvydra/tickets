@@ -29,8 +29,8 @@ public class DataApp {
     }
 
 
-    public void addTicketToCollection(Ticket ticket) {
-        collectionManager.addTicket(ticket);
+    public boolean addTicketToCollection(Ticket ticket) {
+        return collectionManager.addTicket(ticket);
     }
 
     public void setIdToTicket(Ticket ticket) throws ValueIsNotPositiveException {
@@ -69,8 +69,8 @@ public class DataApp {
         return collectionManager.getGroupsByDate();
     }
 
-    public void addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
+    public boolean addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
         setIdToTicket(ticket);
-        addTicketToCollection(ticket);
+        return addTicketToCollection(ticket);
     }
 }

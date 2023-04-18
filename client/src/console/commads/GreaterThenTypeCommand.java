@@ -28,7 +28,7 @@ public class GreaterThenTypeCommand extends ServerCommand {
     @Override
     public void execute(String command) {
         try {
-            TicketType type = TicketType.valueOf(command.split(" ")[ARGUMENT_POSITION]);
+            TicketType type = TicketType.valueOf(command.split(" ")[ARGUMENT_POSITION].toUpperCase());
             Response response = udpClient.sendRequestAndGetResponse(new GreaterThanTypeRequest(type));
             outputHandler.println(response);
         } catch (ArrayIndexOutOfBoundsException e) {

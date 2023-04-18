@@ -1,7 +1,6 @@
 package commands;
 
 import application.DataApp;
-import core.OutputHandler;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
 import requests.AddIfMaxRequest;
@@ -23,13 +22,15 @@ public class AddIfMax extends Command {
         Ticket ticket = ((AddIfMaxRequest) request).getTicket();
         try {
             if (ticket.compareTo(dataApp.getMaxTicket()) > 0) {
-                dataApp.addTicketToCollectionWithoutId(ticket);
-                return new AddResponse("Тикет был добавлен", ticket.getId());
-            } else {
-                return new AddResponse("Тикет не является самым большим", -1);
+                if (dataApp.addTicketToCollectionWithoutId(ticket)) {
+                    return new AddResponse("Тикет был добавлен", ticket.getId());
+                } else {
+                    return new AddResponse("Тикет не был добавлен", -1);
+                }
             }
+            return new AddResponse("Тикет не является самым большим", -1);
         } catch (ValueIsNotPositiveException e) {
-            return new Response("Тикет не смог добавиться!");
+            return new AddResponse("Тикет не смог добавиться!", -1);
         }
     }
 }

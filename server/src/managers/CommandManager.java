@@ -18,6 +18,13 @@ public class CommandManager {
         commandHashMap.put(ADD_IF_MAX, new AddIfMax(logger, dataApp));
         commandHashMap.put(INFO, new Info(logger, dataApp));
         commandHashMap.put(SHOW, new Show(logger, dataApp));
+        commandHashMap.put(CLEAR, new Clear(logger, dataApp));
+        commandHashMap.put(COUNT_GREATER_THAN_TYPE, new GreaterThanType(logger, dataApp));
+        commandHashMap.put(GROUP_COUNTING_BY_CREATION_DATE, new GroupByDate(logger, dataApp));
+        commandHashMap.put(PRINT_FIELD_ASCENDING_TYPE, new PrintTypeAscending(logger, dataApp));
+        commandHashMap.put(REMOVE_BY_ID, new Remove(logger, dataApp));
+        commandHashMap.put(REMOVE_LOWER, new RemoveLower(logger, dataApp));
+        commandHashMap.put(UPDATE, new Update(logger, dataApp));
         commands = commandHashMap;
     }
 
