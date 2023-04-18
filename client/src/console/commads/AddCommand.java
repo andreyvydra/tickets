@@ -27,12 +27,15 @@ public class AddCommand extends ServerCommand {
             Ticket ticket = InputTicket.getTicketWithoutIdFromConsole();
             Response response = udpClient.sendRequestAndGetResponse(new AddRequest(ticket));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Тикет не добавлен" + e);
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
-    public void printHelp() {
+    @Override
+    public void description() {
         outputHandler.println("add {element} : добавить новый элемент в коллекцию");
     }
 }

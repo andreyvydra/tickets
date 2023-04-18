@@ -23,12 +23,12 @@ public class HelpCommand extends DefaultCommand {
     @Override
     public void execute(String command) {
         for (Command command1 : commands.values()) {
-            ((DefaultCommand) command1).printHelp();
+            ((DefaultCommand) command1).description();
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("help : вывести справку по доступным командам");
     }
 }

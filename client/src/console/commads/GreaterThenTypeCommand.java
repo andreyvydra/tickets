@@ -35,13 +35,15 @@ public class GreaterThenTypeCommand extends ServerCommand {
             outputHandler.println("Аргумен не был введён!");
         } catch (IllegalArgumentException e) {
             outputHandler.println("Такого type не существует!");
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Проблемы с сериализацией объекта!");
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("count_greater_than_type type : вывести количество элементов, значение" +
                 " поля type которых больше заданного");
     }

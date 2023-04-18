@@ -8,5 +8,5 @@ abstract public class DefaultCommand implements Command {
     public DefaultCommand(OutputHandler outputHandler) {
         this.outputHandler = outputHandler;
     }
-    abstract public void printHelp();
+    abstract public void description();
 }

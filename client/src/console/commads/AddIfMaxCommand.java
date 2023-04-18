@@ -27,13 +27,15 @@ public class AddIfMaxCommand extends ServerCommand {
             Ticket ticket = InputTicket.getTicketWithoutIdFromConsole();
             Response response = udpClient.sendRequestAndGetResponse(new AddIfMaxRequest(ticket));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Тикет не добавлен");
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("add_if_max {element} : добавить новый элемент в коллекцию, " +
                 "если его значение превышает значение наибольшего элемента этой коллекции");
     }

@@ -9,7 +9,6 @@ import requests.RemoveLowerRequest;
 import responses.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * RemoveLowerCommand deletes all tickets which are lower than inputted ticket.
@@ -29,13 +28,15 @@ public class RemoveLowerCommand extends ServerCommand {
         try {
             Response response = udpClient.sendRequestAndGetResponse(new RemoveLowerRequest(ticket));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Проблемы с сериализацией");
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный");
     }
 }

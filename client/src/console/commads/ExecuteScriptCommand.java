@@ -89,7 +89,7 @@ public class ExecuteScriptCommand extends ServerCommand {
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("execute_script file_name : считать и исполнить скрипт из указанного файла.");
     }
 }

@@ -32,13 +32,15 @@ public class UpdateCommand extends ServerCommand {
         try {
             Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println(e);
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("update id {element} : обновить значение элемента коллекции," +
                 " id которого равен заданному");
     }

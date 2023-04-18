@@ -27,13 +27,15 @@ public class RemoveCommand extends ServerCommand {
         try {
             Response response = udpClient.sendRequestAndGetResponse(new RemoveRequest(id));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Коллекция не была очищена!");
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("remove_by_id id : удалить элемент из коллекции по его id");
     }
 }

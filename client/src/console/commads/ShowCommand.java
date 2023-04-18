@@ -2,9 +2,7 @@ package console.commads;
 
 import console.commads.generalCommands.ServerCommand;
 import core.OutputHandler;
-import data.Ticket;
 import network.UDPClient;
-import requests.RemoveRequest;
 import requests.ShowRequest;
 import responses.Response;
 
@@ -26,13 +24,15 @@ public class ShowCommand extends ServerCommand {
         try {
             Response response = udpClient.sendRequestAndGetResponse(new ShowRequest());
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println(e);
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("show : вывести в стандартный поток вывода все элементы" +
                 " коллекции в строковом представлении");
     }

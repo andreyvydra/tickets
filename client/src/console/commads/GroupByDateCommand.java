@@ -26,13 +26,15 @@ public class GroupByDateCommand extends ServerCommand {
         try {
             Response response = udpClient.sendRequestAndGetResponse(new GroupByDateRequest());
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Коллекция не была очищена!");
+        } catch (IOException  e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Класс не был найден! " + e);
         }
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("group_counting_by_creation_date : сгруппировать элементы коллекции по" +
                 " значению поля creationDate, вывести количество элементов в каждой группе");
     }

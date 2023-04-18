@@ -26,7 +26,7 @@ public class HistoryCommand extends DefaultCommand {
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("history : вывести последние 8 команд (без их аргументов)");
     }
 }

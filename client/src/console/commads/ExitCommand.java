@@ -22,7 +22,7 @@ public class ExitCommand extends DefaultCommand {
     }
 
     @Override
-    public void printHelp() {
+    public void description() {
         outputHandler.println("exit : завершить программу (без сохранения в файл)");
     }
 }
