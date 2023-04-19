@@ -20,6 +20,7 @@ public class UDPServer {
     private final Logger logger = Logger.getLogger(UDPServer.class.getName());
     private final DatagramSocket datagramSocket;
     private final DataApp dataApp;
+    private boolean isRunning = true;
     private final CommandManager commandManager;
 
     public UDPServer(InetSocketAddress address, DataApp dataApp) throws SocketException {
@@ -76,7 +77,7 @@ public class UDPServer {
 
     public void run() {
         logger.info("Старт сервера");
-        while (true) {
+        while (isRunning) {
             Pair<byte[], SocketAddress> pair;
             try {
                 pair = receiveData();
@@ -111,11 +112,14 @@ public class UDPServer {
 
             try {
                 sendResponse(response, socketAddress);
-                throw new IOException();
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "ошибка в sendData", e);
             }
 
         }
+    }
+
+    public void stop() {
+        isRunning = false;
     }
 }
