@@ -21,15 +21,17 @@ public class UDPClient {
 
     public UDPClient(InetAddress address, int port) throws IOException {
         addr = new InetSocketAddress(address, port);
-        datagramChannel = DatagramChannel.open().bind(null).connect(addr);
+        datagramChannel = DatagramChannel.open().connect(addr);
         datagramChannel.configureBlocking(false);
     }
 
-    public byte[] sendAndReceiveData(byte[] data) throws IOException {
-        sendData(data);
-        return receiveData();
-    }
-
+    /**
+     * Класс делит данные на пакеты, а также добавляет специальный
+     * байт в конец и отправляет их на сервер
+     *
+     * @param data - данные для отправки
+     * @throws IOException - ошибка при передачи данных
+     */
     public void sendData(byte[] data) throws IOException {
         byte[][] packetData = new byte[(int)Math.ceil(data.length / (double)DATA_SIZE)][DATA_SIZE];
         for (int i = 0; i < packetData.length; i++) {
@@ -76,7 +78,8 @@ public class UDPClient {
         ObjectOutputStream out = new ObjectOutputStream(bos);
         out.writeObject(request);
         out.close();
-        byte[] receivedData = sendAndReceiveData(bos.toByteArray());
+        sendData(bos.toByteArray());
+        byte[] receivedData = receiveData();
         ByteArrayInputStream bis = new ByteArrayInputStream(receivedData);
         ObjectInputStream ois = new ObjectInputStream(bis);
         Response response = (Response) ois.readObject();
