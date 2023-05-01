@@ -1,5 +1,6 @@
 
 import application.ClientApp;
+import core.exceptions.EmptyPortException;
 
 import java.io.IOException;
 
@@ -8,8 +9,10 @@ public class Client {
         try {
             ClientApp clientApp = new ClientApp();
             clientApp.execute();
+
         } catch (IOException e) {
-            System.out.println("Не удалось запустить клиентское приложение!");
+            System.out.println("Не удалось запустить клиентское приложение!" +
+                    "Вам следует повторить запуск");
         }
     }
 }

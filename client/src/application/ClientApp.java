@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.util.*;
 
+import static core.Globals.SERVER_PORT;
+
 /**
  * App is class which link collection, fileManager, console, parser etc.
  * There is mainloop of program
@@ -24,7 +26,7 @@ public class ClientApp {
     private final OutputHandler outputHandler = new OutputHandler();
 
     public ClientApp() throws IOException {
-        udpClient = new UDPClient(InetAddress.getLocalHost(), 8000);
+        udpClient = new UDPClient(InetAddress.getLocalHost(), SERVER_PORT);
     }
 
     public void execute() {

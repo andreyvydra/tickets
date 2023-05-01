@@ -7,6 +7,10 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.Scanner;
 
+import static core.Globals.CommandNames.EXIT;
+import static core.Globals.CommandNames.SAVE;
+import static core.Globals.SERVER_PORT;
+
 public class ServerApp {
     private final UDPServer udpServer;
     private final DataApp dataApp;
@@ -14,7 +18,7 @@ public class ServerApp {
 
     public ServerApp(String filename) throws SocketException {
         dataApp = new DataApp(filename);
-        udpServer = new UDPServer(new InetSocketAddress(8000), dataApp);
+        udpServer = new UDPServer(new InetSocketAddress(SERVER_PORT), dataApp);
     }
 
     public void run() {
@@ -24,12 +28,13 @@ public class ServerApp {
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 String input = scanner.nextLine().trim().toLowerCase();
-                if (input.equals("save")) {
+                if (input.equals(SAVE)) {
                     dataApp.saveJSONObjectToFile();
-                } else if (input.equals("exit")) {
+                } else if (input.equals(EXIT)) {
                     dataApp.saveJSONObjectToFile();
                     outputHandler.println("До скорой встречи!");
-                    System.exit(0);
+                    udpServer.stop();
+                    break;
                 }
             }
         });
