@@ -5,7 +5,7 @@ import core.OutputHandler;
 import data.Ticket;
 import network.UDPClient;
 import requests.GroupByDateRequest;
-import responses.Response;
+import responses.GroupByDateResponse;
 
 import java.io.IOException;
 
@@ -24,8 +24,11 @@ public class GroupByDateCommand extends ServerCommand {
     @Override
     public void execute(String command) {
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new GroupByDateRequest());
+            GroupByDateResponse response = (GroupByDateResponse) udpClient.sendRequestAndGetResponse(new GroupByDateRequest());
             outputHandler.println(response);
+            for (Object group : response.getData()) {
+                outputHandler.println(group);
+            }
         } catch (IOException  e) {
             outputHandler.println("Ошибка при передачи данных! " + e);
         } catch (ClassNotFoundException e) {

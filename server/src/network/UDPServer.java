@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static core.Globals.DATA_SIZE;
+import static core.Globals.Network.*;
 import static core.Globals.PACKET_SIZE;
 
 public class UDPServer {
@@ -64,9 +65,9 @@ public class UDPServer {
             byte[] packet = packetData[i];
             byte[] packetToSend = Arrays.copyOf(packet, PACKET_SIZE);
             if (i + 1 == packetData.length) {
-                System.arraycopy(new byte[]{0}, 0, packetToSend, DATA_SIZE, 1);
+                System.arraycopy(new byte[]{PACKET_ENDS}, 0, packetToSend, DATA_SIZE, 1);
             } else {
-                System.arraycopy(new byte[]{1}, 0, packetToSend, DATA_SIZE, 1);
+                System.arraycopy(new byte[]{PACKET_CONTINUES}, 0, packetToSend, DATA_SIZE, 1);
             }
             DatagramPacket datagramPacket = new DatagramPacket(packetToSend, packetToSend.length, socketAddress);
             datagramSocket.send(datagramPacket);
@@ -100,13 +101,9 @@ public class UDPServer {
             logger.info("Пришёл " + request.toString());
 
             Response response;
-            try {
-                Command command = commandManager.getCommand(request.getCommandName());
-                response = command.execute(request);
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "ошибка при выполнении команды", e);
-                continue;
-            }
+            Command command = commandManager.getCommand(request.getCommandName());
+            response = command.execute(request);
+
             logger.info("Ответ: " + response.toString());
 
 

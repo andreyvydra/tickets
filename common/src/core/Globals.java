@@ -10,6 +10,7 @@ public class Globals {
     public static byte ARGUMENT_POSITION = 1; // Position at split string
     public static byte COMMAND_POSITION = 0;
     public static byte FILENAME_POSITION = 0;
+    public static int SERVER_PORT = 8000;
     public static byte HISTORY_SIZE = 8;
     public static short COORDINATE_X_MIN_LIMIT = -873;
 
@@ -86,5 +87,14 @@ public class Globals {
         public static String PRICE = "price";
         public static String TYPE = "type";
         public static String PERSON = "person";
+    }
+
+    static public class Responses {
+        public static byte TICKET_WAS_NOT_ADDED = -1;
+    }
+
+    static public class Network {
+        public static byte PACKET_CONTINUES = 1;
+        public static byte PACKET_ENDS = 0;
     }
 }

@@ -1,7 +1,8 @@
 package responses;
 
-public class ShowResponse extends Response {
-    public ShowResponse(String msg) {
-        super(msg);
+
+public class ShowResponse extends DataResponse {
+    public ShowResponse(String msg, Object[] data) {
+        super(msg, data);
     }
 }

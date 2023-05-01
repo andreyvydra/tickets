@@ -7,6 +7,7 @@ import responses.GroupByDateResponse;
 import responses.Response;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -18,16 +19,16 @@ public class GroupByDate extends Command {
 
     @Override
     public Response execute(Request request) {
-        StringBuilder sb = new StringBuilder();
+        ArrayList<String> data = new ArrayList<>();
         Map<ZonedDateTime, List<Ticket>> groups = dataApp.getTicketGroupsByDate();
         if (groups.size() == 0) {
-            return new GroupByDateResponse("Групп не найдено!");
+            return new GroupByDateResponse("Групп не найдено!", data.toArray());
         }
         for (Map.Entry<ZonedDateTime, List<Ticket>> entry : groups.entrySet()) {
             ZonedDateTime key = entry.getKey();
             int value = entry.getValue().size();
-            sb.append("Группа: ").append(key).append(", кол-во: ").append(value).append("\n");
+            data.add("Группа: " + key + ", кол-во: " + value);
         }
-        return new GroupByDateResponse(sb.toString());
+        return new GroupByDateResponse("Группы", data.toArray());
     }
 }

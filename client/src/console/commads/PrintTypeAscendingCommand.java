@@ -4,7 +4,7 @@ import console.commads.generalCommands.ServerCommand;
 import core.OutputHandler;
 import network.UDPClient;
 import requests.PrintTypeAscendingRequest;
-import responses.Response;
+import responses.PrintTypeAscendingResponse;
 
 import java.io.IOException;
 
@@ -22,9 +22,12 @@ public class PrintTypeAscendingCommand extends ServerCommand {
     @Override
     public void execute(String command) {
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest());
+            PrintTypeAscendingResponse response = (PrintTypeAscendingResponse) udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest());
             outputHandler.println(response);
-        } catch (IOException  e) {
+            for (Object type : response.getData()) {
+                outputHandler.println(type);
+            }
+        } catch (IOException e) {
             outputHandler.println("Ошибка при передачи данных! " + e);
         } catch (ClassNotFoundException e) {
             outputHandler.println("Класс не был найден! " + e);

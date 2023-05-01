@@ -13,6 +13,7 @@ import java.nio.channels.DatagramChannel;
 import java.util.Arrays;
 
 import static core.Globals.DATA_SIZE;
+import static core.Globals.Network.*;
 import static core.Globals.PACKET_SIZE;
 
 public class UDPClient {
@@ -42,9 +43,9 @@ public class UDPClient {
             byte[] packet = packetData[i];
             byte[] packetToSend = Arrays.copyOf(packet, PACKET_SIZE);
             if (i + 1 == packetData.length) {
-                System.arraycopy(new byte[]{0}, 0, packetToSend, DATA_SIZE, 1);
+                System.arraycopy(new byte[]{PACKET_ENDS}, 0, packetToSend, DATA_SIZE, 1);
             } else {
-                System.arraycopy(new byte[]{1}, 0, packetToSend, DATA_SIZE, 1);
+                System.arraycopy(new byte[]{PACKET_CONTINUES}, 0, packetToSend, DATA_SIZE, 1);
             }
             datagramChannel.send(ByteBuffer.wrap(packetToSend), addr);
         }

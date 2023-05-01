@@ -4,7 +4,7 @@ import console.commads.generalCommands.ServerCommand;
 import core.OutputHandler;
 import network.UDPClient;
 import requests.ShowRequest;
-import responses.Response;
+import responses.ShowResponse;
 
 import java.io.IOException;
 
@@ -22,8 +22,11 @@ public class ShowCommand extends ServerCommand {
     @Override
     public void execute(String command) {
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new ShowRequest());
+            ShowResponse response = (ShowResponse) udpClient.sendRequestAndGetResponse(new ShowRequest());
             outputHandler.println(response);
+            for (Object ticket : response.getData()) {
+                outputHandler.println(ticket);
+            }
         } catch (IOException  e) {
             outputHandler.println("Ошибка при передачи данных! " + e);
         } catch (ClassNotFoundException e) {

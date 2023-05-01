@@ -2,9 +2,10 @@ package commands;
 
 import application.DataApp;
 import requests.Request;
-import responses.InfoResponse;
 import responses.Response;
+import responses.ShowResponse;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class Show extends Command {
@@ -14,12 +15,12 @@ public class Show extends Command {
 
     @Override
     public Response execute(Request request) {
-        StringBuilder sb = new StringBuilder();
+        ArrayList<String> data = new ArrayList<>();
         if (dataApp.getCollectionLen() != 0) {
-            dataApp.getCollection().forEach(x -> sb.append(x).append("\n"));
+            dataApp.getCollection().forEach(x -> data.add(x.toString()));
         } else {
-            sb.append("Коллекция пуста!");
+            return new ShowResponse("Коллекция пуста!", data.toArray());
         }
-        return new InfoResponse(sb.toString());
+        return new ShowResponse("Коллекция", data.toArray());
     }
 }

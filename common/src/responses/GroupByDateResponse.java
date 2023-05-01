@@ -1,7 +1,8 @@
 package responses;
 
-public class GroupByDateResponse extends Response {
-    public GroupByDateResponse(String msg) {
-        super(msg);
+
+public class GroupByDateResponse extends DataResponse {
+    public GroupByDateResponse(String msg, Object[] data) {
+        super(msg, data);
     }
 }
