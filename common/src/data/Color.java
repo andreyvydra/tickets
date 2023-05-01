@@ -1,13 +1,12 @@
 package data;
 
-import java.io.Serializable;
 
 /**
  * Enum of colors
  *
  * @see Person
  */
-public enum Color implements Serializable {
+public enum Color {
     GREEN("Зелёный"),
     YELLOW("Жёлтый"),
     ORANGE("Оранжевый"),

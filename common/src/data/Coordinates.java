@@ -4,6 +4,7 @@ import core.Globals;
 import core.exceptions.CoordinateXException;
 import core.exceptions.EmptyFieldException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
@@ -14,6 +15,9 @@ import java.util.Objects;
  * @see Ticket
  */
 public class Coordinates implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 13L;
+
     private Float x; //Значение поля должно быть больше -873, Поле не может быть null
     private Float y; //Поле не может быть null
 

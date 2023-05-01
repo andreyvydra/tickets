@@ -1,15 +1,14 @@
 package data;
 
 
-import java.io.Serializable;
 
 /**
  * Enum of Countries
  *
  * @see Person
  */
-public enum Country implements Serializable {
-    USA("Америка"),
+public enum Country {
+    USA("США"),
     GERMANY("Германия"),
     CHINA("Китай"),
     THAILAND("Тайланд"),

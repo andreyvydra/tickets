@@ -5,6 +5,7 @@ import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -14,6 +15,9 @@ import java.util.Objects;
  * Ticket is a class of ticket
  */
 public class Ticket implements Comparable<Ticket>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 10L;
+
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null

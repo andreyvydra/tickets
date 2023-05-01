@@ -1,11 +1,10 @@
 package data;
 
-import java.io.Serializable;
 
 /**
  * TicketType is enum of ticket types
  */
-public enum TicketType implements Serializable {
+public enum TicketType {
     CHEAP("Дешёвый"),
     BUDGETARY("Бюджетный"),
     USUAL("Обычный"),

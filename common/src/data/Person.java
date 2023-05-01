@@ -3,6 +3,7 @@ package data;
 import core.Globals;
 import core.exceptions.EmptyFieldException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,6 +16,9 @@ import java.util.Objects;
  * @see Ticket
  */
 public class Person implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 11L;
+
     private LocalDateTime birthday; //Поле может быть null
     private Color eyeColor; //Поле не может быть null
     private Color hairColor; //Поле может быть null

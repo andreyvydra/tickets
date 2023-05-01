@@ -3,6 +3,7 @@ package data;
 import core.Globals;
 import core.exceptions.EmptyFieldException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
@@ -14,6 +15,9 @@ import java.util.Objects;
  * @see Person
  */
 public class Location implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 12L;
+
     private double x;
     private Integer y; //Поле не может быть null
     private float z;
