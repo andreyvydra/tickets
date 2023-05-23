@@ -22,7 +22,7 @@ public class ServerApp {
     }
 
     public void run() {
-        Thread thread = new Thread(() -> {
+        Thread threadConsole = new Thread(() -> {
             outputHandler.println("Введите exit для того, чтобы выйти из " +
                     "программы или save, чтобы сохранить данные в файл.");
             Scanner scanner = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class ServerApp {
                 }
             }
         });
-        thread.start();
+        threadConsole.start();
         udpServer.run();
     }
 }

@@ -34,6 +34,7 @@ public class Globals {
         public static String GROUP_COUNTING_BY_CREATION_DATE = "group_counting_by_creation_date";
         public static String COUNT_GREATER_THAN_TYPE = "count_greater_than_type";
         public static String PRINT_FIELD_ASCENDING_TYPE = "print_field_ascending_type";
+        public static String TICKET_EXIST = "ticket_exist";
 
         public static Map<String, Class<? extends Command>> commandMap = new HashMap<>();
         static {
@@ -96,5 +97,7 @@ public class Globals {
     static public class Network {
         public static byte PACKET_CONTINUES = 1;
         public static byte PACKET_ENDS = 0;
+        public static byte TICKET_IS_NOT_EXIST = 0;
+        public static byte TICKET_IS_EXIST = 1;
     }
 }

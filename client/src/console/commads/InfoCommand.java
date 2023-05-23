@@ -4,6 +4,7 @@ import console.commads.generalCommands.ServerCommand;
 import core.OutputHandler;
 import network.UDPClient;
 import requests.InfoRequest;
+import responses.InfoResponse;
 import responses.Response;
 
 import java.io.IOException;
@@ -21,10 +22,12 @@ public class InfoCommand extends ServerCommand {
     @Override
     public void execute(String command) {
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new InfoRequest());
+            InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest());
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Проблема с сериализацией");
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Проблема с сериализацией " + e);
+        } catch (IOException e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
         }
     }
 

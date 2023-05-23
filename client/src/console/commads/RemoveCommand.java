@@ -23,14 +23,19 @@ public class RemoveCommand extends ServerCommand {
 
     @Override
     public void execute(String command) {
-        long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
-        try {
-            Response response = udpClient.sendRequestAndGetResponse(new RemoveRequest(id));
-            outputHandler.println(response);
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+        String[] arguments = command.split(" ");
+        if (arguments.length == 1) {
+            outputHandler.println("Введите id для remove.");
+        } else {
+            long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
+            try {
+                Response response = udpClient.sendRequestAndGetResponse(new RemoveRequest(id));
+                outputHandler.println(response);
+            } catch (IOException e) {
+                outputHandler.println("Ошибка при передачи данных! " + e);
+            } catch (ClassNotFoundException e) {
+                outputHandler.println("Класс не был найден! " + e);
+            }
         }
     }
 

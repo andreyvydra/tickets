@@ -39,7 +39,7 @@ public class UDPServer {
             DatagramPacket packet = new DatagramPacket(data, PACKET_SIZE);
             datagramSocket.receive(packet);
             address = packet.getSocketAddress();
-            if (data[data.length - 1] == 0) {
+            if (data[data.length - 1] == PACKET_ENDS) {
                 isReceived = true;
             }
             outputStream.write(Arrays.copyOf(data, DATA_SIZE));
@@ -83,6 +83,9 @@ public class UDPServer {
             try {
                 pair = receiveData();
             } catch (IOException e) {
+                if (datagramSocket.isClosed()) {
+                    break;
+                }
                 logger.log(Level.SEVERE, "ошибка при получении данных", e);
                 continue;
             }
@@ -118,5 +121,6 @@ public class UDPServer {
 
     public void stop() {
         isRunning = false;
+        datagramSocket.close();
     }
 }
