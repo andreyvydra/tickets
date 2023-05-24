@@ -59,6 +59,26 @@ public class Person implements Serializable {
         this.nationality = nationality;
     }
 
+    public Color getEyeColor() {
+        return eyeColor;
+    }
+
+    public Color getHairColor() {
+        return hairColor;
+    }
+
+    public Country getNationality() {
+        return nationality;
+    }
+
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put(Globals.PersonFields.BIRTHDAY, !Objects.isNull(this.birthday) ? this.birthday.toString() : null);

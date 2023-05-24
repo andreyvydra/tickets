@@ -25,6 +25,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     private long price; //Значение поля должно быть больше 0
     private TicketType type; //Поле не может быть null
     private Person person; //Поле не может быть null
+    private String creatorLogin;
 
     public Ticket() {
         id = 1;
@@ -34,6 +35,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         price = 1000;
         type = TicketType.USUAL;
         person = new Person();
+        creatorLogin = "";
     }
 
     public void setId(long id) throws ValueIsNotPositiveException {

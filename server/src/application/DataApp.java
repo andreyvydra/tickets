@@ -3,20 +3,21 @@ package application;
 import core.exceptions.TicketWasNotFound;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
+import db.DBManager;
 import managers.CollectionManager;
 
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 public class DataApp {
     private final CollectionManager collectionManager;
-    private final FileManager fileManager;
+    private final DBManager dbManager;
 
-    public DataApp(String filename) {
+    public DataApp(DBManager dbManager) {
         collectionManager = new CollectionManager();
-        fileManager = new FileManager(filename);
-        JSONParser jsonParser = new JSONParser(fileManager.getJSONObjectFromFile());
-        ArrayList<Ticket> tickets = jsonParser.parse();
+        this.dbManager = dbManager;
+        ArrayList<Ticket> tickets = dbManager.getAllTickets();
         collectionManager.loadTickets(tickets);
     }
 
@@ -24,17 +25,17 @@ public class DataApp {
         return collectionManager;
     }
 
-    public void saveJSONObjectToFile() {
-        fileManager.saveJSONObjectToFile(collectionManager);
-    }
-
-
     public boolean addTicketToCollection(Ticket ticket) {
-        return collectionManager.addTicket(ticket);
-    }
-
-    public void setIdToTicket(Ticket ticket) throws ValueIsNotPositiveException {
-        ticket.setId(getCollectionManager().getNewId());
+        try {
+            long idt = dbManager.addTicket(ticket);
+            if (idt < 1) {
+                return false;
+            }
+            return collectionManager.addTicket(ticket);
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
     }
 
     public Ticket getMaxTicket() {
@@ -70,7 +71,6 @@ public class DataApp {
     }
 
     public boolean addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
-        setIdToTicket(ticket);
         return addTicketToCollection(ticket);
     }
 }

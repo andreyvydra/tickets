@@ -32,11 +32,7 @@ public class CollectionManager {
     }
 
     public void loadTickets(ArrayList<Ticket> tickets) {
-        for (Ticket ticket : tickets) {
-            if (this.checkId(ticket.getId())) {
-                this.collection.add(ticket);
-            }
-        }
+        this.collection.addAll(tickets);
     }
 
     public boolean checkId(long id) {
@@ -46,19 +42,6 @@ public class CollectionManager {
             }
         }
         return true;
-    }
-
-    public long getNewId() {
-        long id = 1;
-        for (Ticket ticket : this.collection) {
-            if (ticket.getId() > id) {
-                id = ticket.getId() + 1;
-            }
-        }
-        while (!checkId(id)) {
-            id += 1;
-        }
-        return id;
     }
 
     public boolean addTicket(Ticket ticket) {

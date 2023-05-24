@@ -43,6 +43,18 @@ public class Location implements Serializable {
         this.z = z;
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
+
     public HashMap<String, Object> getMappedValues() {
         HashMap<String, Object> hm = new HashMap<>();
         hm.put(Globals.LocationFields.X, this.x);
