@@ -32,6 +32,7 @@ public class TicketSerializer extends Serializer {
         ticket.setCoordinates((Coordinates) cs.getObject());
         PersonSerializer ps = new PersonSerializer(resultSet);
         ticket.setPerson((Person) ps.getObject());
+        ticket.setCreatorLogin(resultSet.getString("creator"));
         return ticket;
     }
 }

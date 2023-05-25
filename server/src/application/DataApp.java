@@ -54,8 +54,12 @@ public class DataApp {
         return collectionManager.getLen();
     }
 
-    public void removeTicketById(long id) throws TicketWasNotFound {
-        collectionManager.removeTicket(id);
+    public boolean removeTicketById(long id, HashMap<String, String> user) throws TicketWasNotFound {
+        if (dbManager.removeTicket(id, user)) {
+            collectionManager.removeTicket(id);
+            return true;
+        }
+        return false;
     }
 
     public Ticket getTicketById(long id) {
@@ -72,5 +76,13 @@ public class DataApp {
 
     public boolean addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
         return addTicketToCollection(ticket);
+    }
+
+    public boolean checkUser(HashMap<String, String> user) {
+        return dbManager.checkUser(user);
+    }
+
+    public long createUser(HashMap<String, String> user) {
+        return dbManager.createUser(user);
     }
 }

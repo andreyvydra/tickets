@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.util.*;
 
+import static core.Globals.Network.PASSWORD;
+import static core.Globals.Network.USERNAME;
 import static core.Globals.SERVER_PORT;
 
 /**
@@ -25,7 +27,11 @@ public class ClientApp {
     private final UDPClient udpClient;
     private final OutputHandler outputHandler = new OutputHandler();
 
+    private final HashMap<String, String> user = new HashMap<>();
+
     public ClientApp() throws IOException {
+        user.put(USERNAME, null);
+        user.put(PASSWORD, null);
         udpClient = new UDPClient(InetAddress.getLocalHost(), SERVER_PORT);
     }
 
@@ -43,7 +49,7 @@ public class ClientApp {
                     input = Objects.requireNonNull(commandBuffer.poll()).trim();
                     outputHandler.println(input);
                 }
-                console.execute(input);
+                console.execute(input, user);
             } catch (NoSuchElementException e) {
                 outputHandler.println("До новой встречи!");
                 break;

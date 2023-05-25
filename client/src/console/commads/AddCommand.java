@@ -9,6 +9,8 @@ import requests.AddRequest;
 import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
+
 
 /**
  * AddCommand adds new item to collection.
@@ -22,10 +24,10 @@ public class AddCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            Ticket ticket = InputTicket.getTicketWithoutIdFromConsole();
-            Response response = udpClient.sendRequestAndGetResponse(new AddRequest(ticket));
+            Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
+            Response response = udpClient.sendRequestAndGetResponse(new AddRequest(ticket, user));
             outputHandler.println(response);
         } catch (IOException  e) {
             outputHandler.println("Ошибка при передачи данных! " + e);

@@ -19,6 +19,9 @@ public class TicketExist extends  Command{
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new TicketExistResponse("Ошибка авторизации", TICKET_IS_NOT_EXIST);
+        }
         TicketExistRequest request1 = (TicketExistRequest) request;
         if (Objects.isNull(dataApp.getTicketById(request1.ticketId))) {
             return new TicketExistResponse("Тикета нет", TICKET_IS_NOT_EXIST);

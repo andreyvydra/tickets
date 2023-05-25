@@ -1,14 +1,14 @@
 package console.commads;
 
-import console.commads.generalCommands.ServerCommand;
+import console.commads.generalCommands.DefaultCommand;
 import core.OutputHandler;
-import network.UDPClient;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 
 import static core.Globals.ARGUMENT_POSITION;
@@ -22,16 +22,16 @@ import static core.Globals.CommandNames.EXECUTE_SCRIPT;
  * recursions.
  *
  */
-public class ExecuteScriptCommand extends ServerCommand {
+public class ExecuteScriptCommand extends DefaultCommand {
     private final Queue<String> commandBuffer;
 
-    public ExecuteScriptCommand(OutputHandler outputHandler, UDPClient udpClient, Queue<String> commandBuffer) {
-        super(outputHandler, udpClient);
+    public ExecuteScriptCommand(OutputHandler outputHandler, Queue<String> commandBuffer) {
+        super(outputHandler);
         this.commandBuffer = commandBuffer;
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         ArrayList<String> allCommands = new ArrayList<>();
         String[] commandArgs = command.split(" ");
         allCommands.add(command);

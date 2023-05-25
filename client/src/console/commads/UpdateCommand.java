@@ -11,9 +11,9 @@ import responses.Response;
 import responses.TicketExistResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static core.Globals.ARGUMENT_POSITION;
-import static core.Globals.CommandNames.TICKET_EXIST;
 import static core.Globals.Network.TICKET_IS_EXIST;
 
 /**
@@ -30,7 +30,7 @@ public class UpdateCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         String[] arguments = command.split(" ");
         if (arguments.length == 1) {
             outputHandler.println("Введите id для update.");
@@ -38,10 +38,10 @@ public class UpdateCommand extends ServerCommand {
             long id = Long.parseLong(arguments[ARGUMENT_POSITION]);
 
             try {
-                TicketExistResponse responseId = (TicketExistResponse) udpClient.sendRequestAndGetResponse(new TicketExistRequest(TICKET_EXIST, id));
+                TicketExistResponse responseId = (TicketExistResponse) udpClient.sendRequestAndGetResponse(new TicketExistRequest(id, user));
                 if (responseId.status == TICKET_IS_EXIST) {
-                    Ticket inpTicket = InputTicket.getTicketWithoutIdFromConsole();
-                    Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id));
+                    Ticket inpTicket = InputTicket.getTicketWithoutIdFromConsole(user);
+                    Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id, user));
                     outputHandler.println(response);
                 } else {
                     outputHandler.println(responseId.getMsg());

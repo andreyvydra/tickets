@@ -26,6 +26,7 @@ public class CommandManager {
         commandHashMap.put(REMOVE_LOWER, new RemoveLower(logger, dataApp));
         commandHashMap.put(UPDATE, new Update(logger, dataApp));
         commandHashMap.put(TICKET_EXIST, new TicketExist(logger, dataApp));
+        commandHashMap.put(REGISTER, new Register(logger, dataApp));
         commands = commandHashMap;
     }
 

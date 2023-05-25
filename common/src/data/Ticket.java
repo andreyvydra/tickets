@@ -1,6 +1,5 @@
 package data;
 
-import core.Globals;
 import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
@@ -8,7 +7,6 @@ import core.exceptions.ValueIsNotPositiveException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -35,7 +33,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         price = 1000;
         type = TicketType.USUAL;
         person = new Person();
-        creatorLogin = "";
+        creatorLogin = null;
     }
 
     public void setId(long id) throws ValueIsNotPositiveException {
@@ -87,6 +85,9 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         this.person = person;
     }
 
+    public void setCreatorLogin(String creatorLogin) {
+        this.creatorLogin = creatorLogin;
+    }
 
     @Override
     public int compareTo(Ticket ticket) {
@@ -95,7 +96,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
 
     @Override
     public String toString() {
-        return "Ticket(id=" + this.id + ", name=" + this.name +
+        return "Ticket(id=" + this.id + ", name=" + this.name + ", creator=" + this.creatorLogin +
                 ", coordinates=" + this.coordinates + ", creationDate=" + this.creationDate +
                 ", price=" + this.price + ", type=" + this.type + ", person=" + this.person + ")";
     }
@@ -128,15 +129,8 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return creationDate;
     }
 
-    public HashMap<String, Object> getMappedValues() {
-        HashMap<String, Object> hm = new HashMap<>();
-        hm.put(Globals.TicketFields.ID, this.id);
-        hm.put(Globals.TicketFields.NAME, this.name);
-        hm.put(Globals.TicketFields.COORDINATES, this.coordinates.getMappedValues());
-        hm.put(Globals.TicketFields.CREATION_DATE, this.creationDate.toString());
-        hm.put(Globals.TicketFields.PRICE, this.price);
-        hm.put(Globals.TicketFields.TYPE, this.type.name());
-        hm.put(Globals.TicketFields.PERSON, this.person.getMappedValues());
-        return hm;
+    public String getCreatorLogin() {
+        return creatorLogin;
     }
+
 }

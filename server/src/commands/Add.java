@@ -18,6 +18,9 @@ public class Add extends Command {
     }
 
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new AddResponse("Ошибка авторизации", -1);
+        }
         AddRequest addRequest = (AddRequest) request;
         Ticket ticket = addRequest.getTicket();
         try {

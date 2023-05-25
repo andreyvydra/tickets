@@ -3,10 +3,12 @@ package requests;
 import core.Globals;
 import data.Ticket;
 
+import java.util.HashMap;
+
 public class RemoveLowerRequest extends Request {
-    private Ticket ticket;
-    public RemoveLowerRequest(Ticket ticket) {
-        super(Globals.CommandNames.REMOVE_LOWER);
+    private final Ticket ticket;
+    public RemoveLowerRequest(Ticket ticket, HashMap<String, String> user) {
+        super(Globals.CommandNames.REMOVE_LOWER, user);
         this.ticket = ticket;
     }
 

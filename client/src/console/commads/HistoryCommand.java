@@ -5,6 +5,7 @@ import console.commads.generalCommands.DefaultCommand;
 import core.OutputHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * HistoryCommand shows last 8 commands, which was inputted from console
@@ -21,7 +22,7 @@ public class HistoryCommand extends DefaultCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         outputHandler.println(this.commandsHistory.toString());
     }
 

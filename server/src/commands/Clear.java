@@ -14,6 +14,9 @@ public class Clear extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new ClearResponse("Ошибка авторизации");
+        }
         if (dataApp.getCollectionLen() == 0) {
             return new ClearResponse("Коллекция пуста!");
         }

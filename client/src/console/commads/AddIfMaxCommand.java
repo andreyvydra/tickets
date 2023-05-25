@@ -9,6 +9,7 @@ import requests.AddIfMaxRequest;
 import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * AddIfMaxCommand adds inputted element if it's max of collection.
@@ -22,10 +23,10 @@ public class AddIfMaxCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            Ticket ticket = InputTicket.getTicketWithoutIdFromConsole();
-            Response response = udpClient.sendRequestAndGetResponse(new AddIfMaxRequest(ticket));
+            Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
+            Response response = udpClient.sendRequestAndGetResponse(new AddIfMaxRequest(ticket, user));
             outputHandler.println(response);
         } catch (IOException  e) {
             outputHandler.println("Ошибка при передачи данных! " + e);

@@ -8,6 +8,7 @@ import requests.GroupByDateRequest;
 import responses.GroupByDateResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * GroupByDateCommand group tickets by creationDate.
@@ -22,9 +23,9 @@ public class GroupByDateCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            GroupByDateResponse response = (GroupByDateResponse) udpClient.sendRequestAndGetResponse(new GroupByDateRequest());
+            GroupByDateResponse response = (GroupByDateResponse) udpClient.sendRequestAndGetResponse(new GroupByDateRequest(user));
             outputHandler.println(response);
             for (Object group : response.getData()) {
                 outputHandler.println(group);

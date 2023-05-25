@@ -13,6 +13,7 @@ import responses.UpdateResponse;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+
 public class Update extends Command {
     public Update(Logger logger, DataApp dataApp) {
         super(logger, dataApp);
@@ -20,6 +21,9 @@ public class Update extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new UpdateResponse("Ошибка авторизации");
+        }
         UpdateRequest request1 = (UpdateRequest) request;
         Ticket curTicket = dataApp.getTicketById(request1.getId());
         Ticket inpTicket = request1.getTicket();

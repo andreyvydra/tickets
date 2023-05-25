@@ -7,6 +7,7 @@ import requests.RemoveRequest;
 import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static core.Globals.ARGUMENT_POSITION;
 
@@ -22,14 +23,14 @@ public class RemoveCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         String[] arguments = command.split(" ");
         if (arguments.length == 1) {
             outputHandler.println("Введите id для remove.");
         } else {
             long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
             try {
-                Response response = udpClient.sendRequestAndGetResponse(new RemoveRequest(id));
+                Response response = udpClient.sendRequestAndGetResponse(new RemoveRequest(id, user));
                 outputHandler.println(response);
             } catch (IOException e) {
                 outputHandler.println("Ошибка при передачи данных! " + e);

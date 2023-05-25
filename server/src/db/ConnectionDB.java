@@ -13,8 +13,9 @@ public class ConnectionDB {
         String user = dotenv.get("USER");
         String password = dotenv.get("PASSWORD");
         String database = dotenv.get("DATABASE");
+        String schema = dotenv.get("SCHEMA");
         props.setProperty("user", user);
         props.setProperty("password", password);
-        return DriverManager.getConnection("jdbc:postgresql://localhost/" + database + "?currentSchema=" + "s367143", props);
+        return DriverManager.getConnection("jdbc:postgresql://localhost/" + database + "?currentSchema=" + schema, props);
     }
 }

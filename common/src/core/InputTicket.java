@@ -9,22 +9,20 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import static core.Globals.COORDINATE_X_MIN_LIMIT;
+import static core.Globals.Network.USERNAME;
 
 public class InputTicket {
     private static final Scanner scanner = new Scanner(System.in);
     private static final OutputHandler outputHandler = new OutputHandler();
-    
-    public static Ticket getTicketFromConsole() {
-        return getTicketWithoutIdFromConsole();
 
-    }
-
-    public static Ticket getTicketWithoutIdFromConsole() {
+    public static Ticket getTicketWithoutIdFromConsole(HashMap<String, String> user) {
         Ticket ticket = new Ticket();
         try {
+            ticket.setCreatorLogin(user.get(USERNAME));
             setName(ticket);
             setCoordinates(ticket);
             setCreationDate(ticket);

@@ -12,7 +12,11 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+
+import static core.Globals.Network.PASSWORD;
+import static core.Globals.Network.USERNAME;
 
 public class DBManager {
     private final Connection connectionDB;
@@ -35,7 +39,7 @@ public class DBManager {
                     "LEFT JOIN \"Coordinates\" as C on C.id = T.coordinates " +
                     "LEFT JOIN \"Person\" as P on P.id = T.person " +
                     "LEFT JOIN \"Location\" as L on L.id = P.location " +
-                    "LEFT JOIN \"User\" as U on U.id = T.creator");
+                    "LEFT JOIN \"User\" as U on U.username = T.creator");
             while (resultSet.next()) {
                 try {
                     TicketSerializer ticketSerializer = new TicketSerializer(resultSet);
@@ -68,14 +72,15 @@ public class DBManager {
         }
         try {
             PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"Ticket\" (name," +
-                    " coordinates, creation_date, price, person, creator, type) VALUES(?, ?, ?, ?, ?, 1, ?::ticket_type)", new String[]{"id"});
+                    " coordinates, creation_date, price, person, creator, type) VALUES(?, ?, ?, ?, ?, ?, ?::ticket_type)", new String[]{"id"});
             statement.setString(1, ticket.getName());
             statement.setLong(2, idCoords);
             ZonedDateTime zonedDateTime = ticket.getCreationDate();
             statement.setTimestamp(3, Timestamp.valueOf(zonedDateTime.toLocalDateTime()));
             statement.setLong(4, ticket.getPrice());
             statement.setLong(5, idPerson);
-            statement.setString(6, ticket.getType().name());
+            statement.setString(6, ticket.getCreatorLogin());
+            statement.setString(7, ticket.getType().name());
             statement.execute();
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();
@@ -111,30 +116,19 @@ public class DBManager {
             String nationality = ticket.getPerson().getNationality().name();
             Long location = addLocation(ticket);
             PreparedStatement statement;
-            if (Objects.isNull(location)) {
-                statement = connectionDB.prepareStatement("INSERT INTO \"Person\" (birthday," +
-                        " eye_color, hair_color, nationality) VALUES(?, ?::color, ?::color, ?::nationality)", new String[]{"id"});
-                if (Objects.isNull(birthday)) {
-                    statement.setObject(1, null);
-                } else {
-                    statement.setTimestamp(1, Timestamp.valueOf(birthday));
-                }
-                statement.setString(2, eyeColor);
-                statement.setString(3, hairColor);
-                statement.setObject(4, nationality);
+
+            statement = connectionDB.prepareStatement("INSERT INTO \"Person\" (birthday," +
+                    " eye_color, hair_color, location, nationality) VALUES(?, ?::color, ?::color, ?, ?::nationality)", new String[]{"id"});
+            if (Objects.isNull(birthday)) {
+                statement.setObject(1, null);
             } else {
-                statement = connectionDB.prepareStatement("INSERT INTO \"Person\" (birthday," +
-                        " eye_color, hair_color, location, nationality) VALUES(?, ?::color, ?::color, ?, ?::nationality)", new String[]{"id"});
-                if (Objects.isNull(birthday)) {
-                    statement.setObject(1, null);
-                } else {
-                    statement.setTimestamp(1, Timestamp.valueOf(birthday));
-                }
-                statement.setString(2, eyeColor);
-                statement.setString(3, hairColor);
-                statement.setLong(4, location);
-                statement.setString(5, nationality);
+                statement.setTimestamp(1, Timestamp.valueOf(birthday));
             }
+            statement.setString(2, eyeColor);
+            statement.setString(3, hairColor);
+            statement.setObject(4, location);
+            statement.setString(5, nationality);
+
             statement.execute();
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();
@@ -163,6 +157,50 @@ public class DBManager {
             return rs.getLong(1);
         } catch (SQLException e) {
             return null;
+        }
+    }
+
+    public boolean removeTicket(long id, HashMap<String, String> user) {
+        try {
+            PreparedStatement statement = connectionDB.prepareStatement("DELETE FROM \"Ticket\" WHERE id = ? AND creator = ?");
+            statement.setLong(1, id);
+            statement.setString(2, user.get(USERNAME));
+            int deleted = statement.executeUpdate();
+            return deleted > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean checkUser(HashMap<String, String> user) {
+        try {
+            PreparedStatement statement = connectionDB.prepareStatement("SELECT * FROM \"User\" WHERE username = ?");
+            statement.setString(1, user.get(USERNAME));
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            String password = "#^1,'5p6-" + user.get(PASSWORD) + rs.getString("salt");
+            String passwordSHA256 = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+            return rs.getString("password").equals(passwordSHA256);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public long createUser(HashMap<String, String> user) {
+        try {
+            String salt = org.apache.commons.lang3.RandomStringUtils.randomNumeric(7);
+            String passwordSHA256 = org.apache.commons.codec.digest.DigestUtils.sha256Hex("#^1,'5p6-" + user.get(PASSWORD) + salt);
+            PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"User\" (username," +
+                    " password, salt) VALUES(?, ?, ?)", new String[]{"id"});
+            statement.setString(1, user.get(USERNAME));
+            statement.setString(2, passwordSHA256);
+            statement.setString(3, salt);
+            statement.execute();
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            return rs.getLong(1);
+        } catch (SQLException e) {
+            return -1;
         }
     }
 }

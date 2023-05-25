@@ -5,9 +5,9 @@ import core.OutputHandler;
 import network.UDPClient;
 import requests.InfoRequest;
 import responses.InfoResponse;
-import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * InfoCommand shows info about CollectionManager
@@ -20,9 +20,9 @@ public class InfoCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest());
+            InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest(user));
             outputHandler.println(response);
         } catch (ClassNotFoundException e) {
             outputHandler.println("Проблема с сериализацией " + e);

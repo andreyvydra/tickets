@@ -9,7 +9,6 @@ import java.util.Map;
 public class Globals {
     public static byte ARGUMENT_POSITION = 1; // Position at split string
     public static byte COMMAND_POSITION = 0;
-    public static byte FILENAME_POSITION = 0;
     public static int SERVER_PORT = 8000;
     public static byte HISTORY_SIZE = 8;
     public static short COORDINATE_X_MIN_LIMIT = -873;
@@ -36,6 +35,9 @@ public class Globals {
         public static String PRINT_FIELD_ASCENDING_TYPE = "print_field_ascending_type";
         public static String TICKET_EXIST = "ticket_exist";
 
+        public static String LOGIN = "login";
+        public static String REGISTER = "register";
+
         public static Map<String, Class<? extends Command>> commandMap = new HashMap<>();
         static {
             commandMap.put(HELP, HelpCommand.class);
@@ -53,12 +55,9 @@ public class Globals {
             commandMap.put(GROUP_COUNTING_BY_CREATION_DATE, GroupByDateCommand.class);
             commandMap.put(COUNT_GREATER_THAN_TYPE, GreaterThenTypeCommand.class);
             commandMap.put(PRINT_FIELD_ASCENDING_TYPE, PrintTypeAscendingCommand.class);
+            commandMap.put(LOGIN, LoginCommand.class);
+            commandMap.put(REGISTER, RegisterCommand.class);
         }
-    }
-
-    static public class JSONFields {
-        public static String TICKETS = "tickets";
-        public static String PERSON = "person";
     }
 
     static public class CoordinatesFields {
@@ -80,16 +79,6 @@ public class Globals {
         public static String LOCATION = "location";
     }
 
-    static public class TicketFields {
-        public static String ID = "id";
-        public static String NAME = "name";
-        public static String COORDINATES = "coordinates";
-        public static String CREATION_DATE = "creationDate";
-        public static String PRICE = "price";
-        public static String TYPE = "type";
-        public static String PERSON = "person";
-    }
-
     static public class Responses {
         public static byte TICKET_WAS_NOT_ADDED = -1;
     }
@@ -99,5 +88,8 @@ public class Globals {
         public static byte PACKET_ENDS = 0;
         public static byte TICKET_IS_NOT_EXIST = 0;
         public static byte TICKET_IS_EXIST = 1;
+
+        public static String USERNAME = "username";
+        public static String PASSWORD = "password";
     }
 }
