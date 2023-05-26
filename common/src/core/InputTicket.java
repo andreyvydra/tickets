@@ -27,7 +27,7 @@ public class InputTicket {
             setCoordinates(ticket);
             setCreationDate(ticket);
             setPrice(ticket);
-            setEnumValue(ticket, TicketType.class, ticket.getClass().getMethod("setType", TicketType.class));
+            setEnumValue(ticket, TicketType.class, ticket.getClass().getMethod("setType", TicketType.class), true);
             setPerson(ticket);
         } catch (NoSuchMethodException e) {
             outputHandler.println("Отсутствует указанный метод");
@@ -40,9 +40,9 @@ public class InputTicket {
         outputHandler.println("Создание человека");
 
         setPersonsBirthday(person);
-        setEnumValue(person, Color.class, person.getClass().getMethod("setEyeColor", Color.class));
-        setEnumValue(person, Color.class, person.getClass().getMethod("setHairColor", Color.class));
-        setEnumValue(person, Country.class, person.getClass().getMethod("setNationality", Country.class));
+        setEnumValue(person, Color.class, person.getClass().getMethod("setEyeColor", Color.class), true);
+        setEnumValue(person, Color.class, person.getClass().getMethod("setHairColor", Color.class), false);
+        setEnumValue(person, Country.class, person.getClass().getMethod("setNationality", Country.class), true);
         if (!isLocationInputted()) {
             person.setLocation(null);
         } else {
@@ -85,7 +85,7 @@ public class InputTicket {
             } catch (NumberFormatException e) {
                 outputHandler.println("Введен текст или дробное число");
             } catch (EmptyFieldException e) {
-                throw new RuntimeException(e);
+                outputHandler.println(e);
             }
         }
     }
@@ -127,42 +127,43 @@ public class InputTicket {
         }
     }
 
-    public static void setEnumValue(Object object, Class<? extends Enum> eEnum, Method setValue) {
+    public static void setEnumValue(Object object, Class<? extends Enum> eEnum, Method setValue, boolean isNotNull) {
         printEnumValues(eEnum);
         Object[] values = eEnum.getEnumConstants();
 
         while (true) {
             try {
                 outputHandler.print("Введите вид " + eEnum.getName() + ": ");
-                if (scanner.hasNextLine()) {
-                    String value = scanner.nextLine().trim().toUpperCase();
-                    if (value.isEmpty()) {
-                        outputHandler.println("Ввели пустую строчку!");
-                        continue;
-                    }
-                    try {
-                        int number = Integer.parseInt(value) - 1;
-                        if (0 > number || number >= values.length) {
-                            throw new EnumValuesOutOfRangeException();
-                        }
-                        setValue.invoke(object, values[number]);
-                    } catch (NumberFormatException e) {
-                        boolean flag = false;
-                        for (Object item : eEnum.getEnumConstants()) {
-                            if (item.toString().startsWith(value)) {
-                                setValue.invoke(object, item);
-                                flag = true;
-                            }
-                        }
-                        if (!flag) {
-                            throw new IncorrectEnumNameException();
-                        }
-                    } catch (EnumValuesOutOfRangeException e) {
-                        outputHandler.println(e);
-                        continue;
-                    }
+                String value = scanner.nextLine().trim().toUpperCase();
+                if (value.isEmpty() && isNotNull) {
+                    outputHandler.println("Ввели пустую строчку!");
+                    continue;
+                } else if (value.isEmpty()) {
+                    setValue.invoke(object, (Object) null);
                     break;
                 }
+                try {
+                    int number = Integer.parseInt(value) - 1;
+                    if (0 > number || number >= values.length) {
+                        throw new EnumValuesOutOfRangeException();
+                    }
+                    setValue.invoke(object, values[number]);
+                } catch (NumberFormatException e) {
+                    boolean flag = false;
+                    for (Object item : eEnum.getEnumConstants()) {
+                        if (item.toString().startsWith(value)) {
+                            setValue.invoke(object, item);
+                            flag = true;
+                        }
+                    }
+                    if (!flag) {
+                        throw new IncorrectEnumNameException();
+                    }
+                } catch (EnumValuesOutOfRangeException e) {
+                    outputHandler.println(e);
+                    continue;
+                }
+                break;
             } catch (IllegalArgumentException | InvocationTargetException e) {
                 outputHandler.println("Введён неправильный вид " + eEnum.getName());
             } catch (IllegalAccessException e) {

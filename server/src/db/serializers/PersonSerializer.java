@@ -18,7 +18,12 @@ public class PersonSerializer extends Serializer {
         ResultSet resultSet = getResultSet();
         Person person = new Person();
         person.setNationality(Country.valueOf(resultSet.getString("nationality")));
-        person.setHairColor(Color.valueOf(resultSet.getString("hair_color")));
+        String hairColor = resultSet.getString("hair_color");
+        if (Objects.isNull(hairColor)) {
+            person.setHairColor(null);
+        } else {
+            person.setHairColor(Color.valueOf(hairColor));
+        }
         person.setEyeColor(Color.valueOf(resultSet.getString("eye_color")));
         String birthday = resultSet.getString("birthday");
         if (Objects.isNull(birthday)) {

@@ -10,6 +10,9 @@ import responses.Response;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,10 +27,18 @@ public class UDPServer {
     private boolean isRunning = true;
     private final CommandManager commandManager;
 
+    private final ExecutorService serviceRequest;
+    private final ExecutorService serviceLoad;
+    private final ExecutorService serviceResponse;
+
+
     public UDPServer(InetSocketAddress address, DataApp dataApp) throws SocketException {
         datagramSocket = new DatagramSocket(address);
         this.dataApp = dataApp;
         this.commandManager = new CommandManager(logger, dataApp);
+        serviceRequest = Executors.newFixedThreadPool(10);
+        serviceLoad = Executors.newFixedThreadPool(10);
+        serviceResponse = Executors.newCachedThreadPool();
     }
 
     public Pair<byte[], SocketAddress> receiveData() throws IOException {
@@ -78,45 +89,57 @@ public class UDPServer {
 
     public void run() {
         logger.info("Старт сервера");
-        while (isRunning) {
-            Pair<byte[], SocketAddress> pair;
-            try {
-                pair = receiveData();
-            } catch (IOException e) {
-                if (datagramSocket.isClosed()) {
-                    break;
+            while (isRunning) {
+                Pair<byte[], SocketAddress> pair;
+                serviceRequest.submit(() -> {
+                    try {
+                        pair = receiveData();
+                    } catch (IOException e) {
+                        if (datagramSocket.isClosed()) {
+                            break;
+                        }
+                        logger.log(Level.SEVERE, "ошибка при получении данных", e);
+                        continue;
+                    }
+                });
+                try {
+                    serviceRequest.submit(() -> {pair = receiveData()})
+                    pair = receiveData();
+                } catch (IOException e) {
+                    if (datagramSocket.isClosed()) {
+                        break;
+                    }
+                    logger.log(Level.SEVERE, "ошибка при получении данных", e);
+                    continue;
                 }
-                logger.log(Level.SEVERE, "ошибка при получении данных", e);
-                continue;
+
+                var data = pair.getKey();
+                var socketAddress = pair.getValue();
+
+                Request request;
+                try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
+                     ObjectInput ois = new ObjectInputStream(bis)) {
+                    request = (Request) ois.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    logger.log(Level.SEVERE, "ошибка при обработке реквеста", e);
+                    continue;
+                }
+                logger.info("Пришёл " + request.toString());
+
+                Response response;
+                Command command = commandManager.getCommand(request.getCommandName());
+                response = command.execute(request);
+
+                logger.info("Ответ: " + response.toString());
+
+
+                try {
+                    sendResponse(response, socketAddress);
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "ошибка в sendData", e);
+                }
+
             }
-
-            var data = pair.getKey();
-            var socketAddress = pair.getValue();
-
-            Request request;
-            try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
-                 ObjectInput ois = new ObjectInputStream(bis)) {
-                request = (Request) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                logger.log(Level.SEVERE, "ошибка при обработке реквеста", e);
-                continue;
-            }
-            logger.info("Пришёл " + request.toString());
-
-            Response response;
-            Command command = commandManager.getCommand(request.getCommandName());
-            response = command.execute(request);
-
-            logger.info("Ответ: " + response.toString());
-
-
-            try {
-                sendResponse(response, socketAddress);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, "ошибка в sendData", e);
-            }
-
-        }
     }
 
     public void stop() {

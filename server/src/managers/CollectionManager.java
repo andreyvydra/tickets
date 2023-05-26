@@ -1,6 +1,9 @@
 package managers;
 
+import core.exceptions.EmptyFieldException;
+import core.exceptions.EmptyNameException;
 import core.exceptions.TicketWasNotFound;
+import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
 
 import java.time.LocalDateTime;
@@ -35,17 +38,22 @@ public class CollectionManager {
         this.collection.addAll(tickets);
     }
 
-    public boolean checkId(long id) {
-        for (Ticket ticket : this.collection) {
-            if (ticket.getId() == id) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public boolean addTicket(Ticket ticket) {
         return this.collection.add(ticket);
+    }
+
+    public boolean updateTicket(long id, Ticket inpTicket) {
+        Ticket curTicket = getTicketById(id);
+        try {
+            curTicket.setName(inpTicket.getName());
+            curTicket.setType(inpTicket.getType());
+            curTicket.setPerson(inpTicket.getPerson());
+            curTicket.setPrice(inpTicket.getPrice());
+            curTicket.setCoordinates(inpTicket.getCoordinates());
+            return true;
+        } catch (ValueIsNotPositiveException | EmptyNameException | EmptyFieldException e) {
+            return false;
+        }
     }
 
     public Ticket getTicketById(long id) {

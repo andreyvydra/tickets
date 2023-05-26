@@ -1,5 +1,6 @@
 package application;
 
+import core.InputTicket;
 import core.exceptions.TicketWasNotFound;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
@@ -76,6 +77,14 @@ public class DataApp {
 
     public boolean addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
         return addTicketToCollection(ticket);
+    }
+
+    public boolean updateTicket(long id, Ticket inpTicket) {
+        if (dbManager.updateTicket(id, inpTicket)) {
+            collectionManager.updateTicket(id, inpTicket);
+            return true;
+        }
+        return false;
     }
 
     public boolean checkUser(HashMap<String, String> user) {

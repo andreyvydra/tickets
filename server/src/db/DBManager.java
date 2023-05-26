@@ -5,7 +5,7 @@ import core.exceptions.CoordinateXException;
 import core.exceptions.EmptyFieldException;
 import core.exceptions.EmptyNameException;
 import core.exceptions.ValueIsNotPositiveException;
-import data.Ticket;
+import data.*;
 import db.serializers.TicketSerializer;
 
 import java.sql.*;
@@ -112,7 +112,7 @@ public class DBManager {
         try {
             LocalDateTime birthday = ticket.getPerson().getBirthday();
             String eyeColor = ticket.getPerson().getEyeColor().name();
-            String hairColor = ticket.getPerson().getHairColor().name();
+            Color hairColor = ticket.getPerson().getHairColor();
             String nationality = ticket.getPerson().getNationality().name();
             Long location = addLocation(ticket);
             PreparedStatement statement;
@@ -125,7 +125,11 @@ public class DBManager {
                 statement.setTimestamp(1, Timestamp.valueOf(birthday));
             }
             statement.setString(2, eyeColor);
-            statement.setString(3, hairColor);
+            if (Objects.isNull(hairColor)) {
+                statement.setObject(3, null);
+            } else {
+                statement.setString(3, hairColor.name());
+            }
             statement.setObject(4, location);
             statement.setString(5, nationality);
 
@@ -172,7 +176,79 @@ public class DBManager {
         }
     }
 
-    public boolean checkUser(HashMap<String, String> user) {
+    public boolean updateTicket(long id, Ticket inpTicket) {
+        try {
+            Statement statement = connectionDB.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT t.person, t.coordinates, p.location FROM" +
+                    " \"Ticket\" t LEFT JOIN \"Person\" P on P.id = t.person WHERE t.id = " + id);
+            resultSet.next();
+            long personId = resultSet.getLong(1);
+            long coordinatesId = resultSet.getLong(2);
+            long locationId = resultSet.getLong(3);
+
+            PreparedStatement statementTicket = connectionDB.prepareStatement("UPDATE \"Ticket\" SET name = ?," +
+                    " type = ?::ticket_type, price = ? WHERE id = ? AND creator = ?");
+            statementTicket.setString(1, inpTicket.getName());
+            statementTicket.setString(2, inpTicket.getType().name());
+            statementTicket.setLong(3, inpTicket.getPrice());
+            statementTicket.setLong(4, id);
+            statementTicket.setString(5, inpTicket.getCreatorLogin());
+            int updated = statementTicket.executeUpdate();
+            if (updated == 0) {
+                return false;
+            }
+
+            PreparedStatement statementPerson = connectionDB.prepareStatement("UPDATE \"Person\" SET birthday = ?," +
+                    " hair_color = ?::color, eye_color = ?::color, nationality = ?::nationality WHERE id = ?");
+            Person person = inpTicket.getPerson();
+            LocalDateTime birthday = person.getBirthday();
+            if (Objects.isNull(birthday)) {
+                statementPerson.setObject(1, null);
+            } else {
+                statementPerson.setString(1, String.valueOf(birthday));
+            }
+            if (Objects.isNull(person.getHairColor())) {
+                statementPerson.setObject(2, null);
+            } else {
+                statementPerson.setString(2, person.getHairColor().name());
+            }
+            statementPerson.setString(3, person.getEyeColor().name());
+            statementPerson.setString(4, person.getNationality().name());
+            statementPerson.setLong(5, personId);
+            updated = statementPerson.executeUpdate();
+            if (updated == 0) {
+                return false;
+            }
+
+            PreparedStatement statementCoords = connectionDB.prepareStatement("UPDATE \"Coordinates\" SET x = ?," +
+                    " y = ? WHERE id = ?");
+            Coordinates coordinates = inpTicket.getCoordinates();
+            statementCoords.setFloat(1, coordinates.getX());
+            statementCoords.setFloat(2, coordinates.getY());
+            statementCoords.setLong(3, coordinatesId);
+            updated = statementCoords.executeUpdate();
+            if (updated == 0) {
+                return false;
+            }
+
+            PreparedStatement statementLocation = connectionDB.prepareStatement("UPDATE \"Location\" SET x = ?," +
+                    " y = ?, z = ? WHERE id = ?");
+            Location location = person.getLocation();
+            if (!Objects.isNull(location)) {
+                statementLocation.setDouble(1, location.getX());
+                statementLocation.setInt(2, location.getY());
+                statementLocation.setFloat(3, location.getZ());
+                statementLocation.setLong(4, locationId);
+                updated = statementLocation.executeUpdate();
+                return updated != 0;
+            }
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+        public boolean checkUser(HashMap<String, String> user) {
         try {
             PreparedStatement statement = connectionDB.prepareStatement("SELECT * FROM \"User\" WHERE username = ?");
             statement.setString(1, user.get(USERNAME));
