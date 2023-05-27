@@ -1,0 +1,79 @@
+create sequence "Users_id_seq";
+
+create type ticket_type as enum ('CHEAP', 'BUDGETARY', 'USUAL', 'VIP');
+
+create type color as enum ('GREEN', 'YELLOW', 'ORANGE', 'RED', 'BLUE', 'BROWN');
+
+create type nationality as enum ('USA', 'GERMANY', 'CHINA', 'THAILAND', 'JAPAN');
+
+create table if not exists "User"
+(
+    id       bigint default nextval('s367143."Users_id_seq"'::regclass) not null
+        constraint "Users_pk"
+            primary key,
+    username varchar(32)                                                not null
+        constraint "User_pk"
+            unique,
+    password varchar(64)                                                not null,
+    salt     varchar(16)                                                not null
+);
+
+alter sequence "Users_id_seq" owned by "User".id;
+
+create table if not exists "Coordinates"
+(
+    id bigserial
+        constraint "Coordinates_pk"
+            primary key,
+    x  double precision default 1 not null,
+    y  double precision default 1 not null
+);
+
+create table if not exists "Location"
+(
+    id bigserial
+        constraint "Location_pk"
+            primary key,
+    x  double precision,
+    y  integer default 1 not null,
+    z  double precision
+);
+
+create table if not exists "Person"
+(
+    id          bigserial
+        constraint "Person_pk"
+            primary key,
+    birthday    timestamp with time zone default now(),
+    location    bigint
+        constraint "Person_Location_id_fk"
+            references "Location",
+    hair_color  s367143.color            default 'GREEN'::s367143.color,
+    eye_color   s367143.color            default 'YELLOW'::s367143.color    not null,
+    nationality s367143.nationality      default 'USA'::s367143.nationality not null
+);
+
+create table if not exists "Ticket"
+(
+    id            bigserial
+        constraint "Ticket_pk"
+            primary key,
+    name          varchar(64)              default 'Билет'::character varying   not null,
+    coordinates   bigint                                                        not null
+        constraint "Ticket_Coordinates_id_fk"
+            references "Coordinates"
+            on delete cascade,
+    creation_date timestamp with time zone default now()                        not null,
+    price         bigint                   default 1000                         not null
+        constraint "Ticket_pk2"
+            unique,
+    person        bigint                                                        not null
+        constraint "Ticket_Person_id_fk"
+            references "Person"
+            on delete cascade,
+    creator       varchar(32)                                                   not null
+        constraint "Ticket_User_username_fk"
+            references "User" (username),
+    type          s367143.ticket_type      default 'USUAL'::s367143.ticket_type not null
+);
+
