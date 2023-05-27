@@ -1,6 +1,5 @@
 package application;
 
-import core.InputTicket;
 import core.exceptions.TicketWasNotFound;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
@@ -10,6 +9,7 @@ import managers.CollectionManager;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class DataApp {
     private final CollectionManager collectionManager;
@@ -34,7 +34,6 @@ public class DataApp {
             }
             return collectionManager.addTicket(ticket);
         } catch (SQLException e) {
-            System.out.println(e);
             return false;
         }
     }
@@ -47,7 +46,7 @@ public class DataApp {
         collectionManager.clear();
     }
 
-    public TreeSet<Ticket> getCollection() {
+    public ConcurrentSkipListSet<Ticket> getCollection() {
         return collectionManager.getCollection();
     }
 

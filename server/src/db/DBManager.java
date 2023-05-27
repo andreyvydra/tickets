@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static core.Globals.Network.PASSWORD;
 import static core.Globals.Network.USERNAME;
+import static db.Queries.*;
 
 public class DBManager {
     private final Connection connectionDB;
@@ -31,15 +32,7 @@ public class DBManager {
         ArrayList<Ticket> tickets = new ArrayList<>();
         try {
             Statement statement = connectionDB.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT T.id, T.name, T.coordinates, T.creation_date, T.price," +
-                    "       T.person, T.creator, T.type, C.x AS cx, C.y AS cy," +
-                    "       P.birthday, P.location, P.hair_color," +
-                    "       P.eye_color, P.nationality, L.x AS lx," +
-                    "       L.y AS ly, L.x AS lz FROM \"Ticket\" as T " +
-                    "LEFT JOIN \"Coordinates\" as C on C.id = T.coordinates " +
-                    "LEFT JOIN \"Person\" as P on P.id = T.person " +
-                    "LEFT JOIN \"Location\" as L on L.id = P.location " +
-                    "LEFT JOIN \"User\" as U on U.username = T.creator");
+            ResultSet resultSet = statement.executeQuery(SQL_GET_ALL_TICKETS);
             while (resultSet.next()) {
                 try {
                     TicketSerializer ticketSerializer = new TicketSerializer(resultSet);
@@ -63,16 +56,14 @@ public class DBManager {
     public long addTicket(Ticket ticket) throws SQLException {
         long idCoords = addCoordinates(ticket);
         if (idCoords < 0) {
-            return -1;
+            return idCoords;
         }
         long idPerson = addPerson(ticket);
-        System.out.println(idPerson);
         if (idPerson < 0) {
-            return -1;
+            return idPerson;
         }
         try {
-            PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"Ticket\" (name," +
-                    " coordinates, creation_date, price, person, creator, type) VALUES(?, ?, ?, ?, ?, ?, ?::ticket_type)", new String[]{"id"});
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_ADD_TICKET, SQL_RETURN_IDS);
             statement.setString(1, ticket.getName());
             statement.setLong(2, idCoords);
             ZonedDateTime zonedDateTime = ticket.getCreationDate();
@@ -88,7 +79,7 @@ public class DBManager {
             ticket.setId(id);
             return id;
         } catch (SQLException | ValueIsNotPositiveException e) {
-            return -1;
+            return SQL_EXCEPTION_SIGNAL;
         }
     }
 
@@ -96,7 +87,7 @@ public class DBManager {
         try {
             float x = ticket.getCoordinates().getX();
             float y = ticket.getCoordinates().getY();
-            PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"Coordinates\" (x, y) VALUES(?, ?)", new String[]{"id"});
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_ADD_COORDINATES, SQL_RETURN_IDS);
             statement.setFloat(1, x);
             statement.setFloat(2, y);
             statement.execute();
@@ -104,7 +95,7 @@ public class DBManager {
             rs.next();
             return rs.getLong(1);
         } catch (SQLException e) {
-            return -1;
+            return SQL_EXCEPTION_SIGNAL;
         }
     }
 
@@ -117,8 +108,7 @@ public class DBManager {
             Long location = addLocation(ticket);
             PreparedStatement statement;
 
-            statement = connectionDB.prepareStatement("INSERT INTO \"Person\" (birthday," +
-                    " eye_color, hair_color, location, nationality) VALUES(?, ?::color, ?::color, ?, ?::nationality)", new String[]{"id"});
+            statement = connectionDB.prepareStatement(SQL_ADD_PERSON, SQL_RETURN_IDS);
             if (Objects.isNull(birthday)) {
                 statement.setObject(1, null);
             } else {
@@ -138,7 +128,7 @@ public class DBManager {
             rs.next();
             return rs.getLong(1);
         } catch (SQLException e) {
-            return -1;
+            return SQL_EXCEPTION_SIGNAL;
         }
     }
 
@@ -150,8 +140,7 @@ public class DBManager {
             double x = ticket.getPerson().getLocation().getX();
             Integer y = ticket.getPerson().getLocation().getY();
             float z = ticket.getPerson().getLocation().getZ();
-            PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"Location\" (x, y, z) " +
-                    "VALUES(?, ?, ?)", new String[]{"id"});
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_ADD_LOCATION, SQL_RETURN_IDS);
             statement.setDouble(1, x);
             statement.setInt(2, y);
             statement.setFloat(3, z);
@@ -166,7 +155,7 @@ public class DBManager {
 
     public boolean removeTicket(long id, HashMap<String, String> user) {
         try {
-            PreparedStatement statement = connectionDB.prepareStatement("DELETE FROM \"Ticket\" WHERE id = ? AND creator = ?");
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_REMOVE_TICKET);
             statement.setLong(1, id);
             statement.setString(2, user.get(USERNAME));
             int deleted = statement.executeUpdate();
@@ -178,16 +167,12 @@ public class DBManager {
 
     public boolean updateTicket(long id, Ticket inpTicket) {
         try {
-            Statement statement = connectionDB.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT t.person, t.coordinates, p.location FROM" +
-                    " \"Ticket\" t LEFT JOIN \"Person\" P on P.id = t.person WHERE t.id = " + id);
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_GET_TICKET);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            long personId = resultSet.getLong(1);
-            long coordinatesId = resultSet.getLong(2);
-            long locationId = resultSet.getLong(3);
 
-            PreparedStatement statementTicket = connectionDB.prepareStatement("UPDATE \"Ticket\" SET name = ?," +
-                    " type = ?::ticket_type, price = ? WHERE id = ? AND creator = ?");
+            PreparedStatement statementTicket = connectionDB.prepareStatement(SQL_UPDATE_TICKET);
             statementTicket.setString(1, inpTicket.getName());
             statementTicket.setString(2, inpTicket.getType().name());
             statementTicket.setLong(3, inpTicket.getPrice());
@@ -198,65 +183,77 @@ public class DBManager {
                 return false;
             }
 
-            PreparedStatement statementPerson = connectionDB.prepareStatement("UPDATE \"Person\" SET birthday = ?," +
-                    " hair_color = ?::color, eye_color = ?::color, nationality = ?::nationality WHERE id = ?");
+            long personId = resultSet.getLong(1);
             Person person = inpTicket.getPerson();
-            LocalDateTime birthday = person.getBirthday();
-            if (Objects.isNull(birthday)) {
-                statementPerson.setObject(1, null);
-            } else {
-                statementPerson.setString(1, String.valueOf(birthday));
-            }
-            if (Objects.isNull(person.getHairColor())) {
-                statementPerson.setObject(2, null);
-            } else {
-                statementPerson.setString(2, person.getHairColor().name());
-            }
-            statementPerson.setString(3, person.getEyeColor().name());
-            statementPerson.setString(4, person.getNationality().name());
-            statementPerson.setLong(5, personId);
-            updated = statementPerson.executeUpdate();
-            if (updated == 0) {
+            if (!updatePerson(personId, person)) {
                 return false;
             }
 
-            PreparedStatement statementCoords = connectionDB.prepareStatement("UPDATE \"Coordinates\" SET x = ?," +
-                    " y = ? WHERE id = ?");
+            long coordinatesId = resultSet.getLong(2);
             Coordinates coordinates = inpTicket.getCoordinates();
-            statementCoords.setFloat(1, coordinates.getX());
-            statementCoords.setFloat(2, coordinates.getY());
-            statementCoords.setLong(3, coordinatesId);
-            updated = statementCoords.executeUpdate();
-            if (updated == 0) {
+            if (!updateCoordinates(coordinatesId, coordinates)) {
                 return false;
             }
 
-            PreparedStatement statementLocation = connectionDB.prepareStatement("UPDATE \"Location\" SET x = ?," +
-                    " y = ?, z = ? WHERE id = ?");
+            long locationId = resultSet.getLong(3);
             Location location = person.getLocation();
-            if (!Objects.isNull(location)) {
-                statementLocation.setDouble(1, location.getX());
-                statementLocation.setInt(2, location.getY());
-                statementLocation.setFloat(3, location.getZ());
-                statementLocation.setLong(4, locationId);
-                updated = statementLocation.executeUpdate();
-                return updated != 0;
-            }
-            return true;
+            return updateLocation(locationId, location);
         } catch (SQLException e) {
             return false;
         }
     }
 
-        public boolean checkUser(HashMap<String, String> user) {
+    public boolean updatePerson(long personId, Person person) throws SQLException {
+        PreparedStatement statementPerson = connectionDB.prepareStatement(SQL_UPDATE_PERSON);
+        LocalDateTime birthday = person.getBirthday();
+        if (Objects.isNull(birthday)) {
+            statementPerson.setObject(1, null);
+        } else {
+            statementPerson.setString(1, String.valueOf(birthday));
+        }
+        if (Objects.isNull(person.getHairColor())) {
+            statementPerson.setObject(2, null);
+        } else {
+            statementPerson.setString(2, person.getHairColor().name());
+        }
+        statementPerson.setString(3, person.getEyeColor().name());
+        statementPerson.setString(4, person.getNationality().name());
+        statementPerson.setLong(5, personId);
+        int updated = statementPerson.executeUpdate();
+        return updated != 0;
+    }
+
+    public boolean updateCoordinates(long coordinatesId, Coordinates coordinates) throws SQLException {
+        PreparedStatement statementCoords = connectionDB.prepareStatement(SQL_UPDATE_COORDINATES);
+        statementCoords.setFloat(1, coordinates.getX());
+        statementCoords.setFloat(2, coordinates.getY());
+        statementCoords.setLong(3, coordinatesId);
+        int updated = statementCoords.executeUpdate();
+        return updated != 0;
+    }
+
+    public boolean updateLocation(long locationId, Location location) throws SQLException {
+        PreparedStatement statementLocation = connectionDB.prepareStatement(SQL_UPDATE_LOCATION);
+        if (!Objects.isNull(location)) {
+            statementLocation.setDouble(1, location.getX());
+            statementLocation.setInt(2, location.getY());
+            statementLocation.setFloat(3, location.getZ());
+            statementLocation.setLong(4, locationId);
+            int updated = statementLocation.executeUpdate();
+            return updated != 0;
+        }
+        return true;
+    }
+
+    public boolean checkUser(HashMap<String, String> user) {
         try {
-            PreparedStatement statement = connectionDB.prepareStatement("SELECT * FROM \"User\" WHERE username = ?");
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_GET_USER);
             statement.setString(1, user.get(USERNAME));
             ResultSet rs = statement.executeQuery();
             rs.next();
             String password = "#^1,'5p6-" + user.get(PASSWORD) + rs.getString("salt");
             String passwordSHA256 = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-            return rs.getString("password").equals(passwordSHA256);
+            return rs.getString(PASSWORD).equals(passwordSHA256);
         } catch (SQLException e) {
             return false;
         }
@@ -266,8 +263,7 @@ public class DBManager {
         try {
             String salt = org.apache.commons.lang3.RandomStringUtils.randomNumeric(7);
             String passwordSHA256 = org.apache.commons.codec.digest.DigestUtils.sha256Hex("#^1,'5p6-" + user.get(PASSWORD) + salt);
-            PreparedStatement statement = connectionDB.prepareStatement("INSERT INTO \"User\" (username," +
-                    " password, salt) VALUES(?, ?, ?)", new String[]{"id"});
+            PreparedStatement statement = connectionDB.prepareStatement(SQL_CREATE_USER, SQL_RETURN_IDS);
             statement.setString(1, user.get(USERNAME));
             statement.setString(2, passwordSHA256);
             statement.setString(3, salt);
@@ -276,7 +272,7 @@ public class DBManager {
             rs.next();
             return rs.getLong(1);
         } catch (SQLException e) {
-            return -1;
+            return SQL_EXCEPTION_SIGNAL;
         }
     }
 }

@@ -9,20 +9,21 @@ import data.Ticket;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
 
 /**
  * CollectionManager operates collection and their items.
  */
 public class CollectionManager {
-    private final TreeSet<Ticket> collection = new TreeSet<>();
+    private final ConcurrentSkipListSet<Ticket> collection = new ConcurrentSkipListSet<>();
     private final LocalDateTime initDateTime;
 
     public CollectionManager() {
         this.initDateTime = LocalDateTime.now();
     }
 
-    public TreeSet<Ticket> getCollection() {
+    public ConcurrentSkipListSet<Ticket> getCollection() {
         return collection;
     }
 

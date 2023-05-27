@@ -10,7 +10,6 @@ import responses.Response;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -23,22 +22,20 @@ import static core.Globals.PACKET_SIZE;
 public class UDPServer {
     private final Logger logger = Logger.getLogger(UDPServer.class.getName());
     private final DatagramSocket datagramSocket;
-    private final DataApp dataApp;
     private boolean isRunning = true;
     private final CommandManager commandManager;
 
     private final ExecutorService serviceRequest;
-    private final ExecutorService serviceLoad;
-    private final ExecutorService serviceResponse;
+    private final ExecutorService serviceReceiveData;
+    private final ExecutorService serviceSendResponse;
 
 
     public UDPServer(InetSocketAddress address, DataApp dataApp) throws SocketException {
         datagramSocket = new DatagramSocket(address);
-        this.dataApp = dataApp;
         this.commandManager = new CommandManager(logger, dataApp);
+        serviceReceiveData = Executors.newFixedThreadPool(10);
         serviceRequest = Executors.newFixedThreadPool(10);
-        serviceLoad = Executors.newFixedThreadPool(10);
-        serviceResponse = Executors.newCachedThreadPool();
+        serviceSendResponse = Executors.newCachedThreadPool();
     }
 
     public Pair<byte[], SocketAddress> receiveData() throws IOException {
@@ -60,86 +57,77 @@ public class UDPServer {
     }
 
 
-    public void sendResponse(Response response, SocketAddress socketAddress) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(bos);
-        os.writeObject(response);
-        os.flush();
-        byte[] data = bos.toByteArray();
-        byte[][] packetData = new byte[(int)Math.ceil(data.length / (double)DATA_SIZE)][DATA_SIZE];
-        for (int i = 0; i < packetData.length; i++) {
-            packetData[i] = Arrays.copyOfRange(data, i * DATA_SIZE, (i + 1) * DATA_SIZE);
-        }
+    public void sendResponse(Response response, SocketAddress socketAddress) {
+        serviceSendResponse.execute(() -> {
+            try {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream os = new ObjectOutputStream(bos);
+                os.writeObject(response);
+                os.flush();
+                byte[] data = bos.toByteArray();
+                byte[][] packetData = new byte[(int) Math.ceil(data.length / (double) DATA_SIZE)][DATA_SIZE];
+                for (int i = 0; i < packetData.length; i++) {
+                    packetData[i] = Arrays.copyOfRange(data, i * DATA_SIZE, (i + 1) * DATA_SIZE);
+                }
 
-        logger.info("Отправка " + data.length + " байт на " + socketAddress);
-        for (int i = 0; i < packetData.length; i++) {
-            byte[] packet = packetData[i];
-            byte[] packetToSend = Arrays.copyOf(packet, PACKET_SIZE);
-            if (i + 1 == packetData.length) {
-                System.arraycopy(new byte[]{PACKET_ENDS}, 0, packetToSend, DATA_SIZE, 1);
-            } else {
-                System.arraycopy(new byte[]{PACKET_CONTINUES}, 0, packetToSend, DATA_SIZE, 1);
+                logger.info("Отправка " + data.length + " байт на " + socketAddress);
+                for (int i = 0; i < packetData.length; i++) {
+                    byte[] packet = packetData[i];
+                    byte[] packetToSend = Arrays.copyOf(packet, PACKET_SIZE);
+                    if (i + 1 == packetData.length) {
+                        System.arraycopy(new byte[]{PACKET_ENDS}, 0, packetToSend, DATA_SIZE, 1);
+                    } else {
+                        System.arraycopy(new byte[]{PACKET_CONTINUES}, 0, packetToSend, DATA_SIZE, 1);
+                    }
+                    DatagramPacket datagramPacket = new DatagramPacket(packetToSend, packetToSend.length, socketAddress);
+                    datagramSocket.send(datagramPacket);
+                }
+                logger.info("Отправка на " + socketAddress + " завершена.");
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "ошибка в sendData", e);
             }
-            DatagramPacket datagramPacket = new DatagramPacket(packetToSend, packetToSend.length, socketAddress);
-            datagramSocket.send(datagramPacket);
-        }
-        logger.info("Отправка на " + socketAddress + " завершена.");
-
+        });
     }
 
     public void run() {
         logger.info("Старт сервера");
+        serviceReceiveData.execute(() -> {
             while (isRunning) {
                 Pair<byte[], SocketAddress> pair;
-                serviceRequest.submit(() -> {
-                    try {
-                        pair = receiveData();
-                    } catch (IOException e) {
-                        if (datagramSocket.isClosed()) {
-                            break;
-                        }
-                        logger.log(Level.SEVERE, "ошибка при получении данных", e);
-                        continue;
-                    }
-                });
                 try {
-                    serviceRequest.submit(() -> {pair = receiveData()})
                     pair = receiveData();
                 } catch (IOException e) {
                     if (datagramSocket.isClosed()) {
-                        break;
+                        return;
                     }
                     logger.log(Level.SEVERE, "ошибка при получении данных", e);
                     continue;
                 }
 
-                var data = pair.getKey();
-                var socketAddress = pair.getValue();
+                serviceRequest.execute(() -> {
+                    var data = pair.getKey();
+                    var socketAddress = pair.getValue();
 
-                Request request;
-                try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
-                     ObjectInput ois = new ObjectInputStream(bis)) {
-                    request = (Request) ois.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    logger.log(Level.SEVERE, "ошибка при обработке реквеста", e);
-                    continue;
-                }
-                logger.info("Пришёл " + request.toString());
+                    Request request;
+                    try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
+                         ObjectInput ois = new ObjectInputStream(bis)) {
+                        request = (Request) ois.readObject();
+                    } catch (IOException | ClassNotFoundException e) {
+                        logger.log(Level.SEVERE, "ошибка при обработке реквеста", e);
+                        return;
+                    }
+                    logger.info("Пришёл " + request.toString());
 
-                Response response;
-                Command command = commandManager.getCommand(request.getCommandName());
-                response = command.execute(request);
+                    Response response;
+                    Command command = commandManager.getCommand(request.getCommandName());
+                    response = command.execute(request);
 
-                logger.info("Ответ: " + response.toString());
+                    logger.info("Ответ: " + response.toString());
 
-
-                try {
                     sendResponse(response, socketAddress);
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, "ошибка в sendData", e);
-                }
-
+                });
             }
+        });
     }
 
     public void stop() {
