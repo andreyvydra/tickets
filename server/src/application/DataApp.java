@@ -42,8 +42,16 @@ public class DataApp {
         return collectionManager.getMaxTicket();
     }
 
-    public void clearCollectionManger() {
-        collectionManager.clear();
+    public int clearCollectionManger(HashMap<String, String> user) {
+        int counter = 0;
+        for (Ticket ticket : collectionManager.getCollection()) {
+            try {
+                if (removeTicketById(ticket.getId(), user)) {
+                    counter += 1;
+                }
+            } catch (TicketWasNotFound ignore) {}
+        }
+        return counter;
     }
 
     public ConcurrentSkipListSet<Ticket> getCollection() {

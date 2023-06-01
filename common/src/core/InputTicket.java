@@ -189,13 +189,13 @@ public class InputTicket {
                 outputHandler.print("Введите цену (price): ");
                 String line = scanner.nextLine();
                 if (line.isEmpty()) {
-                    outputHandler.println("Цена должна быть положительным числом");
+                    outputHandler.println("Цена должна быть натуральным числом");
                 } else {
                     ticket.setPrice(Long.parseLong(line));
                     break;
                 }
             } catch (ValueIsNotPositiveException | NumberFormatException e) {
-                outputHandler.println("Цена должна быть положительным числом");
+                outputHandler.println("Цена должна быть натуральным числом");
             }
         }
     }

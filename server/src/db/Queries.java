@@ -22,7 +22,7 @@ public class Queries {
     public static String SQL_ADD_LOCATION = "INSERT INTO \"Location\" (x, y, z) " +
             "VALUES(?, ?, ?)";
 
-    public static String SQL_REMOVE_TICKET = "DELETE FROM \\\"Ticket\\\" WHERE id = ? AND creator = ?\"";
+    public static String SQL_REMOVE_TICKET = "DELETE FROM \"Ticket\" WHERE id = ? AND creator = ?";
 
     public static String SQL_GET_TICKET = "SELECT t.person, t.coordinates, p.location FROM" +
             " \"Ticket\" t LEFT JOIN \"Person\" P on P.id = t.person WHERE t.id = ?";

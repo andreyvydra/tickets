@@ -27,6 +27,7 @@ public class CommandManager {
         commandHashMap.put(UPDATE, new Update(logger, dataApp));
         commandHashMap.put(TICKET_EXIST, new TicketExist(logger, dataApp));
         commandHashMap.put(REGISTER, new Register(logger, dataApp));
+        commandHashMap.put(LOGIN_USER, new Login(logger, dataApp));
         commands = commandHashMap;
     }
 

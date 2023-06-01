@@ -128,6 +128,7 @@ public class UDPServer {
                 });
             }
         });
+        serviceReceiveData.shutdown();
     }
 
     public void stop() {

@@ -25,7 +25,6 @@ public class Globals {
         public static String UPDATE = "update";
         public static String REMOVE_BY_ID = "remove_by_id";
         public static String CLEAR = "clear";
-        public static String SAVE = "save";
         public static String EXIT = "exit";
         public static String ADD_IF_MAX = "add_if_max";
         public static String REMOVE_LOWER = "remove_lower";
@@ -37,6 +36,8 @@ public class Globals {
 
         public static String LOGIN = "login";
         public static String REGISTER = "register";
+        public static String LOGOUT = "logout";
+        public static String LOGIN_USER = "login_user";
 
         public static Map<String, Class<? extends Command>> commandMap = new HashMap<>();
         static {
@@ -57,6 +58,7 @@ public class Globals {
             commandMap.put(PRINT_FIELD_ASCENDING_TYPE, PrintTypeAscendingCommand.class);
             commandMap.put(LOGIN, LoginCommand.class);
             commandMap.put(REGISTER, RegisterCommand.class);
+            commandMap.put(LOGOUT, LogoutCommand.class);
         }
     }
 
@@ -91,5 +93,7 @@ public class Globals {
 
         public static String USERNAME = "username";
         public static String PASSWORD = "password";
+
+        public static String IS_LOGGED = "is_logged";
     }
 }
