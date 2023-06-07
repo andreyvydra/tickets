@@ -37,11 +37,11 @@ public class Console {
                         commands.put(key, (Command) constructor.newInstance(outputHandler, udpClient));
                     } else if (constructor.getParameterTypes()[1].equals(ArrayList.class)) {
                         commands.put(key, (Command) constructor.newInstance(outputHandler, commandsHistory));
+                    } else if (constructor.getParameterTypes()[1].equals(Queue.class)) {
+                        commands.put(key, (Command) constructor.newInstance(outputHandler, commandBuffer));
                     } else {
                         commands.put(key, (Command) constructor.newInstance(outputHandler, commands));
                     }
-                } else if (constructor.getParameterCount() == 3) {
-                    commands.put(key, (Command) constructor.newInstance(outputHandler, udpClient, commandBuffer));
                 } else {
                     commands.put(key, (Command) constructor.newInstance(outputHandler));
                 }
@@ -55,12 +55,13 @@ public class Console {
         }
     }
 
-    public void execute(String command) throws InvocationTargetException, IllegalAccessException, CommandWasNotFound {
+    public void execute(String command, HashMap<String, String> user) throws InvocationTargetException, IllegalAccessException, CommandWasNotFound {
         String commandName = command.split(" ")[COMMAND_POSITION];
         if (!commandMap.containsKey(commandName)) {
             throw new CommandWasNotFound();
         }
-        commands.get(commandName).execute(command);
+        commands.get(commandName).execute(command, user);
+
         if (commandsHistory.size() == HISTORY_SIZE) {
             commandsHistory.remove(0);
         }

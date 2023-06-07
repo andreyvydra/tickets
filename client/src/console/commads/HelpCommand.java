@@ -21,9 +21,9 @@ public class HelpCommand extends DefaultCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         for (Command command1 : commands.values()) {
-            ((DefaultCommand) command1).description();
+            command1.description();
         }
     }
 

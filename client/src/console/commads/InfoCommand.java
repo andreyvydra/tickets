@@ -4,9 +4,10 @@ import console.commads.generalCommands.ServerCommand;
 import core.OutputHandler;
 import network.UDPClient;
 import requests.InfoRequest;
-import responses.Response;
+import responses.InfoResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * InfoCommand shows info about CollectionManager
@@ -19,12 +20,14 @@ public class InfoCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new InfoRequest());
+            InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest(user));
             outputHandler.println(response);
-        } catch (IOException | ClassNotFoundException e) {
-            outputHandler.println("Проблема с сериализацией");
+        } catch (ClassNotFoundException e) {
+            outputHandler.println("Проблема с сериализацией " + e);
+        } catch (IOException e) {
+            outputHandler.println("Ошибка при передачи данных! " + e);
         }
     }
 

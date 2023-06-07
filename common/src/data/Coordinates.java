@@ -47,6 +47,14 @@ public class Coordinates implements Serializable {
         this.y = y;
     }
 
+    public Float getX() {
+        return x;
+    }
+
+    public Float getY() {
+        return y;
+    }
+
     @Override
     public String toString() {
         return "Coordinates(" + Globals.CoordinatesFields.X + "=" + this.x + ", " + Globals.CoordinatesFields.Y + "=" + this.y + ")";

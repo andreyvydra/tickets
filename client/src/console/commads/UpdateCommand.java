@@ -5,12 +5,16 @@ import core.InputTicket;
 import core.OutputHandler;
 import data.Ticket;
 import network.UDPClient;
+import requests.TicketExistRequest;
 import requests.UpdateRequest;
 import responses.Response;
+import responses.TicketExistResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static core.Globals.ARGUMENT_POSITION;
+import static core.Globals.Network.TICKET_IS_EXIST;
 
 /**
  * UpdateCommand updates ticket by id and extends Input
@@ -26,16 +30,27 @@ public class UpdateCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
-        long id = Long.parseLong(command.split(" ")[ARGUMENT_POSITION]);
-        Ticket inpTicket = InputTicket.getTicketWithoutIdFromConsole();
-        try {
-            Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id));
-            outputHandler.println(response);
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) {
+        String[] arguments = command.split(" ");
+        if (arguments.length == 1) {
+            outputHandler.println("Введите id для update.");
+        } else {
+            long id = Long.parseLong(arguments[ARGUMENT_POSITION]);
+
+            try {
+                TicketExistResponse responseId = (TicketExistResponse) udpClient.sendRequestAndGetResponse(new TicketExistRequest(id, user));
+                if (responseId.status == TICKET_IS_EXIST) {
+                    Ticket inpTicket = InputTicket.getTicketWithoutIdFromConsole(user);
+                    Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id, user));
+                    outputHandler.println(response);
+                } else {
+                    outputHandler.println(responseId.getMsg());
+                }
+            } catch (IOException  e) {
+                outputHandler.println("Ошибка при передачи данных! " + e);
+            } catch (ClassNotFoundException e) {
+                outputHandler.println("Класс не был найден! " + e);
+            }
         }
     }
 

@@ -15,6 +15,9 @@ public class Show extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new ShowResponse("Ошибка авторизации", new Object[]{});
+        }
         ArrayList<String> data = new ArrayList<>();
         if (dataApp.getCollectionLen() != 0) {
             dataApp.getCollection().forEach(x -> data.add(x.toString()));

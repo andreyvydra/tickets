@@ -3,20 +3,22 @@ package application;
 import core.exceptions.TicketWasNotFound;
 import core.exceptions.ValueIsNotPositiveException;
 import data.Ticket;
+import db.DBManager;
 import managers.CollectionManager;
 
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class DataApp {
     private final CollectionManager collectionManager;
-    private final FileManager fileManager;
+    private final DBManager dbManager;
 
-    public DataApp(String filename) {
+    public DataApp(DBManager dbManager) {
         collectionManager = new CollectionManager();
-        fileManager = new FileManager(filename);
-        JSONParser jsonParser = new JSONParser(fileManager.getJSONObjectFromFile());
-        ArrayList<Ticket> tickets = jsonParser.parse();
+        this.dbManager = dbManager;
+        ArrayList<Ticket> tickets = dbManager.getAllTickets();
         collectionManager.loadTickets(tickets);
     }
 
@@ -24,28 +26,35 @@ public class DataApp {
         return collectionManager;
     }
 
-    public void saveJSONObjectToFile() {
-        fileManager.saveJSONObjectToFile(collectionManager);
-    }
-
-
     public boolean addTicketToCollection(Ticket ticket) {
-        return collectionManager.addTicket(ticket);
-    }
-
-    public void setIdToTicket(Ticket ticket) throws ValueIsNotPositiveException {
-        ticket.setId(getCollectionManager().getNewId());
+        try {
+            long idt = dbManager.addTicket(ticket);
+            if (idt < 1) {
+                return false;
+            }
+            return collectionManager.addTicket(ticket);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public Ticket getMaxTicket() {
         return collectionManager.getMaxTicket();
     }
 
-    public void clearCollectionManger() {
-        collectionManager.clear();
+    public int clearCollectionManger(HashMap<String, String> user) {
+        int counter = 0;
+        for (Ticket ticket : collectionManager.getCollection()) {
+            try {
+                if (removeTicketById(ticket.getId(), user)) {
+                    counter += 1;
+                }
+            } catch (TicketWasNotFound ignore) {}
+        }
+        return counter;
     }
 
-    public TreeSet<Ticket> getCollection() {
+    public ConcurrentSkipListSet<Ticket> getCollection() {
         return collectionManager.getCollection();
     }
 
@@ -53,8 +62,12 @@ public class DataApp {
         return collectionManager.getLen();
     }
 
-    public void removeTicketById(long id) throws TicketWasNotFound {
-        collectionManager.removeTicket(id);
+    public boolean removeTicketById(long id, HashMap<String, String> user) throws TicketWasNotFound {
+        if (dbManager.removeTicket(id, user)) {
+            collectionManager.removeTicket(id);
+            return true;
+        }
+        return false;
     }
 
     public Ticket getTicketById(long id) {
@@ -70,7 +83,22 @@ public class DataApp {
     }
 
     public boolean addTicketToCollectionWithoutId(Ticket ticket) throws ValueIsNotPositiveException {
-        setIdToTicket(ticket);
         return addTicketToCollection(ticket);
+    }
+
+    public boolean updateTicket(long id, Ticket inpTicket) {
+        if (dbManager.updateTicket(id, inpTicket)) {
+            collectionManager.updateTicket(id, inpTicket);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkUser(HashMap<String, String> user) {
+        return dbManager.checkUser(user);
+    }
+
+    public long createUser(HashMap<String, String> user) {
+        return dbManager.createUser(user);
     }
 }

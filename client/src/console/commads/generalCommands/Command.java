@@ -1,9 +1,9 @@
 package console.commads.generalCommands;
 
-/**
- * Command interface with one method execute. Every abstract command class
- * is implements it.
- */
+import java.util.HashMap;
+
 public interface Command {
-    void execute(String command);
+    void execute(String command, HashMap<String, String> user);
+
+    void description();
 }

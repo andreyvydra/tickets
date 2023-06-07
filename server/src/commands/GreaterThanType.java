@@ -15,6 +15,9 @@ public class GreaterThanType extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new GreaterThanTypeResponse("Ошибка авторизации");
+        }
         GreaterThanTypeRequest request1 = (GreaterThanTypeRequest) request;
         long count = dataApp.getCollection().stream().filter(
                 x -> x.getType().compareTo(request1.getTicketType()) > 0

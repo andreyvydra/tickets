@@ -9,6 +9,7 @@ import requests.RemoveLowerRequest;
 import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * RemoveLowerCommand deletes all tickets which are lower than inputted ticket.
@@ -23,10 +24,10 @@ public class RemoveLowerCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
-        Ticket ticket = InputTicket.getTicketWithoutIdFromConsole();
+    public void execute(String command, HashMap<String, String> user) {
+        Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
         try {
-            Response response = udpClient.sendRequestAndGetResponse(new RemoveLowerRequest(ticket));
+            Response response = udpClient.sendRequestAndGetResponse(new RemoveLowerRequest(ticket, user));
             outputHandler.println(response);
         } catch (IOException  e) {
             outputHandler.println("Ошибка при передачи данных! " + e);

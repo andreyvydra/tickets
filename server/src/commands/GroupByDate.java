@@ -19,6 +19,9 @@ public class GroupByDate extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new GroupByDateResponse("Ошибка авторизации", new Object[]{});
+        }
         ArrayList<String> data = new ArrayList<>();
         Map<ZonedDateTime, List<Ticket>> groups = dataApp.getTicketGroupsByDate();
         if (groups.size() == 0) {

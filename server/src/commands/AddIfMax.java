@@ -21,6 +21,9 @@ public class AddIfMax extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new AddResponse("Ошибка авторизации", -1);
+        }
         Ticket ticket = ((AddIfMaxRequest) request).getTicket();
         try {
             if (ticket.compareTo(dataApp.getMaxTicket()) > 0) {

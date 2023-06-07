@@ -7,6 +7,7 @@ import requests.ShowRequest;
 import responses.ShowResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * This class shows full info about every ticket at collection.
@@ -20,9 +21,9 @@ public class ShowCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            ShowResponse response = (ShowResponse) udpClient.sendRequestAndGetResponse(new ShowRequest());
+            ShowResponse response = (ShowResponse) udpClient.sendRequestAndGetResponse(new ShowRequest(user));
             outputHandler.println(response);
             for (Object ticket : response.getData()) {
                 outputHandler.println(ticket);

@@ -2,11 +2,13 @@ package requests;
 
 import core.Globals;
 
-public class RemoveRequest extends Request {
-    private long id;
+import java.util.HashMap;
 
-    public RemoveRequest(long id) {
-        super(Globals.CommandNames.REMOVE_BY_ID);
+public class RemoveRequest extends Request {
+    private final long id;
+
+    public RemoveRequest(long id, HashMap<String, String> user) {
+        super(Globals.CommandNames.REMOVE_BY_ID, user);
         this.id = id;
     }
 

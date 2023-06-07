@@ -1,6 +1,5 @@
 
 import application.ClientApp;
-import core.exceptions.EmptyPortException;
 
 import java.io.IOException;
 

@@ -2,9 +2,11 @@ package requests;
 
 import core.Globals.CommandNames;
 
+import java.util.HashMap;
+
 public class ClearRequest extends Request{
 
-    public ClearRequest() {
-        super(CommandNames.CLEAR);
+    public ClearRequest(HashMap<String, String> user) {
+        super(CommandNames.CLEAR, user);
     }
 }

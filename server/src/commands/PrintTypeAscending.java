@@ -15,6 +15,9 @@ public class PrintTypeAscending extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new PrintTypeAscendingResponse("Ошибка авторизации", new Object[]{});
+        }
         ArrayList<String> types = new ArrayList<>();
         if (dataApp.getCollectionLen() == 0) {
             return new PrintTypeAscendingResponse("Коллекция пуста!", types.toArray());

@@ -57,10 +57,10 @@ public class UDPClient {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         while (!isReceived) {
             byte[] packet = getPacket();
-            if (packet[packet.length - 1] == 0) {
+            if (packet[packet.length - 1] == PACKET_ENDS) {
                 isReceived = true;
             }
-            outputStream.write(packet);
+            outputStream.write(Arrays.copyOf(packet, DATA_SIZE));
         }
         return outputStream.toByteArray();
     }
@@ -79,12 +79,14 @@ public class UDPClient {
         ObjectOutputStream out = new ObjectOutputStream(bos);
         out.writeObject(request);
         out.close();
+        bos.close();
         sendData(bos.toByteArray());
         byte[] receivedData = receiveData();
         ByteArrayInputStream bis = new ByteArrayInputStream(receivedData);
         ObjectInputStream ois = new ObjectInputStream(bis);
         Response response = (Response) ois.readObject();
         ois.close();
+        bis.close();
         return response;
     }
 }

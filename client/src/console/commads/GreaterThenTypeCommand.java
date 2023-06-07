@@ -9,6 +9,7 @@ import requests.GreaterThanTypeRequest;
 import responses.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static core.Globals.ARGUMENT_POSITION;
 
@@ -26,10 +27,10 @@ public class GreaterThenTypeCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
             TicketType type = TicketType.valueOf(command.split(" ")[ARGUMENT_POSITION].toUpperCase());
-            Response response = udpClient.sendRequestAndGetResponse(new GreaterThanTypeRequest(type));
+            Response response = udpClient.sendRequestAndGetResponse(new GreaterThanTypeRequest(type, user));
             outputHandler.println(response);
         } catch (ArrayIndexOutOfBoundsException e) {
             outputHandler.println("Аргумен не был введён!");

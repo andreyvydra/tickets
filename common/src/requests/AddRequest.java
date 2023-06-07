@@ -4,11 +4,13 @@ package requests;
 import data.Ticket;
 import core.Globals.CommandNames;
 
-public class AddRequest extends Request {
-    private Ticket ticket;
+import java.util.HashMap;
 
-    public AddRequest(Ticket ticket) {
-        super(CommandNames.ADD);
+public class AddRequest extends Request {
+    private final Ticket ticket;
+
+    public AddRequest(Ticket ticket, HashMap<String, String> user) {
+        super(CommandNames.ADD, user);
         this.ticket = ticket;
     }
 

@@ -14,6 +14,9 @@ public class Info extends Command {
 
     @Override
     public Response execute(Request request) {
+        if (!dataApp.checkUser(request.getUser())) {
+            return new InfoResponse("Ошибка авторизации");
+        }
         return new InfoResponse(dataApp.getCollectionManager().toString());
     }
 }

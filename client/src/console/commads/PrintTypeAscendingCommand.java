@@ -7,6 +7,7 @@ import requests.PrintTypeAscendingRequest;
 import responses.PrintTypeAscendingResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * PrintTypeAscendingCommand prints every ticket's type ascending.
@@ -20,9 +21,9 @@ public class PrintTypeAscendingCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command) {
+    public void execute(String command, HashMap<String, String> user) {
         try {
-            PrintTypeAscendingResponse response = (PrintTypeAscendingResponse) udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest());
+            PrintTypeAscendingResponse response = (PrintTypeAscendingResponse) udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest(user));
             outputHandler.println(response);
             for (Object type : response.getData()) {
                 outputHandler.println(type);
