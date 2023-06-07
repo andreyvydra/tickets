@@ -78,13 +78,9 @@ public class CollectionManager {
         }
     }
 
-    public void clear() {
-        this.collection.clear();
-    }
-
     @Override
     public String toString() {
-        return "Type: CollectionManager, InitDate: " + this.initDateTime + ", Items quantity of collection: " + this.collection.size();
+        return "Дата и время инициализации: " + this.initDateTime + ", Кол-во элементов в коллекции: " + this.collection.size();
     }
 
     public void removeTickets(ArrayList<Ticket> ticketsToDelete) {
