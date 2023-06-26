@@ -18,7 +18,7 @@ import static core.Globals.Network.IS_LOGGED;
  * AddIfMaxCommand adds inputted element if it's max of collection.
  *
  */
-public class AddIfMaxCommand extends ServerCommand {
+public class AddIfMaxCommand extends AddCommand {
 
 
     public AddIfMaxCommand(OutputHandler outputHandler, UDPClient udpClient) {
@@ -26,19 +26,12 @@ public class AddIfMaxCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            if (!Objects.isNull(user.get(IS_LOGGED))) {
-                Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
-                Response response = udpClient.sendRequestAndGetResponse(new AddIfMaxRequest(ticket, user));
-                outputHandler.println(response);
-            } else {
-                outputHandler.println("Ошибка авторизации");
-            }
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        if (!Objects.isNull(user.get(IS_LOGGED))) {
+            Response response = udpClient.sendRequestAndGetResponse(new AddIfMaxRequest(ticket, user));
+            outputHandler.println(response);
+        } else {
+            outputHandler.println("Ошибка авторизации");
         }
     }
 

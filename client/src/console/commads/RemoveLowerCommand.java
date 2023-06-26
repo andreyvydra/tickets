@@ -16,7 +16,7 @@ import java.util.HashMap;
  *
  * @see InputTicket
  */
-public class RemoveLowerCommand extends ServerCommand {
+public class RemoveLowerCommand extends AddCommand {
 
 
     public RemoveLowerCommand(OutputHandler outputHandler, UDPClient client) {
@@ -24,16 +24,9 @@ public class RemoveLowerCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
-        try {
-            Response response = udpClient.sendRequestAndGetResponse(new RemoveLowerRequest(ticket, user));
-            outputHandler.println(response);
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
-        }
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        Response response = udpClient.sendRequestAndGetResponse(new RemoveLowerRequest(ticket, user));
+        outputHandler.println(response);
     }
 
     @Override

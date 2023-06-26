@@ -21,17 +21,11 @@ public class ShowCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            ShowResponse response = (ShowResponse) udpClient.sendRequestAndGetResponse(new ShowRequest(user));
-            outputHandler.println(response);
-            for (Object ticket : response.getData()) {
-                outputHandler.println(ticket);
-            }
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        ShowResponse response = (ShowResponse) udpClient.sendRequestAndGetResponse(new ShowRequest(user));
+        outputHandler.println(response);
+        for (Object ticket : response.getData()) {
+            outputHandler.println(ticket);
         }
     }
 

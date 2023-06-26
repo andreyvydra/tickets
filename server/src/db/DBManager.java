@@ -209,7 +209,7 @@ public class DBManager {
         if (Objects.isNull(birthday)) {
             statementPerson.setObject(1, null);
         } else {
-            statementPerson.setString(1, String.valueOf(birthday));
+            statementPerson.setTimestamp(1, Timestamp.valueOf(birthday));
         }
         if (Objects.isNull(person.getHairColor())) {
             statementPerson.setObject(2, null);

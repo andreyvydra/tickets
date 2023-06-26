@@ -21,16 +21,9 @@ public class ClearCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            Response response = udpClient.sendRequestAndGetResponse(new ClearRequest(user));
-            outputHandler.println(response);
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
-        }
-
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        Response response = udpClient.sendRequestAndGetResponse(new ClearRequest(user));
+        outputHandler.println(response);
     }
 
     @Override

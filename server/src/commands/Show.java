@@ -1,6 +1,7 @@
 package commands;
 
 import application.DataApp;
+import data.Ticket;
 import requests.Request;
 import responses.Response;
 import responses.ShowResponse;
@@ -15,15 +16,15 @@ public class Show extends Command {
 
     @Override
     public Response execute(Request request) {
+        ArrayList<Ticket> tickets = new ArrayList<>();
         if (!dataApp.checkUser(request.getUser())) {
-            return new ShowResponse("Ошибка авторизации", new Object[]{});
+            return new ShowResponse("Ошибка авторизации", tickets);
         }
-        ArrayList<String> data = new ArrayList<>();
         if (dataApp.getCollectionLen() != 0) {
-            dataApp.getCollection().forEach(x -> data.add(x.toString()));
+            tickets.addAll(dataApp.getCollection());
         } else {
-            return new ShowResponse("Коллекция пуста!", data.toArray());
+            return new ShowResponse("Коллекция пуста!", tickets);
         }
-        return new ShowResponse("Коллекция", data.toArray());
+        return new ShowResponse("Коллекция", tickets);
     }
 }

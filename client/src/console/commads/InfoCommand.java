@@ -20,15 +20,9 @@ public class InfoCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest(user));
-            outputHandler.println(response);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Проблема с сериализацией " + e);
-        } catch (IOException e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        }
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        InfoResponse response = (InfoResponse) udpClient.sendRequestAndGetResponse(new InfoRequest(user));
+        outputHandler.println(response);
     }
 
     @Override

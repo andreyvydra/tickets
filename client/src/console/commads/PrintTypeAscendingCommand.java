@@ -21,17 +21,11 @@ public class PrintTypeAscendingCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            PrintTypeAscendingResponse response = (PrintTypeAscendingResponse) udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest(user));
-            outputHandler.println(response);
-            for (Object type : response.getData()) {
-                outputHandler.println(type);
-            }
-        } catch (IOException e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        PrintTypeAscendingResponse response = (PrintTypeAscendingResponse) udpClient.sendRequestAndGetResponse(new PrintTypeAscendingRequest(user));
+        outputHandler.println(response);
+        for (Object type : response.getData()) {
+            outputHandler.println(type);
         }
     }
 

@@ -27,7 +27,7 @@ public class GreaterThenTypeCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
         try {
             TicketType type = TicketType.valueOf(command.split(" ")[ARGUMENT_POSITION].toUpperCase());
             Response response = udpClient.sendRequestAndGetResponse(new GreaterThanTypeRequest(type, user));
@@ -36,10 +36,6 @@ public class GreaterThenTypeCommand extends ServerCommand {
             outputHandler.println("Аргумен не был введён!");
         } catch (IllegalArgumentException e) {
             outputHandler.println("Такого type не существует!");
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
         }
     }
 

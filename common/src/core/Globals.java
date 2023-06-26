@@ -1,10 +1,5 @@
 package core;
 
-import console.commads.*;
-import console.commads.generalCommands.Command;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Globals {
     public static byte ARGUMENT_POSITION = 1; // Position at split string
@@ -39,27 +34,17 @@ public class Globals {
         public static String LOGOUT = "logout";
         public static String LOGIN_USER = "login_user";
 
-        public static Map<String, Class<? extends Command>> commandMap = new HashMap<>();
-        static {
-            commandMap.put(HELP, HelpCommand.class);
-            commandMap.put(INFO, InfoCommand.class);
-            commandMap.put(SHOW, ShowCommand.class);
-            commandMap.put(ADD, AddCommand.class);
-            commandMap.put(UPDATE, UpdateCommand.class);
-            commandMap.put(REMOVE_BY_ID, RemoveCommand.class);
-            commandMap.put(CLEAR, ClearCommand.class);
-            commandMap.put(EXECUTE_SCRIPT, ExecuteScriptCommand.class);
-            commandMap.put(ADD_IF_MAX, AddIfMaxCommand.class);
-            commandMap.put(REMOVE_LOWER, RemoveLowerCommand.class);
-            commandMap.put(EXIT, ExitCommand.class);
-            commandMap.put(HISTORY, HistoryCommand.class);
-            commandMap.put(GROUP_COUNTING_BY_CREATION_DATE, GroupByDateCommand.class);
-            commandMap.put(COUNT_GREATER_THAN_TYPE, GreaterThenTypeCommand.class);
-            commandMap.put(PRINT_FIELD_ASCENDING_TYPE, PrintTypeAscendingCommand.class);
-            commandMap.put(LOGIN, LoginCommand.class);
-            commandMap.put(REGISTER, RegisterCommand.class);
-            commandMap.put(LOGOUT, LogoutCommand.class);
-        }
+    }
+
+    static public class TicketFields {
+        public static String ID = "id";
+        public static String NAME = "name";
+        public static String COORDINATES = "coordinates";
+        public static String CREATION_DATE = "creationDate";
+        public static String PRICE = "price";
+        public static String TYPE = "type";
+        public static String PERSON = "person";
+        public static String CREATOR_LOGIN = "creatorLogin";
     }
 
     static public class CoordinatesFields {

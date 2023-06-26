@@ -23,33 +23,25 @@ import static core.Globals.Network.TICKET_IS_EXIST;
  *
  * @see InputTicket
  */
-public class UpdateCommand extends ServerCommand {
+public class UpdateCommand extends AddCommand {
 
     public UpdateCommand(OutputHandler outputHandler, UDPClient client) {
         super(outputHandler, client);
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
         String[] arguments = command.split(" ");
         if (arguments.length == 1) {
             outputHandler.println("Введите id для update.");
         } else {
             long id = Long.parseLong(arguments[ARGUMENT_POSITION]);
-
-            try {
-                TicketExistResponse responseId = (TicketExistResponse) udpClient.sendRequestAndGetResponse(new TicketExistRequest(id, user));
-                if (responseId.status == TICKET_IS_EXIST) {
-                    Ticket inpTicket = InputTicket.getTicketWithoutIdFromConsole(user);
-                    Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(inpTicket, id, user));
-                    outputHandler.println(response);
-                } else {
-                    outputHandler.println(responseId.getMsg());
-                }
-            } catch (IOException  e) {
-                outputHandler.println("Ошибка при передачи данных! " + e);
-            } catch (ClassNotFoundException e) {
-                outputHandler.println("Класс не был найден! " + e);
+            TicketExistResponse responseId = (TicketExistResponse) udpClient.sendRequestAndGetResponse(new TicketExistRequest(id, user));
+            if (responseId.status == TICKET_IS_EXIST) {
+                Response response = udpClient.sendRequestAndGetResponse(new UpdateRequest(ticket, id, user));
+                outputHandler.println(response);
+            } else {
+                outputHandler.println(responseId.getMsg());
             }
         }
     }

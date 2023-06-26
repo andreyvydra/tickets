@@ -23,17 +23,11 @@ public class GroupByDateCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            GroupByDateResponse response = (GroupByDateResponse) udpClient.sendRequestAndGetResponse(new GroupByDateRequest(user));
-            outputHandler.println(response);
-            for (Object group : response.getData()) {
-                outputHandler.println(group);
-            }
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        GroupByDateResponse response = (GroupByDateResponse) udpClient.sendRequestAndGetResponse(new GroupByDateRequest(user));
+        outputHandler.println(response);
+        for (Object group : response.getData()) {
+            outputHandler.println(group);
         }
     }
 

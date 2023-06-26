@@ -19,39 +19,14 @@ public class LoginCommand extends ServerCommand {
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            outputHandler.print("Введите username: ");
-            String username = scanner.nextLine();
-            if (!username.equals("")) {
-                user.put(USERNAME, username);
-                break;
-            }
-            outputHandler.println("Username пустой!");
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        LoginResponse response = (LoginResponse) udpClient.sendRequestAndGetResponse(new LoginUserRequest(user));
+        if (response.is_logged) {
+            user.put(IS_LOGGED, "Да");
+        } else {
+            user.put(IS_LOGGED, null);
         }
-        while (true) {
-            outputHandler.print("Введите пароль: ");
-            String password = scanner.nextLine();
-            if (!password.equals("")) {
-                user.put(PASSWORD, password);
-                break;
-            }
-            outputHandler.println("Password пустой!");
-        }
-        try {
-            LoginResponse response = (LoginResponse) udpClient.sendRequestAndGetResponse(new LoginUserRequest(user));
-            if (response.is_logged) {
-                user.put(IS_LOGGED, "Да");
-            } else {
-                user.put(IS_LOGGED, null);
-            }
-            outputHandler.println(response.getMsg());
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
-        }
+        outputHandler.println(response.getMsg());
     }
 
     @Override

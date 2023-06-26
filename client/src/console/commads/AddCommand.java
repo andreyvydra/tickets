@@ -22,25 +22,24 @@ import static core.Globals.Network.IS_LOGGED;
  */
 public class AddCommand extends ServerCommand {
 
+    public Ticket ticket;
+
     public AddCommand(OutputHandler outputHandler, UDPClient udpClient) {
         super(outputHandler, udpClient);
     }
 
     @Override
-    public void execute(String command, HashMap<String, String> user) {
-        try {
-            if (!Objects.isNull(user.get(IS_LOGGED))) {
-                Ticket ticket = InputTicket.getTicketWithoutIdFromConsole(user);
-                Response response = udpClient.sendRequestAndGetResponse(new AddRequest(ticket, user));
-                outputHandler.println(response);
-            } else {
-                outputHandler.println("Ошибка авторизации");
-            }
-        } catch (IOException  e) {
-            outputHandler.println("Ошибка при передачи данных! " + e);
-        } catch (ClassNotFoundException e) {
-            outputHandler.println("Класс не был найден! " + e);
+    public void execute(String command, HashMap<String, String> user) throws IOException, ClassNotFoundException {
+        if (!Objects.isNull(user.get(IS_LOGGED))) {
+            Response response = udpClient.sendRequestAndGetResponse(new AddRequest(ticket, user));
+            outputHandler.println(response);
+        } else {
+            outputHandler.println("Ошибка авторизации");
         }
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     @Override
