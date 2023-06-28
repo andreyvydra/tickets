@@ -100,10 +100,15 @@ public class Console {
         addToHistory(command);
     }
 
+    public String getHistory() {
+        return commandsHistory.toString();
+    }
+
     public void addToHistory(String command) {
         if (commandsHistory.size() == HISTORY_SIZE) {
             commandsHistory.remove(0);
         }
         commandsHistory.add(command);
     }
+
 }

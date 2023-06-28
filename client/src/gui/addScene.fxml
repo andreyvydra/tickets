@@ -9,34 +9,33 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="300.0" styleClass="MainWindow" stylesheets="@main.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="TOP_CENTER" styleClass="Label" text="Ticket" />
+            <Label fx:id="ticketLabel" alignment="TOP_CENTER" styleClass="Label" text="Билет" />
             <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Name:" />
+                  <Label fx:id="nameLabel" styleClass="Label" text="Имя:" />
                   <TextField fx:id="nameField" promptText="name" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Price:" />
+                  <Label fx:id="priceLabel" styleClass="Label" text="Стоимость:" />
                   <TextField fx:id="priceField" promptText="price" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Type:" />
+                  <Label fx:id="typeLabel" styleClass="Label" text="Тип:" />
                   <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" />
                </children>
             </HBox>
-            <Label styleClass="Label" text="Coordinates" />
+            <Label fx:id="coordinatesLabel" styleClass="Label" text="Координаты" />
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="X:" />
+                  <Label styleClass="Label" text="X:" fx:id="xCoordinatesLabel" />
                   <TextField promptText="x" fx:id="xCoordinatesField" />
                </children>
             </HBox>
@@ -46,32 +45,32 @@
                   <TextField fx:id="yCoordinatesField" promptText="y" />
                </children>
             </HBox>
-            <Label styleClass="Label" text="Person" />
+            <Label fx:id="personLabel" styleClass="Label" text="Персона" />
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Birthday:" />
+                  <Label fx:id="birthdayLabel" styleClass="Label" text="День рождения:" />
                   <DatePicker fx:id="birthdayPersonPick" promptText="birthday" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Eye color:" />
+                  <Label fx:id="colorEyeLabel" styleClass="Label" text="Цвет глаз:" />
                   <ChoiceBox fx:id="eyeColorChoiceBox" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Hair color:" />
+                  <Label fx:id="colorHairLabel" styleClass="Label" text="Цвет волос: " />
                   <ChoiceBox fx:id="hairColorChoiceBox" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Label styleClass="Label" text="Nationality:" />
+                  <Label fx:id="nationalityLabel" styleClass="Label" text="Национальность:" />
                   <ChoiceBox fx:id="nationalityChoiceBox" prefWidth="150.0" />
                </children>
             </HBox>
-            <Label styleClass="Label" text="Location" />
+            <Label fx:id="locationLabel" styleClass="Label" text="Локация" />
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="5.0">
                <children>
                   <Label styleClass="Label" text="X:" />
@@ -92,8 +91,8 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="71.0" prefWidth="300.0" spacing="5.0">
                <children>
-                  <Button fx:id="addButton" mnemonicParsing="false" styleClass="Button" text="Add" />
-                  <Button fx:id="addIfMaxTicket" mnemonicParsing="false" styleClass="Button" text="Add If Max" />
+                  <Button fx:id="addButton" mnemonicParsing="false" styleClass="Button" text="Добавить" />
+                  <Button fx:id="addIfMaxTicket" mnemonicParsing="false" styleClass="Button" text="Добавить максимум" />
                </children>
             </HBox>
          </children>

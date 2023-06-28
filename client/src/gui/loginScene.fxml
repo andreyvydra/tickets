@@ -22,12 +22,12 @@
           <RowConstraints minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label styleClass="Label" text="Login:" />
-            <Label styleClass="Label" text="Password:" GridPane.rowIndex="1" />
+            <Label styleClass="Label" text="Логин:" />
+            <Label styleClass="Label" text="Пароль:" GridPane.rowIndex="1" />
             <TextField fx:id="loginField" promptText="login" GridPane.columnIndex="1" />
             <TextField fx:id="passwordField" promptText="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button fx:id="signUpButton" mnemonicParsing="false" styleClass="Button" text="Sign Up" GridPane.rowIndex="2" />
-            <Button fx:id="logInButton" mnemonicParsing="false" styleClass="Button" text="Log in" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="signUpButton" mnemonicParsing="false" styleClass="Button" text="Создать" GridPane.rowIndex="2" />
+            <Button fx:id="logInButton" mnemonicParsing="false" styleClass="Button" text="Войти" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets bottom="50.0" left="5.0" right="5.0" top="5.0" />

@@ -12,9 +12,6 @@ import core.exceptions.CommandWasNotFound;
 import data.Ticket;
 import gui.AppController;
 import gui.LoginController;
-import gui.RemoveLowerController;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -24,14 +21,12 @@ import requests.ShowRequest;
 import responses.ShowResponse;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.util.*;
 
 import static core.Globals.CommandNames.*;
 import static core.Globals.Network.*;
 import static core.Globals.SERVER_PORT;
-import static java.lang.Thread.sleep;
 
 /**
  * App is class which link collection, fileManager, console, parser etc.
@@ -49,7 +44,7 @@ public class ClientApp {
     private Stage stage;
     private final OutputHandler outputHandler = new MessageHandler();
 
-    private HashMap<String, String> user = new HashMap<>();
+    private final HashMap<String, String> user = new HashMap<>();
 
     public ClientApp() throws IOException {
         user.put(USERNAME, null);
@@ -159,7 +154,13 @@ public class ClientApp {
         }
     }
 
+    public String getHistory() {
+        return console.getHistory();
+    }
+
     public void executeScript() {
+        OutputHandler outputHandler1 = new OutputHandler();
+        Console console1 = new Console(outputHandler1, udpClient, commandBuffer);
         while (true) {
             try {
                 if (commandBuffer.toArray().length == 0) {
@@ -168,15 +169,15 @@ public class ClientApp {
                     }
                 } else {
                     String input = Objects.requireNonNull(commandBuffer.poll()).trim();
-                    console.execute(input, user);
+                    console1.execute(input, user);
                 }
             } catch (NoSuchElementException e) {
-                outputHandler.println("До новой встречи!");
+                outputHandler1.println("До новой встречи!");
                 break;
             } catch (InterruptedException e) {
-                outputHandler.println("Amogus!");
+                outputHandler1.println("Amogus!");
             } catch (CommandWasNotFound e) {
-                outputHandler.println("Введена неправильная команда!");
+                outputHandler1.println("Введена неправильная команда!");
             } catch (IllegalStateException ignore) {
             }
         }

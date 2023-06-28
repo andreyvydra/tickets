@@ -17,7 +17,7 @@ import static core.Globals.Network.*;
 import static core.Globals.PACKET_SIZE;
 
 public class UDPClient {
-    private final DatagramChannel datagramChannel;
+    private DatagramChannel datagramChannel;
     private final SocketAddress addr;
 
     public UDPClient(InetAddress address, int port) throws IOException {
@@ -68,8 +68,14 @@ public class UDPClient {
     public byte[] getPacket() throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(PACKET_SIZE);
         SocketAddress address = null;
-        while(address == null) {
+        int countFall = 1;
+        while (address == null) {
+            if (countFall > 1000000) {
+                datagramChannel = DatagramChannel.open().connect(addr);
+                datagramChannel.configureBlocking(false);
+            }
             address = datagramChannel.receive(buffer);
+            countFall += 1;
         }
         return buffer.array();
     }

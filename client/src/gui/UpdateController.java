@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static core.Globals.CommandNames.REMOVE_BY_ID;
 
@@ -26,8 +28,8 @@ public class UpdateController extends AddController {
 
     public Stage stage;
 
-    public UpdateController(Ticket ticket, ClientApp clientApp, Stage stage) {
-        super(clientApp);
+    public UpdateController(Ticket ticket, ClientApp clientApp, Stage stage, Locale locale) {
+        super(clientApp, locale);
         this.ticket = ticket;
         this.clientApp = clientApp;
         this.stage = stage;
@@ -35,6 +37,7 @@ public class UpdateController extends AddController {
 
     public void initialize() {
         initializeChoicesBox();
+        initializeLanguage();
         removeTicket.setOnAction(this::remove);
         updateButton.setOnAction(this::update);
 
@@ -51,6 +54,14 @@ public class UpdateController extends AddController {
         priceField.setText(String.valueOf(ticket.getPrice()));
         typeChoiceBox.setValue(ticket.getType());
 
+    }
+
+    @Override
+    public void initializeLanguage() {
+        super.generalInitializeLanguage();
+        ResourceBundle rb = ResourceBundle.getBundle("locale.GuiTicket", locale);
+        removeTicket.setText(rb.getString("removeButton"));
+        updateButton.setText(rb.getString("updateButton"));
     }
 
     public void update(ActionEvent event) {

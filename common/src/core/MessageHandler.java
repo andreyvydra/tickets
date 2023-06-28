@@ -14,8 +14,10 @@ public class MessageHandler extends OutputHandler {
     @Override
     public void println(Object... objects) {
         for (Object object : objects) {
-            alert.setContentText(object.toString());
-            alert.showAndWait();
+            if (!alert.isShowing()) {
+                alert.setContentText(object.toString());
+                alert.showAndWait();
+            }
         }
     }
 }
