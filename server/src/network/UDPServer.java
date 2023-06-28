@@ -2,9 +2,9 @@ package network;
 
 import application.DataApp;
 import commands.Command;
+import javafx.util.Pair;
 import managers.CommandManager;
 import requests.Request;
-import javafx.util.Pair;
 import responses.Response;
 
 import java.io.*;
@@ -16,7 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static core.Globals.DATA_SIZE;
-import static core.Globals.Network.*;
+import static core.Globals.Network.PACKET_CONTINUES;
+import static core.Globals.Network.PACKET_ENDS;
 import static core.Globals.PACKET_SIZE;
 
 public class UDPServer {

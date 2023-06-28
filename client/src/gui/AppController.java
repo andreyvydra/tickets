@@ -94,6 +94,8 @@ public class AppController {
     @FXML
     private Tab tableTab;
 
+    private ResourceBundle messages;
+
     private final ClientApp clientApp;
 
     private final ObservableList<Ticket> ticketObservableList = FXCollections.observableList(new ArrayList<>());
@@ -151,6 +153,7 @@ public class AppController {
     private void changeLanguage(ActionEvent event) {
         Locale locale = Locale.forLanguageTag(language.getValue().languageName);
         ResourceBundle rb = ResourceBundle.getBundle("locale.Gui", locale);
+        messages = ResourceBundle.getBundle("local.Messages", locale);
         tableTab.setText(rb.getString("tableTab"));
         canvasTab.setText(rb.getString("canvasTab"));
         historyLabel.setText(rb.getString("historyLabel"));
